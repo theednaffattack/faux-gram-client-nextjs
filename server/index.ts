@@ -33,8 +33,8 @@ app.prepare().then(() => {
 
   // tslint:disable-next-line:no-console
   console.log(
-    `> Server listening at ${prefix}${host}:${port} as ${
+    `\n🚀 Server listening at ${prefix}${host}:${port} as ${
       dev ? "development" : process.env.NODE_ENV
-    }`
+    }\n`
   );
 });
