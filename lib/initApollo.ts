@@ -32,9 +32,9 @@ const prodDomain = `${myIpAddress}:${port}`;
 
 const domain = process.env.NODE_ENV === "production" ? prodDomain : myLanInfo;
 
-const prefix = process.env.NODE_ENV === "production" ? "http://" : "https://";
+const prefix = process.env.NODE_ENV === "production" ? "https://" : "http://";
 
-const wsPrefix = process.env.NODE_ENV === "production" ? "ws://" : "wss://";
+const wsPrefix = process.env.NODE_ENV === "production" ? "wss://" : "ws://";
 
 const prodGraphqlUrl = `${prefix}${domain}/graphql`;
 
