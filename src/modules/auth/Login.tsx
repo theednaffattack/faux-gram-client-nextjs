@@ -2,6 +2,7 @@ import React, { ChangeEvent } from "react";
 import Router from "next/router";
 
 import * as T from "./types";
+import Layout from "../../components/Layout";
 
 export interface LoginProps {}
 
@@ -44,7 +45,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     const { credentials } = this.state;
 
     return (
-      <div>
+      <Layout>
         <h1>Login</h1>
         <form>
           <input
@@ -65,7 +66,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
             {this.state.isLoginLoading ? "Logging in..." : "Log in"}
           </button>
         </form>
-      </div>
+      </Layout>
     );
   }
 }
