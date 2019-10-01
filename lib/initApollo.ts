@@ -22,23 +22,23 @@ const myIpAddress = "192.168.1.24"; // internalIp.v4.sync();
 
 const port = process.env.GRAPHQL_PORT || 8800;
 
-console.log(process.env.GRAPHQL_PORT);
-console.log(process.env.DEV_PORT);
-
-const myLanInfo = `${myIpAddress}:${port}`;
+const myLanInfo: string = `${myIpAddress}:${port}`;
 
 // const prodDomain = "fauxgram.eddienaff.dev";
-const prodDomain = `${myIpAddress}:${port}`;
+const prodDomain: string = `${myIpAddress}:${port}`;
 
-const domain = process.env.NODE_ENV === "production" ? prodDomain : myLanInfo;
+const domain: string =
+  process.env.NODE_ENV === "production" ? prodDomain : myLanInfo;
 
-const prefix = process.env.NODE_ENV === "production" ? "https://" : "http://";
+const prefix: string =
+  process.env.NODE_ENV === "production" ? "https://" : "http://";
 
-const wsPrefix = process.env.NODE_ENV === "production" ? "wss://" : "ws://";
+const wsPrefix: string =
+  process.env.NODE_ENV === "production" ? "wss://" : "ws://";
 
-const prodGraphqlUrl = `${prefix}${domain}/graphql`;
+const prodGraphqlUrl: string = `${prefix}${domain}/graphql`;
 
-const prodWebsocketsUrl = `${wsPrefix}${domain}/subscriptions`;
+const prodWebsocketsUrl: string = `${wsPrefix}${domain}/subscriptions`;
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 

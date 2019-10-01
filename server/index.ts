@@ -7,15 +7,15 @@ const dev = process.env.NODE_ENV !== "production";
 
 const devPort = parseInt(process.env.DEV_PORT || "5050", 10);
 const port = dev ? devPort : parseInt(process.env.PORT || "3000", 10);
+
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const localHostIpAddress = internalIp.v4.sync();
 
-const host =
-  process.env.NODE_ENV !== "production" ? localHostIpAddress : "localhost";
+const host = dev ? localHostIpAddress : null;
 
-const prefix = process.env.NODE_ENV !== "production" ? "http://" : "https://";
+const prefix = dev ? "http://" : "https://";
 
 app.prepare().then(() => {
   createServer((req, res) => {
