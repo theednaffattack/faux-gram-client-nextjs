@@ -7,8 +7,8 @@ type Props = {
   pid?: string | string[];
 };
 
-import Layout from "../../../components/Layout";
-import { Header } from "../../../components/Header";
+import Layout from "../../src/components/Layout";
+import { Header } from "../../src/components/Header";
 import { ParsedUrlQuery } from "querystring";
 
 const Comment: NextPage<Props> = ({ pathname, pid, query }: Props) => {

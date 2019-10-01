@@ -20,12 +20,17 @@ import Router from "next/router";
 
 const myIpAddress = "192.168.1.24"; // internalIp.v4.sync();
 
-const port = process.env.GRAPHQL_PORT || 8800;
+const port = process.env.GRAPHQL_PORT;
 
 const myLanInfo: string = `${myIpAddress}:${port}`;
 
 // const prodDomain = "fauxgram.eddienaff.dev";
 const prodDomain: string = `${myIpAddress}:${port}`;
+
+console.log("WHAT IS PROCESS.ENV", {
+  env: process.env.GRAPHQL_PORT,
+  myLanInfo
+});
 
 const domain: string =
   process.env.NODE_ENV === "production" ? prodDomain : myLanInfo;
@@ -51,26 +56,10 @@ interface Options {
   getToken: () => string;
 }
 
-function create(initialState: any, { getToken }: Options) {
-  // const httpLink = createHttpLink({
-  //   uri: `http://${myIpAddress}:4000/graphql`,
-  //   credentials: "include"
-  // });
-
-  // const uploadLink = createUploadLink({
-  //   // uri: `http://${myIpAddress}:4000/graphql`,
-  //   uri: prodGraphqlUrl,
-  //   credentials: "include"
-  // });
-
-  // const httpLink = isBrowser
-  //   ? new HttpLink({
-  //       uri: prodGraphqlUrl, // Server URL (must be absolute)
-  //       credentials: "include", // Additional fetch() options like `credentials` or `headers`
-  //       fetch
-  //     })
-  //   : undefined;
-
+function create(
+  initialState: any,
+  { getToken }: Options
+): ApolloClient<NormalizedCacheObject> {
   const httpLink = new HttpLink({
     uri: prodGraphqlUrl, // Server URL (must be absolute)
     credentials: "include", // Additional fetch() options like `credentials` or `headers`
@@ -80,7 +69,6 @@ function create(initialState: any, { getToken }: Options) {
   // Create a WebSocket link:
   const wsLink = isBrowser
     ? new WebSocketLink({
-        // uri: `ws://${myIpAddress}:4000/subscriptions`,
         uri: prodWebsocketsUrl,
         options: {
           reconnect: true
@@ -91,25 +79,11 @@ function create(initialState: any, { getToken }: Options) {
       })
     : null;
 
-  // const splitLink = isBrowser
-  //   ? split(
-  //       // split based on operation type
-  //       ({ query }) => {
-  //         const definition = getMainDefinition(query);
-  //         return (
-  //           definition.kind === "OperationDefinition" &&
-  //           definition.operation === "subscription"
-  //         );
-  //       },
-  //       wsLink!,
-  //       uploadLink
-  //     )
-  //   : uploadLink;
-
   const splitLink = isBrowser
     ? split(
         // split based on operation type
         ({ query }) => {
+          console.log({ query });
           const definition = getMainDefinition(query);
           return (
             definition.kind === "OperationDefinition" &&

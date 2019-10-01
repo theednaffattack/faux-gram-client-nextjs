@@ -5,7 +5,7 @@ type Props = {
   title?: string;
 };
 
-export const Header: React.FunctionComponent<Props> = ({ title }) => (
+export const Header: React.FunctionComponent<Props> = () => (
   <header>
     <nav>
       <Link href="/">
