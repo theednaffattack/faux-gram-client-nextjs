@@ -18,6 +18,10 @@ import { getMainDefinition } from "apollo-utilities";
 import { isBrowser } from "./isBrowser";
 import Router from "next/router";
 
+const nodeEnv = process.env.NODE_ENV;
+
+const envIsDev = nodeEnv !== "production";
+
 const myIpAddress = "192.168.1.24"; // internalIp.v4.sync();
 
 const port = process.env.GRAPHQL_PORT;
@@ -25,21 +29,18 @@ const port = process.env.GRAPHQL_PORT;
 const myLanInfo: string = `${myIpAddress}:${port}`;
 
 // const prodDomain = "fauxgram.eddienaff.dev";
-const prodDomain: string = `${myIpAddress}:${port}`;
+const prodDomain: string = `fauxgramapi.eddienaff.dev`;
 
 console.log("WHAT IS PROCESS.ENV", {
   env: process.env.GRAPHQL_PORT,
   myLanInfo
 });
 
-const domain: string =
-  process.env.NODE_ENV === "production" ? prodDomain : myLanInfo;
+const domain: string = envIsDev ? myLanInfo : prodDomain;
 
-const prefix: string =
-  process.env.NODE_ENV === "production" ? "https://" : "http://";
+const prefix: string = envIsDev ? "http://" : "https://";
 
-const wsPrefix: string =
-  process.env.NODE_ENV === "production" ? "wss://" : "ws://";
+const wsPrefix: string = envIsDev ? "ws://" : "wss://";
 
 const prodGraphqlUrl: string = `${prefix}${domain}/graphql`;
 
