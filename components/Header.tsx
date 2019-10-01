@@ -1,7 +1,11 @@
 import React from "react";
 import Link from "next/link";
 
-export const Header: React.FunctionComponent = () => (
+type Props = {
+  title?: string;
+};
+
+export const Header: React.FunctionComponent<Props> = ({ title }) => (
   <header>
     <nav>
       <Link href="/">
