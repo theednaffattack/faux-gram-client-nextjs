@@ -5,6 +5,7 @@
     "node": "11.x"
   },
   "scripts": {
+    "test": "jest",
     "start": "next start -p $PORT",
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
