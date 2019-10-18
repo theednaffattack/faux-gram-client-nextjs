@@ -3,6 +3,10 @@ import { NextPage } from "next";
 import Layout from "../../../src/components/layout";
 import { IUserPageProps } from "../../../src/modules/auth/types";
 
+const dummyVar = "";
+
+console.log(dummyVar);
+
 const ChangePassword: NextPage<IUserPageProps> = ({
   pathname,
   query,
