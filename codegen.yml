@@ -2,10 +2,11 @@ overwrite: true
 schema: "http://192.168.1.24:4000/graphql"
 documents: "src/graphql/**/*.ts"
 generates:
-  src/components/generated/apollo-graphql.tsx:
+  src/components/generated/apollo-graphql:
+    config:
+      # withMutationFn: true
+      noNamespaces: true
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
-    config:
-      withMutationFn: true
