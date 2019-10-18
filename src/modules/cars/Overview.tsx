@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 
 import * as T from "./types";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout";
 
 export interface CarsOverviewProps {
   cars?: T.CarList;
