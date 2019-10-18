@@ -9,6 +9,7 @@ import { ApolloProvider } from "react-apollo";
 // import { createGlobalStyle } from "styled-components";
 
 import withApollo from "../src/lib/withApollo";
+import "./empty.css";
 
 class MyApp extends App<any> {
   render() {
