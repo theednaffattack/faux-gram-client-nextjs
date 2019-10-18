@@ -3,9 +3,6 @@ import { parse, UrlWithParsedQuery } from "url";
 import next from "next";
 import internalIp from "internal-ip";
 
-import { routes } from "./routes";
-import { HTTPHandler } from "next-routes";
-
 const nodeEnv = process.env.NODE_ENV;
 
 const dev = nodeEnv !== "production";
@@ -24,10 +21,7 @@ const domain = dev ? localHostIpAddress : productionDomain;
 const prefix = dev ? "http://" : "https://";
 
 const app = next({ dev });
-// const handle = app.getRequestHandler();
-
-const handle: HTTPHandler = routes.getRequestHandler(app);
-
+const handle = app.getRequestHandler();
 app.prepare().then(() => {
   createServer((req, res) => {
     const parsedUrl: UrlWithParsedQuery = parse(req.url!, true);
@@ -39,6 +33,7 @@ app.prepare().then(() => {
       app.render(req, res, "/b", query);
     } else {
       // handle(req, res, parsedUrl);
+
       handle(req, res);
     }
   }).listen(port);
