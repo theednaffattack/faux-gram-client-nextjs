@@ -20,3 +20,4 @@ src/components/infinite-loader-SAFETY.blah
 pages/messages_OLD.blah
 react-geomicons.d.tsOLD
 src/server/routes.ts_OLD
+graphql.schema.json
