@@ -4,19 +4,15 @@ import {
   NormalizedCacheObject
 } from "apollo-boost";
 import { setContext } from "apollo-link-context";
-// import { createHttpLink } from "apollo-link-http";
-// import { createUploadLink } from "apollo-upload-client";
 import { WebSocketLink } from "apollo-link-ws";
-
 import { HttpLink } from "apollo-link-http";
 import fetch from "isomorphic-unfetch";
 import { onError } from "apollo-link-error";
 import { split } from "apollo-link";
-
 import { getMainDefinition } from "apollo-utilities";
+import Router from "next/router";
 
 import { isBrowser } from "./isBrowser";
-import Router from "next/router";
 
 const nodeEnv = process.env.NODE_ENV;
 
@@ -28,13 +24,7 @@ const port = process.env.GRAPHQL_PORT;
 
 const myLanInfo: string = `${myIpAddress}:${port}`;
 
-// const prodDomain = "fauxgram.eddienaff.dev";
 const prodDomain: string = `fauxgramapi.eddienaff.dev`;
-
-console.log("WHAT IS PROCESS.ENV", {
-  env: process.env.GRAPHQL_PORT,
-  myLanInfo
-});
 
 const domain: string = envIsDev ? myLanInfo : prodDomain;
 
@@ -74,7 +64,7 @@ function create(
         options: {
           reconnect: true
           // connectionParams: {
-          //   authToken: authToken ? `qid=${authToken}` : ""
+          //   authToken: authToken ? `mfg=${authToken}` : ""
           // }
         }
       })
@@ -84,7 +74,6 @@ function create(
     ? split(
         // split based on operation type
         ({ query }) => {
-          console.log({ query });
           const definition = getMainDefinition(query);
           return (
             definition.kind === "OperationDefinition" &&
@@ -118,7 +107,7 @@ function create(
     return {
       headers: {
         ...headers,
-        cookie: token ? `qid=${token}` : ""
+        cookie: token ? `mfg=${token}` : ""
       }
     };
   });
