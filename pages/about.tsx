@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Layout from "../src/components/Layout";
+import Layout from "../src/components/layout";
 
 const AboutPage: React.FunctionComponent = () => (
   <Layout title="About | Next.js + TypeScript Example">
