@@ -1,14 +1,14 @@
 import React from "react";
-import Layout from "../src/components/Layout";
+import Layout from "../src/components/layout";
 import { NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 
-type Props = {
+export type TBProps = {
   pathname: string;
   query: ParsedUrlQuery;
 };
 
-const BPage: NextPage<Props> = ({ pathname, query }) => (
+const BPage: NextPage<TBProps> = ({ pathname, query }) => (
   <Layout title="b">
     <div>b</div>
     <div>{pathname}</div>
