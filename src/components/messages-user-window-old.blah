@@ -1,0 +1,648 @@
+import React from "react";
+import { VariableSizeList as List, VariableSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
+import InfiniteScroll from "react-infinite-scroll-component";
+import classNames from "classnames";
+import Measure, { ContentRect, BoundingRect } from "react-measure";
+
+import { MessageBox } from "./message-box_v2";
+import { Flex, Image } from "./styled-rebass";
+import { Frame } from "./zoom-image";
+
+import { MESSAGE_THREADS } from "../graphql/user/subscriptions/MessageThreads";
+import { IChatHistoryStateObject } from "./chat-example/Chat";
+import { getRowHeight } from "./get-chat-message-container-size";
+import { Text } from "./styled-rebass";
+import { Box } from "rebass";
+
+const style = {
+  height: 130,
+  border: "1px solid green",
+  margin: 6,
+  padding: 8
+};
+
+interface IRowProps {
+  index: number;
+  style: any;
+  data: any;
+}
+
+const Row = ({ index, data, style }: IRowProps) => {
+  return (
+    <MessageBox
+      pageInfo={data.pageInfo}
+      threadId={data.threadId}
+      fetchMoreGetMessagesByThreadId={data.fetchMoreGetMessagesByThreadId}
+      key={`${index}-${data.itemData[index].node.id}-${data.itemData[index].node.__typename}`}
+      allData={data.itemData[index]}
+      type={data.itemData[index].__typename}
+      message={data.itemData[index].node.message}
+      sentBy={data.itemData[index].node.sentBy}
+      createdAt={data.itemData[index].node.created_at}
+      images={data.itemData[index].node.images}
+      me={data.me.id}
+      handleRemoveInviteeToThread={data.handleRemoveInviteeToThread}
+      handleToggleImageModal={data.handleToggleImageModal}
+      style={style}
+      imageModalState={data.imageModalState}
+      itemIndex={index}
+    />
+  );
+};
+
+interface IMessagesWindowProps {
+  data: any;
+  handleDisplayMessages: any;
+  // handleThreadSelection: any;
+  handleCloseThread: any;
+  me: any;
+  subscribeToMore: any;
+  threadIdSelected: string;
+  fetchMoreGetMessagesByThreadId: any;
+}
+
+interface IMessageDimensions {
+  height: number;
+  width: number;
+}
+
+interface IMessageWindowState {
+  listLength: number | null;
+  chatHistory: IChatHistoryStateObject[];
+  warning: string;
+  imageModal: string;
+  dimensions: any;
+  fetchedPrevious: boolean;
+  keepHeight: number;
+  initialMeasurement: number;
+  initialMeasurementHappened: boolean;
+  modalImages: any[];
+  selectedItemIndex: number;
+}
+
+// const WARNING = {
+//   noHistory:
+//     "warning: there is no chat history (chatHistoryRef.current is null)",
+//   noListRef: "warning: there is no list present (noListRef.current is null)"
+// };
+
+class MessagesWindow extends React.Component<
+  IMessagesWindowProps,
+  IMessageWindowState
+> {
+  listRef: React.RefObject<VariableSizeList>;
+  messageHistoryRef: React.RefObject<VariableSizeList>;
+  _lastElem: HTMLDivElement | null;
+  constructor(props: IMessagesWindowProps) {
+    super(props);
+
+    this.listRef = React.createRef();
+    this.messageHistoryRef = React.createRef();
+
+    this.scrollToLastRow = this.scrollToLastRow.bind(this);
+
+    this.handleToggleImageModal = this.handleToggleImageModal.bind(this);
+
+    this._lastElem = null;
+
+    this.state = {
+      listLength: null,
+      chatHistory: [],
+      warning: "",
+      imageModal: "closed",
+      fetchedPrevious: false,
+      initialMeasurement: -1,
+      initialMeasurementHappened: false,
+      keepHeight: -1,
+      modalImages: [],
+      selectedItemIndex: -1,
+      dimensions: {
+        height: -1,
+        width: -1
+      }
+    };
+  }
+
+  handleToggleImageModal(imageIndex: number) {
+    this.setState(prevState => {
+      return {
+        imageModal: prevState.imageModal === "open" ? "closed" : "open",
+        selectedItemIndex: imageIndex
+      };
+    });
+  }
+
+  closeImageModal() {
+    this.setState(prevState => {
+      return {
+        imageModal: "closed"
+      };
+    });
+  }
+
+  openImageModal() {
+    this.setState(prevState => {
+      return {
+        imageModal: "open"
+      };
+    });
+  }
+
+  componentDidMount() {
+    this.setState({
+      listLength: this.props.data.edges.length
+    });
+
+    this.props.subscribeToMore({
+      document: MESSAGE_THREADS,
+      variables: {
+        data: {
+          threadId: this.props.threadIdSelected,
+          sentTo: "0a8c2ccf-114f-4c3f-99b0-07d83bc668e5",
+          message: "hi bob",
+          invitees: [
+            "0a8c2ccf-114f-4c3f-99b0-07d83bc668e5",
+            "5102bae2-5000-42f1-986a-58e8f8506971"
+          ]
+        }
+      },
+
+      updateQuery: (prev: any, { subscriptionData }: any) => {
+        let returnObj = Object.assign({}, prev, {
+          // @ts-ignore
+          getMessagesByThreadId: {
+            pageInfo: {
+              ...prev.getMessagesByThreadId.pageInfo
+            },
+            edges: [
+              // @ts-ignore
+              ...prev.getMessagesByThreadId.edges,
+              {
+                node: subscriptionData.data.messageThreads.message,
+                __typename: "MessageEdge"
+              }
+            ],
+            __typename: {
+              ...prev.getMessagesByThreadId.__typename
+            }
+          }
+        });
+
+        return returnObj;
+      }
+    });
+  }
+  // componentDidUpdate(prevState: any, prevProps: any) {
+  //   if (typeof this.state.listLength === "number") {
+  //     this.scrollToLastRow();
+  //   }
+  // }
+
+  render() {
+    const {
+      data,
+      fetchMoreGetMessagesByThreadId,
+      handleDisplayMessages,
+      handleCloseThread,
+      me,
+      threadIdSelected
+    } = this.props;
+
+    const { width, height } = this.state.dimensions;
+    const className = classNames(width < 400 && "small-width-modifier");
+
+    const loadingRow = {
+      node: {
+        last_message: "Load older messages",
+        sentBy: {
+          id: "fake"
+        },
+        message: "loading row"
+      },
+      __typename: "LoadingIndicator"
+    };
+
+    // Array of items loaded so far.
+    const items = data.pageInfo.hasPreviousPage
+      ? [loadingRow, ...data.edges]
+      : data.edges;
+
+    const initialScrollY = 182 * items.length;
+
+    const itemsTotalHeight =
+      items
+        .map((item: any, index: number) => {
+          let showRowHeight = getRowHeight({
+            text:
+              item && index !== 0 ? item.node.message : item.node.last_message,
+            attributes: "",
+            className: "fakeClass",
+            created_at: item.node.created_at,
+            // data: allItems,
+            images: item.node.images,
+            itemIndex: index
+          });
+          return showRowHeight;
+        })
+        .reduce((a: number, b: number) => a + b, 0) - 1;
+
+    console.log("initialScrollY EQUALSSSSSSS\n", {
+      initialScrollY,
+      itemsTotalHeight
+    });
+
+    const { imageModal } = this.state;
+
+    const pose = imageModal === "open" ? "zoom" : "init";
+    return (
+      <>
+        {/* <div style={{ backgroundColor: "limegreen" }}>
+          {JSON.stringify(data.edges.length, null, 2)}
+          {this.state.dimensions.height}
+        </div> */}
+        <div
+          // style={{ border: "2px hotpink solid" }}
+          onClick={() => this.handleToggleImageModal(123)}
+        >
+          <Frame
+            pose={pose}
+            className="frame"
+            style={{
+              // backgroundColor: isZoomed ? "rgba(255,255,255,0.5)" : "transparent"
+              // backgroundColor: "rgba(255,255,255,1)",
+              backgroundColor: "hotpink",
+              width: "100%",
+              height: "100%",
+              zIndex: 9999,
+              display: "flex",
+              flexWrap: "wrap",
+              overflow: "hidden",
+              alignContent: "flex-start"
+            }}
+          >
+            {items &&
+              items[this.state.selectedItemIndex] &&
+              items[this.state.selectedItemIndex].node.images &&
+              items[this.state.selectedItemIndex].node.images.length > 0 &&
+              items[this.state.selectedItemIndex].node.images.map(
+                (image: any) => (
+                  // <img
+                  //   src={image.uri}
+                  //   style={{
+                  //     display: imageModal === "open" ? "block" : "none",
+                  //     maxWidth: "250px"
+                  //   }}
+                  // />
+                  <Image
+                    key={image.uri}
+                    src={image.uri}
+                    width={["50%"]}
+                    maxHeight="150px"
+                    sx={{
+                      maxHeight: "150px"
+                    }}
+                    // sx={{
+                    //   width: ["50%"]
+                    // }}
+                    style={{
+                      maxHeight: "250px",
+                      maxWidth: "250px"
+                    }}
+                  />
+                )
+              )}
+          </Frame>
+        </div>
+        <Measure
+          bounds
+          onResize={(contentRect: ContentRect) => {
+            this.setState((prevState: Readonly<IMessageWindowState>) => {
+              if (this._lastElem && !prevState.initialMeasurementHappened) {
+                return {
+                  initialMeasurement: this._lastElem.offsetHeight,
+                  initialMeasurementHappened: true
+                };
+              }
+              // otherwise...
+              return {
+                initialMeasurement: prevState.initialMeasurement,
+                initialMeasurementHappened: prevState.initialMeasurementHappened
+              };
+            });
+            if (this._lastElem) {
+              console.log(
+                "LET:S SEE state once this._lastElem exists",
+                this._lastElem.offsetHeight
+              );
+            }
+
+            let height: number = -1;
+            let width: number = -1;
+
+            if (contentRect && contentRect.bounds) {
+              height = contentRect.bounds.height;
+              width = contentRect.bounds.width;
+            }
+            this.setState((prevState: any) => {
+              if (
+                prevState.dimensions.height === height &&
+                prevState.dimensions.width === width
+              ) {
+                return { dimensions: prevState.dimensions };
+              }
+
+              return { dimensions: { height, width } };
+            });
+          }}
+        >
+          {({ measureRef }) => (
+            <div
+              // ref={measureRef}
+              ref={node => {
+                if (!this._lastElem) {
+                  measureRef(node);
+                  this._lastElem = node;
+                }
+              }}
+              className={className}
+              style={{
+                // border: "1px crimson dashed",
+                padding: 0,
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                flex: "1 1 auto"
+              }}
+            >
+              {items.map((item: any, index: number) => {
+                let showRowHeight = getRowHeight({
+                  text:
+                    item && index !== 0
+                      ? item.node.message
+                      : item.node.last_message,
+                  attributes: "",
+                  className: "fakeClass",
+                  created_at: item.node.created_at,
+                  // data: allItems,
+                  images: item.node.images,
+                  itemIndex: index
+                });
+              })}
+              {this.state.dimensions && this.state.dimensions.height > 250 && (
+                <InfiniteScroll
+                  dataLength={data.edges.length} //This is important field to render the next data
+                  height={
+                    // 700
+                    this.state.keepHeight > -1
+                      ? this.state.keepHeight
+                      : this.state.initialMeasurement
+                  }
+                  next={() =>
+                    fetchMoreGetMessagesByThreadId({
+                      variables: {
+                        input: {
+                          threadId: threadIdSelected,
+                          skip: 0,
+                          take: 15,
+                          cursor: data.pageInfo.startCursor
+                        }
+                      },
+
+                      updateQuery: (prev: any, { fetchMoreResult }: any) => {
+                        return;
+                        // let returnObj = Object.assign({}, prev, {
+                        //   // @ts-ignore
+                        //   getMessagesByThreadId: {
+                        //     pageInfo: {
+                        //       ...prev.getMessagesByThreadId.pageInfo
+                        //     },
+                        //     edges: [
+                        //       ...fetchMoreResult.getMessagesByThreadId.edges,
+                        //       ...prev.getMessagesByThreadId.edges
+                        //     ],
+                        //     __typename: {
+                        //       ...prev.getMessagesByThreadId.__typename
+                        //     }
+                        //   }
+                        // }
+                        // );
+
+                        // return returnObj;
+                      }
+                    })
+                  }
+                  hasMore={data.pageInfo.hasNextPage}
+                  loader={<h4>Loading...</h4>}
+                  initialScrollY={initialScrollY}
+                  endMessage={
+                    undefined
+                    // <p style={{ textAlign: "center" }}>
+                    //   <b>Yay! You have seen it all</b>
+                    // </p>
+                  }
+                  // below props only if you need pull down functionality
+                  refreshFunction={() => {
+                    // the below if statement keeps the infinite scroller from growing
+                    if (data.pageInfo.hasPreviousPage) {
+                      this.setState(prevState => {
+                        if (!prevState.fetchedPrevious) {
+                          return {
+                            fetchedPrevious: true,
+                            keepHeight: prevState.dimensions.height
+                          };
+                        }
+                        return {
+                          fetchedPrevious: prevState.fetchedPrevious,
+                          keepHeight: prevState.keepHeight
+                        };
+                      });
+
+                      fetchMoreGetMessagesByThreadId({
+                        variables: {
+                          input: {
+                            threadId: threadIdSelected,
+                            skip: 0,
+                            take: 15,
+                            cursor: data.pageInfo.endCursor
+                          }
+                        },
+
+                        updateQuery: (prev: any, { fetchMoreResult }: any) => {
+                          if (!fetchMoreResult) return prev;
+
+                          // return;
+                          let returnObj = Object.assign({}, prev, {
+                            // @ts-ignore
+                            getMessagesByThreadId: {
+                              pageInfo: {
+                                ...prev.getMessagesByThreadId.pageInfo,
+                                endCursor:
+                                  fetchMoreResult.getMessagesByThreadId.pageInfo
+                                    .endCursor,
+                                hasPreviousPage:
+                                  fetchMoreResult.getMessagesByThreadId.pageInfo
+                                    .hasPreviousPage
+                              },
+                              edges: [
+                                ...fetchMoreResult.getMessagesByThreadId.edges,
+                                ...prev.getMessagesByThreadId.edges
+                              ],
+                              __typename: {
+                                ...prev.getMessagesByThreadId.__typename
+                              }
+                            }
+                          });
+
+                          return returnObj;
+                        }
+                      });
+                      return ["blaaaah"];
+                    }
+                  }}
+                  pullDownToRefresh
+                  pullDownToRefreshContent={
+                    <h3 style={{ textAlign: "center" }}>
+                      &#8595; Pull down to refresh
+                    </h3>
+                  }
+                  releaseToRefreshContent={
+                    <h3 style={{ textAlign: "center" }}>
+                      &#8593; Release to refresh
+                    </h3>
+                  }
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    flex: "1 1 auto"
+                    // height: "100%",
+                    // border: "2px rebeccapurple solid",
+                  }}
+                >
+                  {items.map((item: any, index: number) => {
+                    let showRowHeight = getRowHeight({
+                      text:
+                        item && index !== 0
+                          ? item.node.message
+                          : item.node.last_message,
+                      attributes: "",
+                      className: "fakeClass",
+                      created_at: item.node.created_at,
+                      // data: allItems,
+                      images: item.node.images,
+                      itemIndex: index
+                    });
+
+                    return (
+                      <div
+                        key={`list-${index}`}
+                        style={{
+                          // border: "1px crimson solid",
+                          height: getRowHeight({
+                            text:
+                              item && index !== 0
+                                ? item.node.message
+                                : "LOADING ROW",
+                            attributes: "",
+                            className: "fakeClass",
+                            created_at: item.node.created_at || "",
+                            // data: allItems,
+                            images: item.node.images,
+                            itemIndex: index
+                          })
+                        }}
+                      >
+                        <MessageBox
+                          allData={[]}
+                          fetchMoreGetMessagesByThreadId={
+                            fetchMoreGetMessagesByThreadId
+                          }
+                          handleRemoveInviteeToThread={() =>
+                            console.log("handleRemoveInviteeToThread called")
+                          }
+                          images={item.node.images}
+                          threadId=""
+                          imageModalState="closed"
+                          message={
+                            item && index !== 0
+                              ? item.node.message
+                              : item.node.last_message
+                          }
+                          me={me}
+                          createdAt={item.node.created_at}
+                          type={item.node.__typename}
+                          pageInfo={item.pageInfo}
+                          style={{}}
+                          handleToggleImageModal={this.handleToggleImageModal}
+                          itemIndex={index}
+                          sentBy={item.node.sentBy}
+                        />
+                      </div>
+                    );
+                  })}
+                </InfiniteScroll>
+              )}
+            </div>
+          )}
+        </Measure>
+        {/* <AutoSizer>
+          {({ height, width }) => (
+            <List
+              ref={this.listRef}
+              itemData={{
+                pageInfo: data.pageInfo,
+                threadId: threadIdSelected,
+                fetchMoreGetMessagesByThreadId: fetchMoreGetMessagesByThreadId,
+                itemData: items,
+                me: me,
+                handleDisplayMessages: handleDisplayMessages,
+                handleCloseThread: handleCloseThread,
+                handleToggleImageModal: this.handleToggleImageModal,
+                imageModalState: this.state.imageModal
+              }}
+              height={height}
+              itemCount={items.length}
+              itemSize={(index: number) => {
+                console.log(
+                  `${index} - is running, id: ${items[index].node.id} - ${items[index].node.message}`
+                );
+                const height = getRowHeight({
+                  attributes: { fontSize: "2em" },
+                  className: "fakeClassName",
+                  items,
+                  id: items[index].node.id,
+                  data,
+                  itemIndex: index,
+                  text: items[index].node.message,
+                  created_at: items[index].node.created_at,
+                  images: items[index].node.images
+                    ? items[index].node.images
+                    : null
+                });
+                
+                return height;
+              }}
+              width={width}
+            >
+              {Row}
+            </List>
+          )}
+        </AutoSizer> */}
+      </>
+    );
+  }
+
+  scrollToLastRow = () => {
+    if (this.listRef && this.listRef.current && this.state.listLength) {
+      this.listRef.current.scrollToItem(this.state.listLength, "center");
+      return;
+    }
+    if (!this.listRef.current) {
+      console.log("no ref is set dummy");
+    }
+    return;
+  };
+}
+
+export default MessagesWindow;
