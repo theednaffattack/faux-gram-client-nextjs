@@ -1,5 +1,8 @@
 // import { useRouter } from "next/router";
 import { NextPage } from "next";
+import Layout from "../../src/components/layout";
+import { Header } from "../../src/components/Header";
+import { ParsedUrlQuery } from "querystring";
 
 type Props = {
   pathname: string;
@@ -7,11 +10,7 @@ type Props = {
   pid?: string | string[];
 };
 
-import Layout from "../../src/components/Layout";
-import { Header } from "../../src/components/Header";
-import { ParsedUrlQuery } from "querystring";
-
-const Comment: NextPage<Props> = ({ pathname, pid, query }: Props) => {
+const Comment: NextPage<Props> = ({ pathname, pid, query }) => {
   // const router = useRouter();
   // const { id, comment } = router.query;
 
