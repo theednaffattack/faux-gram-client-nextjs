@@ -13,3 +13,10 @@ dist
 .DS_Store/
 .env
 docs/idea
+yarn-error.log
+yarn-error.log
+bundles/client.html
+src/components/infinite-loader-SAFETY.blah
+pages/messages_OLD.blah
+react-geomicons.d.tsOLD
+src/server/routes.ts_OLD
