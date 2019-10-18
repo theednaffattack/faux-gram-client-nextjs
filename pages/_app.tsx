@@ -31,8 +31,8 @@ class MyApp extends App<any> {
               *:after {
                 box-sizing: inherit;
               }
-            `}
-          />
+#__next { min-height: 100vh; display: flex }
+`;
           <Component {...pageProps} />
         </ApolloProvider>
       </ThemeProvider>
