@@ -265,13 +265,12 @@ export interface IUserProfileImageCards {
 export interface IChatFormProps {
   chatEmoji: string;
   disabled: boolean;
-  emojiPickerVisible: boolean;
   files: any[];
   handleChatFieldChange: any;
   handleEngageMicrophoneClick: any;
-  handleOpenEmojiMenuClick: any;
+  handleOpenEmojiMenuClick?: any;
   handleUploadFileClick: any;
-  handleThreadSelection: any;
+  handleThreadSelection?: any;
   newThreadInvitees: any[];
   selectedThreadId: string;
   sentTo: string;
