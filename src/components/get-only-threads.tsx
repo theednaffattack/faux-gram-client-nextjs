@@ -472,7 +472,7 @@ export default class GetOnlyThreads extends Component<
                       handleThreadSelection={this.handleThreadSelection}
                       chatEmoji=""
                       disabled={this.state.disabled}
-                      emojiPickerVisible={this.state.emojiPickerVisible}
+                      // emojiPickerVisible={this.state.emojiPickerVisible}
                       files={[]}
                       handleSetLastMessenger={this.handleSetLastMessenger}
                       handleOpenEmojiMenuClick={this.handleOpenEmojiMenuClick}
@@ -531,7 +531,11 @@ export default class GetOnlyThreads extends Component<
                     alignItems="space-between"
                     width={1}
                     id="isItMe"
-                    style={{ overflowY: "hidden", overflowX: "hidden" }}
+                    flex="1 1 auto"
+                    style={{
+                      overflowY: "hidden",
+                      overflowX: "hidden"
+                    }}
                   >
                     <Button
                       ml="auto"
@@ -545,8 +549,9 @@ export default class GetOnlyThreads extends Component<
                     {/* {JSON.stringify(data.getMessagesByThreadId)} */}
                     <Flex
                       flex="1 1 auto"
-                      border="lime"
-                      style={{ position: "relative" }}
+                      style={{
+                        position: "relative"
+                      }}
                     >
                       {showMessagingAddressBook === false ? (
                         <MessagesWindow
@@ -571,6 +576,8 @@ export default class GetOnlyThreads extends Component<
                       )}
                     </Flex>
                     {/* <Flex> */}
+
+                    {/* <AbFlex position="absolute" bottom={0} width={[1]}> */}
                     <SignS3Component>
                       {signS3 => {
                         // success: boolean;
@@ -604,7 +611,7 @@ export default class GetOnlyThreads extends Component<
                             <ChatForm
                               chatEmoji=""
                               disabled={this.state.disabled}
-                              emojiPickerVisible={this.state.emojiPickerVisible}
+                              // emojiPickerVisible={this.state.emojiPickerVisible}
                               files={[]}
                               handleChatFieldChange={() =>
                                 log("handleChatFieldChange")
@@ -640,6 +647,7 @@ export default class GetOnlyThreads extends Component<
                       }}
                     </SignS3Component>
                     {/* </Flex> */}
+                    {/* </AbFlex> */}
                   </Flex>
                 );
               } else {

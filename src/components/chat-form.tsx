@@ -302,7 +302,6 @@ class ChatForm extends React.Component<IChatFormProps, IChatFormState> {
     const {
       chatEmoji,
       disabled,
-      emojiPickerVisible,
       handleThreadSelection,
       handleEngageMicrophoneClick,
       handleOpenEmojiMenuClick,
@@ -316,9 +315,9 @@ class ChatForm extends React.Component<IChatFormProps, IChatFormState> {
       <>
         {selectedThreadId ? (
           <AddMessageToThread
+            emojiPickerVisible={false}
             chatEmoji={chatEmoji}
             disabled={disabled}
-            emojiPickerVisible={emojiPickerVisible}
             files={this.state.files}
             fileInputRef={this.fileInputRef}
             getS3Signature={this.getS3Signature}
@@ -338,7 +337,7 @@ class ChatForm extends React.Component<IChatFormProps, IChatFormState> {
         ) : (
           <CreateThreadAndAddMessageToThread
             chatEmoji={chatEmoji}
-            emojiPickerVisible={emojiPickerVisible}
+            emojiPickerVisible={false}
             fileInputRef={this.fileInputRef}
             files={this.state.files}
             getS3Signature={this.getS3Signature}
