@@ -6,7 +6,7 @@ import { Frame } from "./zoom-image";
 
 import { MESSAGE_THREADS } from "../graphql/user/subscriptions/MessageThreads";
 import { IChatHistoryStateObject } from "./chat-example/Chat";
-import { getRowHeight } from "./get-chat-message-container-size";
+// import { getRowHeight } from "./get-chat-message-container-size";
 import InfiniteLoader from "./infinite-loader";
 import { clearAllBodyScrollLocks } from "body-scroll-lock";
 
@@ -239,33 +239,33 @@ class MessagesWindow extends React.Component<
 
     const initialScrollY = 182 * items.length;
 
-    const itemsTotalHeight =
-      items
-        .map((item: any, index: number) => {
-          let showRowHeight = getRowHeight({
-            text:
-              item && index !== 0 ? item.node.message : item.node.last_message,
-            attributes: "",
-            className: "fakeClass",
-            created_at: item.node.created_at,
-            // data: allItems,
-            images: item.node.images,
-            itemIndex: index
-          });
-          return showRowHeight;
-        })
-        .reduce((a: number, b: number) => a + b, 0) - 1;
+    // const itemsTotalHeight =
+    //   items
+    //     .map((item: any, index: number) => {
+    //       let showRowHeight = getRowHeight({
+    //         text:
+    //           item && index !== 0 ? item.node.message : item.node.last_message,
+    //         attributes: "",
+    //         className: "fakeClass",
+    //         created_at: item.node.created_at,
+    //         // data: allItems,
+    //         images: item.node.images,
+    //         itemIndex: index
+    //       });
+    //       return showRowHeight;
+    //     })
+    //     .reduce((a: number, b: number) => a + b, 0) - 1;
 
     console.log("initialScrollY EQUALSSSSSSS\n", {
-      initialScrollY,
-      itemsTotalHeight
+      initialScrollY
+      // itemsTotalHeight
     });
 
     const { imageModal } = this.state;
 
     const pose = imageModal === "open" ? "zoom" : "init";
     return (
-      <Flex flexDirection="column" width={1}>
+      <Flex flexDirection="column" width={1} flex="1 1 auto">
         <Frame
           pose={pose}
           onClick={() => this.closeImageModal()}
