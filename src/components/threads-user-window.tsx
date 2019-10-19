@@ -6,6 +6,7 @@ import { Button, Flex, Text } from "./styled-rebass";
 import UserProfileImage from "./user-profile-image";
 
 import Router from "next/router";
+import { Heading } from "rebass";
 
 export interface IRowProps {
   index: number;
@@ -271,32 +272,36 @@ class ThreadWindow extends React.Component<
     return (
       <AutoSizer>
         {({ height, width }) => {
-          return (
-            // <InfiniteLoader isItemLoaded={isItemLoaded} itemCount={itemCount}>
-            //   {({ onItemsRendered, ref }) => {
-            //     return (
-            <List
-              itemData={{
-                itemData: items,
-                loadMoreItems,
-                loadingGetOnlyThreads,
-                handleThreadSelection,
-                handleDisplayMessages,
-                height,
-                width
-              }}
-              ref={this.listRef}
-              height={height}
-              itemCount={itemCount}
-              itemSize={85}
-              width={width}
-            >
-              {Row}
-            </List>
-            //     );
-            //   }}
-            // </InfiniteLoader>
-          );
+          if (itemCount > 0) {
+            return (
+              // <InfiniteLoader isItemLoaded={isItemLoaded} itemCount={itemCount}>
+              //   {({ onItemsRendered, ref }) => {
+              //     return (
+              <List
+                itemData={{
+                  itemData: items,
+                  loadMoreItems,
+                  loadingGetOnlyThreads,
+                  handleThreadSelection,
+                  handleDisplayMessages,
+                  height,
+                  width
+                }}
+                ref={this.listRef}
+                height={height}
+                itemCount={itemCount}
+                itemSize={85}
+                width={width}
+              >
+                {Row}
+              </List>
+              //     );
+              //   }}
+              // </InfiniteLoader>
+            );
+          } else {
+            return <Heading>You don't have any Threads Yet</Heading>;
+          }
         }}
       </AutoSizer>
     );
