@@ -191,7 +191,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             {children}
           </Flex>
         </>
-        <LayoutFooter />;
+        <LayoutFooter />
       </AbFlex>
     );
   }
