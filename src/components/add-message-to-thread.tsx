@@ -183,7 +183,7 @@ function AddMessageToThread({
                                   bg="blue"
                                   fontSize="1.2em"
                                   type="button"
-                                  onClick={event => {
+                                  onClick={(event: React.MouseEvent) => {
                                     event.stopPropagation();
 
                                     values.images.forEach(() =>
@@ -230,7 +230,9 @@ function AddMessageToThread({
                                               bg="transparent"
                                               fontSize="2em"
                                               type="button"
-                                              onClick={event => {
+                                              onClick={(
+                                                event: React.MouseEvent
+                                              ) => {
                                                 event.stopPropagation();
 
                                                 handleRemoveIndividualImagePreview(
@@ -398,6 +400,7 @@ function AddMessageToThread({
                           </AbFlex> */}
                           <MinButton
                             onClick={openFileDialog}
+                            type="button"
                             bg="transparent"
                             minHeight="35px"
                             width="3.5em"
