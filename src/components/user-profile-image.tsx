@@ -30,9 +30,8 @@ function UserProfileImage({
       style={{ minHeight: "40px" }}
     >
       <FlexUserProfileWrap
-        maxHeight="40px"
-        maxWidth="40px"
-        // width="40px"
+        height="40px"
+        width="40px"
         overflow="hidden"
         borderRadius="50%"
         bg="thread_footer"
@@ -43,7 +42,7 @@ function UserProfileImage({
         {user.profileImage ? (
           <Avatar src={user.profileImage} />
         ) : (
-          <Icon size="2em" name="user" fill="white" />
+          <Icon mt={3} size="2em" name="user" fill="white" />
         )}
       </FlexUserProfileWrap>
 

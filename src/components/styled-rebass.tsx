@@ -178,7 +178,15 @@ export const LinkLink = ({ children, style, ...props }: any) => (
   </StyledLinkV1>
 );
 
-export const Icon = IconBase;
+interface IIconBaseProps extends SpaceProps {
+  size: string;
+  name: string;
+  fill: string;
+}
+
+export const Icon: React.FC<IIconBaseProps> = styled(IconBase)`
+  ${space}
+`;
 
 export const FlexShadow: React.FC<IFlexShadowProps> = styled(FlexBase)`
   ${boxShadow}
