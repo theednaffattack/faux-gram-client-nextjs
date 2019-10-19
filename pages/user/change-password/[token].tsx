@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 
-import Layout from "../../../src/components/layout";
+// import Layout from "../../../src/components/layout";
 import { IUserPageProps } from "../../../src/modules/auth/types";
 
 const dummyVar = "";
@@ -13,11 +13,11 @@ const ChangePassword: NextPage<IUserPageProps> = ({
   token
 }) => {
   return (
-    <Layout>
+    <>
       <h1>Post: {JSON.stringify({ token })}</h1>
       <h1>Post: {JSON.stringify({ pathname })}</h1>
       <h1>Post: {JSON.stringify({ query })}</h1>
-    </Layout>
+    </>
   );
 };
 
