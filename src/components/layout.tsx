@@ -144,7 +144,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         ref={this.sidebarContainerRef}
       >
         <Head>
-          <title>{title}</title>
+          <title>{title || ""}</title>
           <meta charSet="utf-8" />
           <meta
             name="viewport"
