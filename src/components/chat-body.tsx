@@ -26,8 +26,6 @@ const ChatBody = ({
   handleChatMenuClick,
   dataMessageThreads,
   me,
-  emojiPickerVisible,
-  // newThreadInvitees,
   handleEngageMicrophoneClick,
   handleOpenEmojiMenuClick,
   handleUploadFileClick,
@@ -215,7 +213,6 @@ const ChatBody = ({
           signS3Mutation={console.log("signS3Mutation")}
           // chatInput={chatInput}
           handleChatFieldChange={handleChatFieldChange}
-          emojiPickerVisible={emojiPickerVisible}
           files={[]}
           handleEngageMicrophoneClick={handleEngageMicrophoneClick}
           handleOpenEmojiMenuClick={handleOpenEmojiMenuClick}
