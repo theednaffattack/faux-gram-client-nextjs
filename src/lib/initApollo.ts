@@ -96,7 +96,11 @@ function create(
           )}, Path: ${path}`
         );
         if (isBrowser && message.includes("Not authenticated")) {
-          Router.replace("/login");
+          // Router.replace("/login");
+          Router.replace({
+            pathname: "/login",
+            query: { message: "You are not authenticated" }
+          });
         }
       });
     if (networkError) console.log(`[Network error]: ${networkError}`);
