@@ -42,7 +42,7 @@ export default function GetMessagesByThreadIdPage(
         }) => {
           // @TODO: change these if statements into skeleton loading below
           if (errorGetMessagesByThreadId)
-            return <div>{errorGetMessagesByThreadId}</div>;
+            return <div>{JSON.stringify(errorGetMessagesByThreadId)}</div>;
           if (loadingGetMessagesByThreadId)
             return <div>loading MESSAGES BY THREAD ID...</div>;
           if (dataGetMessagesByThreadId) {
