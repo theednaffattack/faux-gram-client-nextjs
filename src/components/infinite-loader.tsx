@@ -53,6 +53,26 @@ interface UserPageProps {
   site_admin: boolean;
 }
 
+// const makeCancelable = (promise: Promise<any>) => {
+//   let hasCanceled_ = false;
+
+//   const wrappedPromise = new Promise((resolve, reject) => {
+//     promise.then(
+//       val => (hasCanceled_ ? reject({ isCanceled: true }) : resolve(val)),
+//       error => (hasCanceled_ ? reject({ isCanceled: true }) : reject(error))
+//     );
+//   });
+
+//   return {
+//     promise: wrappedPromise,
+//     cancel() {
+//       hasCanceled_ = true;
+//     }
+//   };
+// };
+
+// const cancelablePromise = makeCancelable(fetch("LINK HERE"));
+
 class InfiniteLoader extends React.Component<
   InfiniteLoaderProps,
   InfiniteLoaderState
@@ -138,10 +158,12 @@ class InfiniteLoader extends React.Component<
   }
 
   componentWillUnmount() {
+    // if any body scroll locks exist from using the loader, ditch them
     clearAllBodyScrollLocks();
-    // if (this.listContainerRef && this.listContainerRef.current) {
-    //   enableBodyScroll(this.listContainerRef.current);
-    // }
+
+    // stop observing the sentinels inside the loader
+    this.topObserver.unobserve(this.topLoadingRef.current);
+    this.bottomObserver.unobserve(this.bottomLoadingRef.current);
   }
 
   handleTopObserver(
@@ -156,9 +178,9 @@ class InfiniteLoader extends React.Component<
       const lastItem = this.props.items[this.props.items.length - 1];
       const curPage = lastItem.id;
 
-      if (this.props.pageInfo.hasPreviousPage) {
-        this.props.fetchMore();
-      }
+      // if (this.props.pageInfo.hasPreviousPage) {
+      //   this.props.fetchMore();
+      // }
 
       this.setState({ page: curPage, topSentinelIsIntersecting: true });
     } else if (this.state.topSentinelIsIntersecting === true) {
@@ -270,7 +292,9 @@ class InfiniteLoader extends React.Component<
                   >
                     <MessageBox
                       allData={[]}
-                      fetchMoreGetMessagesByThreadId={this.props.fetchMore}
+                      fetchMoreGetMessagesByThreadId={() =>
+                        this.props.fetchMore()
+                      }
                       handleRemoveInviteeToThread={() =>
                         console.log("handleRemoveInviteeToThread called")
                       }
