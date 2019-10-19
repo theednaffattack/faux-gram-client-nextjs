@@ -7,7 +7,7 @@ import {
 } from "styled-system";
 import { BoxProps, ButtonProps } from "rebass";
 
-import { IPageProps } from "../../../pages/types";
+import { IPageProps } from "../../page-types/types";
 
 export interface LoginCredentials {
   [email: string]: string;

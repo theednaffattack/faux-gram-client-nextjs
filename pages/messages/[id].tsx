@@ -2,7 +2,7 @@ import { NextPage } from "next";
 
 import Layout from "../../src/components/layout";
 import GetMessagesByThreadIdPage from "../../src/components/messages/get-messages-by-thread-id-page";
-import { IMessagesPageProps } from "./types";
+import { IMessagesPageProps } from "../../src/page-types/types";
 
 const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
   let preppedId: string;
