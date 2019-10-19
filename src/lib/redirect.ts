@@ -1,6 +1,7 @@
 import Router from "next/router";
+import { ParsedUrlQueryInput } from "querystring";
 
-export default (context: any, target: string) => {
+export default (context: any, target: string, query?: ParsedUrlQueryInput) => {
   if (context.res) {
     // server
     // 303: "See other"
@@ -8,6 +9,9 @@ export default (context: any, target: string) => {
     context.res.end();
   } else {
     // In the browser, we just pretend like this never even happened ;)
-    Router.replace(target);
+    Router.replace({
+      pathname: target,
+      query
+    }); // target
   }
 };
