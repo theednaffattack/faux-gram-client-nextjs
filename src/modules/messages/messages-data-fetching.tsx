@@ -32,6 +32,7 @@ const Messages = ({
           //   }
           // });
           // I need to look into how to pass state to NextJS components while routing
+          console.log("errorHello", errorHello);
           Router.push({
             pathname: "/login",
             query: { error: "You are not authenticated" }
