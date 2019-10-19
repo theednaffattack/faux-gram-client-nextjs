@@ -34,8 +34,6 @@ const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
 MessagesById.getInitialProps = async ({ pathname, query }) => {
   const { id } = query;
 
-  console.log({ pathname, query, id });
-
   return { pathname, query, id };
 };
 

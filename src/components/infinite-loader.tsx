@@ -219,14 +219,6 @@ class InfiniteLoader extends React.Component<
     }
     // is this for scrolling up???
     if (this.state.prevBottomSentinelY < bottomSentinelY) {
-      console.log(
-        "WHAT DOESS THIS MEAN prevBottomSentinelY < bottomSentinelY",
-        {
-          prevBottomSentinelY: this.state.prevBottomSentinelY,
-          bottomSentinelY
-        }
-      );
-
       this.setState({ previousFromCursorLoading: true });
     }
 

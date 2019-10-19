@@ -242,7 +242,7 @@ class MessagesWindow extends React.Component<
       ? [loadingRow, ...data.edges]
       : data.edges;
 
-    const initialScrollY = 182 * items.length;
+    // const initialScrollY = 182 * items.length;
 
     // const itemsTotalHeight =
     //   items
@@ -260,11 +260,6 @@ class MessagesWindow extends React.Component<
     //       return showRowHeight;
     //     })
     //     .reduce((a: number, b: number) => a + b, 0) - 1;
-
-    console.log("initialScrollY EQUALSSSSSSS\n", {
-      initialScrollY
-      // itemsTotalHeight
-    });
 
     const { imageModal } = this.state;
 
