@@ -1,4 +1,3 @@
-import { ParsedUrlQuery } from "querystring";
 import {
   BorderRadiusProps,
   BoxShadowProps,
@@ -8,14 +7,11 @@ import {
 } from "styled-system";
 import { BoxProps, ButtonProps } from "rebass";
 
+import { IPageProps } from "../../../pages/types";
+
 export interface LoginCredentials {
   [email: string]: string;
   password: string;
-}
-
-export interface IPageProps {
-  pathname?: string;
-  query?: ParsedUrlQuery;
 }
 
 export interface IUserPageProps extends IPageProps {
