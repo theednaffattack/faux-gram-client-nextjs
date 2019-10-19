@@ -1,5 +1,6 @@
 import React from "react";
 import { VariableSizeList } from "react-window";
+import util from "util";
 
 import { Flex, Image } from "./styled-rebass";
 import { Frame } from "./zoom-image";
@@ -72,11 +73,6 @@ interface IMessagesWindowProps {
   fetchMoreGetMessagesByThreadId: any;
 }
 
-// interface IMessageDimensions {
-//   height: number;
-//   width: number;
-// }
-
 type TImageModalState = "open" | "closed";
 
 interface IMessageWindowState {
@@ -106,6 +102,7 @@ class MessagesWindow extends React.Component<
   listRef: React.RefObject<VariableSizeList>;
   messageHistoryRef: React.RefObject<VariableSizeList>;
   _lastElem: HTMLDivElement | null;
+  unsubscribe: any;
   constructor(props: IMessagesWindowProps) {
     super(props);
 
@@ -117,6 +114,8 @@ class MessagesWindow extends React.Component<
     this.handleToggleImageModal = this.handleToggleImageModal.bind(this);
 
     this._lastElem = null;
+
+    this.unsubscribe = null;
 
     this.state = {
       listLength: null,
@@ -163,16 +162,12 @@ class MessagesWindow extends React.Component<
   }
 
   componentDidMount() {
-    this.setState({
-      listLength: this.props.data.edges.length
-    });
-
-    this.props.subscribeToMore({
+    this.unsubscribe = this.props.subscribeToMore({
       document: MESSAGE_THREADS,
       variables: {
         data: {
           threadId: this.props.threadIdSelected,
-          sentTo: "0a8c2ccf-114f-4c3f-99b0-07d83bc668e5",
+          sentTo: "5102bae2-5000-42f1-986a-58e8f8506971",
           message: "hi bob",
           invitees: [
             "0a8c2ccf-114f-4c3f-99b0-07d83bc668e5",
@@ -203,8 +198,18 @@ class MessagesWindow extends React.Component<
         });
 
         return returnObj;
+      },
+      onError: (err: any) => {
+        return console.error(
+          "onError catch in UpdateQuery",
+          util.inspect(err, true, 3, true)
+        );
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   render() {
