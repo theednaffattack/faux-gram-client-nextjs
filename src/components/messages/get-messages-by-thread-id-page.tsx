@@ -6,6 +6,7 @@ import {
 import { Button, Flex, Icon } from "../styled-rebass";
 import MessagesWindow from "../messages-user-window";
 import ChatForm from "../chat-form";
+import Router from "next/router";
 
 export interface IGetMessagesByThreadIdPageProps {
   threadIdSelected: string;
@@ -61,10 +62,10 @@ export default function GetMessagesByThreadIdPage(
                   ml="auto"
                   key="justAButton"
                   type="button"
-                  onClick={props.handleCloseThread}
+                  onClick={() => Router.push("/messages", "/messages")}
                 >
-                  <Icon name="triangleLeft" fill="white" size="1.5em" /> Back to
-                  Threads
+                  <Icon name="triangleLeft" fill="white" size="1.5em" />
+                  Back to Threads
                 </Button>
 
                 <Flex
