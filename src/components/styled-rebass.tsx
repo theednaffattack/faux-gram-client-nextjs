@@ -85,6 +85,27 @@ export interface ITabListItemProps {
   active?: boolean;
 }
 
+interface IAvatarProps {
+  src: string;
+}
+
+export const Avatar: React.FunctionComponent<IAvatarProps> = ({ src }) => {
+  if (src) {
+    return (
+      <Image
+        src={src}
+        sx={{
+          width: 48,
+          height: 48,
+          borderRadius: 9999
+        }}
+      />
+    );
+  }
+
+  return <Icon size="2em" name="user" fill="white" />;
+};
+
 export const TabListItem: React.FC<ITabListItemProps> = styled.li`
   display: inline-block;
   list-style: none;

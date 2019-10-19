@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Button, Flex, Icon, Text, FlexUserProfileWrap } from "./styled-rebass";
+import {
+  Button,
+  Flex,
+  Icon,
+  Text,
+  FlexUserProfileWrap,
+  Avatar
+} from "./styled-rebass";
 import { IUserProfileImage } from "./types";
 
 function UserProfileImage({
@@ -24,15 +31,20 @@ function UserProfileImage({
     >
       <FlexUserProfileWrap
         maxHeight="40px"
-        width="40px"
+        maxWidth="40px"
+        // width="40px"
         overflow="hidden"
         borderRadius="50%"
         bg="thread_footer"
         alignItems="center"
         justifyContent="center"
-        boxShadow="0 2px 16px rgba(0, 0, 0, 0.25)"
+        boxShadow="2px 2px 16px rgba(0, 0, 0, 0.25)"
       >
-        <Icon size="2em" name="user" fill="white" />
+        {user.profileImage ? (
+          <Avatar src={user.profileImage} />
+        ) : (
+          <Icon size="2em" name="user" fill="white" />
+        )}
       </FlexUserProfileWrap>
 
       <Text color={color ? color : "text"}>
