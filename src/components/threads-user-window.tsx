@@ -5,6 +5,8 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { Button, Flex, Text } from "./styled-rebass";
 import UserProfileImage from "./user-profile-image";
 
+import Router from "next/router";
+
 export interface IRowProps {
   index: number;
   style: any;
@@ -113,7 +115,11 @@ const Row = ({ index, data, style }: IRowProps) => {
           mr={2}
           type="button"
           onClick={() => {
-            data.handleDisplayMessages(data.itemData[index].node.id);
+            // data.handleDisplayMessages(data.itemData[index].node.id);
+            Router.push(
+              "/messages/[id]",
+              `/messages/${data.itemData[index].node.id}`
+            );
           }}
         >
           View messages
