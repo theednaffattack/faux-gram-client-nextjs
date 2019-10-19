@@ -141,7 +141,6 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         width={1}
         alignItems="center"
         flex="1 1 auto"
-        border="lime"
         ref={this.sidebarContainerRef}
       >
         <Head>
@@ -180,7 +179,6 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
           >
             <Flex
               width={[1, 1, 1, "960px"]}
-              // border="lime"
               minHeight="70px"
               style={{
                 position: "static",
