@@ -63,6 +63,7 @@
     "subscriptions-transport-ws": "^0.9.16",
     "theme-ui": "^0.2.43",
     "uuid": "^3.3.3",
+    "webpack": "^4.41.2",
     "yup": "^0.27.0"
   },
   "devDependencies": {
