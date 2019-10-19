@@ -13,7 +13,7 @@ const StyledLink = styled.a<IStyledLinkProps>`
 `;
 
 export default ({ href, name, shade, theme }: any) => (
-  <Link prefetch href={href} passHref>
+  <Link href={href} passHref>
     <StyledLink shade={shade}>
       {name}
       {JSON.stringify(theme)}
