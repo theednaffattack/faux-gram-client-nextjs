@@ -19,7 +19,8 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": { "rebass/styled-components": ["node_modules/@types/rebass"] }
   },
   "exclude": [
     "dist",
