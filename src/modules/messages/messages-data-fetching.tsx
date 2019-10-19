@@ -34,6 +34,8 @@ const Messages = ({
           // I need to look into how to pass state to NextJS components while routing
           console.log("errorHello", errorHello);
           Router.push({
+            href: "/login",
+            path: "/login",
             pathname: "/login",
             query: { error: "You are not authenticated" }
           });
@@ -48,7 +50,7 @@ const Messages = ({
           <MeComponent>
             {({ data, loading, error }) => {
               if (loading) return <div>loading MEEEEEEEEEEEE...</div>;
-              if (error) return <div>error: {error}</div>;
+              if (error) return <div>error: {JSON.stringify(error)}</div>;
               if (data && data.me) {
                 return (
                   <GetOnlyThreadsComponent

@@ -357,7 +357,8 @@ export default class GetOnlyThreads extends Component<
     // const { threadIdSelected } = this.state;
 
     if (errorGetOnlyThreads) {
-      return <Flex>{errorGetOnlyThreads}</Flex>;
+      console.error("errorGetOnlyThreads", errorGetOnlyThreads);
+      return <Flex>{JSON.stringify(errorGetOnlyThreads)}</Flex>;
     }
 
     if (loadingGetOnlyThreads) {

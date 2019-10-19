@@ -62,7 +62,7 @@ export default function GetMessagesByThreadIdPage(
                   ml="auto"
                   key="justAButton"
                   type="button"
-                  onClick={() => Router.push("/messages", "/messages")}
+                  onClick={() => Router.push("/messages")}
                 >
                   <Icon name="triangleLeft" fill="white" size="1.5em" />
                   Back to Threads
