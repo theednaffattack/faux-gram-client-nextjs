@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import { clearAllBodyScrollLocks } from "body-scroll-lock";
+import dynamic from "next/dynamic";
 
-import {
-  GetMessagesByThreadIdComponent
-  // GetOnlyThreadsQuery,
-  // GetOnlyThreadsQueryVariables
-} from "./generated/apollo-graphql";
-import { Button, Flex, Icon, AbFlex } from "./styled-rebass";
-import ChatForm from "./chat-form";
-import { SignS3Component } from "./generated/apollo-graphql";
+import { Flex } from "./styled-rebass";
+// import ChatForm from "./chat-form";
+// import {
+//   SignS3Component,
+//   GetMessagesByThreadIdComponent
+// } from "./generated/apollo-graphql";
 import ThreadWindow from "./threads-user-window";
-import MessagesWindow from "./messages-user-window";
-import AddressBookMutation from "./address-book-mutation";
+// import MessagesWindow from "./messages-user-window";
+// import AddressBookMutationOLD from "./address-book-mutation";
 
-const { log } = console;
+const AddressBookMutation = dynamic({
+  loader: () => import("./address-book-mutation"),
+  loading: () => <p>Loading caused by client page transition ...</p>
+});
+
+// const { log } = console;
 
 // interface IShowThreadsProps {
 //   data: any;
@@ -346,11 +350,11 @@ export default class GetOnlyThreads extends Component<
       errorGetOnlyThreads,
       loadingGetOnlyThreads,
       showMessagingAddressBook,
-      handleCancelNewMessageThread,
-      me
+      handleCancelNewMessageThread
+      // me
     } = this.props;
 
-    const { threadIdSelected } = this.state;
+    // const { threadIdSelected } = this.state;
 
     if (errorGetOnlyThreads) {
       return <Flex>{errorGetOnlyThreads}</Flex>;
@@ -393,6 +397,9 @@ export default class GetOnlyThreads extends Component<
       this.state.displayCreateThread === false
     ) {
       return (
+        // Show a progress indicator while loading
+        // <DynamicComponent2WithCustomLoading />
+
         <AddressBookMutation
           newThreadInvitees={this.state.newThreadInvitees}
           handleAddInviteeToThread={this.handleAddInviteeToThread}
@@ -411,253 +418,253 @@ export default class GetOnlyThreads extends Component<
       );
     }
 
-    if (
-      this.state.displayMessages === false &&
-      // this.state.threadIdSelected === null &&
-      // showMessagingAddressBook === false &&
-      // this.state.newThreadInvitees.length > 0 &&
-      this.state.displayCreateThread === true
-    ) {
-      return (
-        <Flex
-          flexDirection="column"
-          alignItems="space-between"
-          width={1}
-          id="isItMe"
-          style={{ overflowY: "hidden", overflowX: "hidden" }}
-        >
-          <Button
-            ml="auto"
-            key="justAButton"
-            type="button"
-            onClick={this.handleCloseThread}
-          >
-            <Icon name="triangleLeft" fill="white" size="1.5em" /> Back to
-            Threads
-          </Button>
+    // if (
+    //   this.state.displayMessages === false &&
+    //   // this.state.threadIdSelected === null &&
+    //   // showMessagingAddressBook === false &&
+    //   // this.state.newThreadInvitees.length > 0 &&
+    //   this.state.displayCreateThread === true
+    // ) {
+    //   return (
+    //     <Flex
+    //       flexDirection="column"
+    //       alignItems="space-between"
+    //       width={1}
+    //       id="isItMe"
+    //       style={{ overflowY: "hidden", overflowX: "hidden" }}
+    //     >
+    //       <Button
+    //         ml="auto"
+    //         key="justAButton"
+    //         type="button"
+    //         onClick={this.handleCloseThread}
+    //       >
+    //         <Icon name="triangleLeft" fill="white" size="1.5em" /> Back to
+    //         Threads
+    //       </Button>
 
-          <Flex
-            flex="1 1 auto"
-            style={{
-              position: "relative"
-            }}
-          >
-            Type a message to get started
-            <AbFlex position="absolute" bottom={0} width={[1]}>
-              <SignS3Component>
-                {(
-                  signS3,
-                  {
-                    data: dataSignS3,
-                    error: errorSignS3,
-                    loading: loadingSignS3
-                  }
-                ) => {
-                  if (errorSignS3) return <div>{errorSignS3}</div>;
-                  if (loadingSignS3) return <div>loading</div>;
-                  if (dataSignS3) {
-                    return (
-                      <div>
-                        Sign S3 stuff{" "}
-                        <button type="button" onClick={() => signS3}>
-                          blah button
-                        </button>
-                      </div>
-                    );
-                  }
-                  return (
-                    <ChatForm
-                      handleChatFieldChange={() => log("handleChatFieldChange")}
-                      handleUploadFileClick={() => log("handleUploadFile")}
-                      handleThreadSelection={this.handleThreadSelection}
-                      chatEmoji=""
-                      disabled={this.state.disabled}
-                      // emojiPickerVisible={this.state.emojiPickerVisible}
-                      files={[]}
-                      handleSetLastMessenger={this.handleSetLastMessenger}
-                      handleOpenEmojiMenuClick={this.handleOpenEmojiMenuClick}
-                      handleEngageMicrophoneClick={() => console.log}
-                      handleSetLastMessage={this.handleSetLastMessage}
-                      key="someOtherKey"
-                      newThreadInvitees={this.state.newThreadInvitees}
-                      newThreadDisabled={this.state.newThreadDisabled}
-                      selectedThreadId={
-                        threadIdSelected ? threadIdSelected : ""
-                      }
-                      sentTo={""}
-                      signS3Mutation={signS3}
-                      threadId={threadIdSelected ? threadIdSelected : ""}
-                    />
-                  );
-                }}
-              </SignS3Component>
-            </AbFlex>
-          </Flex>
-        </Flex>
-      );
-    }
+    //       <Flex
+    //         flex="1 1 auto"
+    //         style={{
+    //           position: "relative"
+    //         }}
+    //       >
+    //         Type a message to get started
+    //         <AbFlex position="absolute" bottom={0} width={[1]}>
+    //           <SignS3Component>
+    //             {(
+    //               signS3,
+    //               {
+    //                 data: dataSignS3,
+    //                 error: errorSignS3,
+    //                 loading: loadingSignS3
+    //               }
+    //             ) => {
+    //               if (errorSignS3) return <div>{errorSignS3}</div>;
+    //               if (loadingSignS3) return <div>loading</div>;
+    //               if (dataSignS3) {
+    //                 return (
+    //                   <div>
+    //                     Sign S3 stuff{" "}
+    //                     <button type="button" onClick={() => signS3}>
+    //                       blah button
+    //                     </button>
+    //                   </div>
+    //                 );
+    //               }
+    //               return (
+    //                 <ChatForm
+    //                   handleChatFieldChange={() => log("handleChatFieldChange")}
+    //                   handleUploadFileClick={() => log("handleUploadFile")}
+    //                   handleThreadSelection={this.handleThreadSelection}
+    //                   chatEmoji=""
+    //                   disabled={this.state.disabled}
+    //                   // emojiPickerVisible={this.state.emojiPickerVisible}
+    //                   files={[]}
+    //                   handleSetLastMessenger={this.handleSetLastMessenger}
+    //                   handleOpenEmojiMenuClick={this.handleOpenEmojiMenuClick}
+    //                   handleEngageMicrophoneClick={() => console.log}
+    //                   handleSetLastMessage={this.handleSetLastMessage}
+    //                   key="someOtherKey"
+    //                   newThreadInvitees={this.state.newThreadInvitees}
+    //                   newThreadDisabled={this.state.newThreadDisabled}
+    //                   selectedThreadId={
+    //                     threadIdSelected ? threadIdSelected : ""
+    //                   }
+    //                   sentTo={""}
+    //                   signS3Mutation={signS3}
+    //                   threadId={threadIdSelected ? threadIdSelected : ""}
+    //                 />
+    //               );
+    //             }}
+    //           </SignS3Component>
+    //         </AbFlex>
+    //       </Flex>
+    //     </Flex>
+    //   );
+    // }
 
-    if (this.state.displayMessages && this.state.threadIdSelected) {
-      return (
-        <>
-          <GetMessagesByThreadIdComponent
-            // notifyOnNetworkStatusChange
-            variables={{
-              input: {
-                threadId: this.state.threadIdSelected,
-                skip: 0,
-                take: 15
-              }
-            }}
-          >
-            {({
-              data,
-              error,
-              fetchMore: fetchMoreGetMessagesByThreadId,
-              loading: loadingGetMessagesByThreadId,
-              subscribeToMore
-            }) => {
-              // const lastMessengerHere =
-              //   data.getMessagesByThreadId[
-              //     data.getMessagesByThreadId.length - 1
-              //   ].sentBy;
-              if (error) return <div>{error}</div>;
-              if (loadingGetMessagesByThreadId)
-                return <div>loading MESSAGES BY THREAD ID...</div>;
-              if (data) {
-                return (
-                  <Flex
-                    flexDirection="column"
-                    alignItems="space-between"
-                    width={1}
-                    id="isItMe"
-                    flex="1 1 auto"
-                    style={{
-                      overflowY: "hidden",
-                      overflowX: "hidden"
-                    }}
-                  >
-                    <Button
-                      ml="auto"
-                      key="justAButton"
-                      type="button"
-                      onClick={this.handleCloseThread}
-                    >
-                      <Icon name="triangleLeft" fill="white" size="1.5em" />{" "}
-                      Back to Threads
-                    </Button>
-                    {/* {JSON.stringify(data.getMessagesByThreadId)} */}
-                    <Flex
-                      flex="1 1 auto"
-                      style={{
-                        position: "relative"
-                      }}
-                    >
-                      {showMessagingAddressBook === false ? (
-                        <MessagesWindow
-                          data={data.getMessagesByThreadId}
-                          me={me}
-                          handleDisplayMessages={this.handleDisplayMessages}
-                          subscribeToMore={subscribeToMore}
-                          threadIdSelected={threadIdSelected || ""}
-                          loadingGetMessagesByThreadId={
-                            loadingGetMessagesByThreadId
-                          }
-                          fetchMoreGetMessagesByThreadId={
-                            fetchMoreGetMessagesByThreadId
-                          }
-                          // handleRemoveInviteeToThread={
-                          //   this.handleRemoveInviteeToThread
-                          // }
-                          handleCloseThread={this.handleCloseThread}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </Flex>
-                    {/* <Flex> */}
+    // if (this.state.displayMessages && this.state.threadIdSelected) {
+    //   return (
+    //     <>
+    //       <GetMessagesByThreadIdComponent
+    //         // notifyOnNetworkStatusChange
+    //         variables={{
+    //           input: {
+    //             threadId: this.state.threadIdSelected,
+    //             skip: 0,
+    //             take: 15
+    //           }
+    //         }}
+    //       >
+    //         {({
+    //           data,
+    //           error,
+    //           fetchMore: fetchMoreGetMessagesByThreadId,
+    //           loading: loadingGetMessagesByThreadId,
+    //           subscribeToMore
+    //         }) => {
+    //           // const lastMessengerHere =
+    //           //   data.getMessagesByThreadId[
+    //           //     data.getMessagesByThreadId.length - 1
+    //           //   ].sentBy;
+    //           if (error) return <div>{error}</div>;
+    //           if (loadingGetMessagesByThreadId)
+    //             return <div>loading MESSAGES BY THREAD ID...</div>;
+    //           if (data) {
+    //             return (
+    //               <Flex
+    //                 flexDirection="column"
+    //                 alignItems="space-between"
+    //                 width={1}
+    //                 id="isItMe"
+    //                 flex="1 1 auto"
+    //                 style={{
+    //                   overflowY: "hidden",
+    //                   overflowX: "hidden"
+    //                 }}
+    //               >
+    //                 <Button
+    //                   ml="auto"
+    //                   key="justAButton"
+    //                   type="button"
+    //                   onClick={this.handleCloseThread}
+    //                 >
+    //                   <Icon name="triangleLeft" fill="white" size="1.5em" />{" "}
+    //                   Back to Threads
+    //                 </Button>
+    //                 {/* {JSON.stringify(data.getMessagesByThreadId)} */}
+    //                 <Flex
+    //                   flex="1 1 auto"
+    //                   style={{
+    //                     position: "relative"
+    //                   }}
+    //                 >
+    //                   {showMessagingAddressBook === false ? (
+    //                     <MessagesWindow
+    //                       data={data.getMessagesByThreadId}
+    //                       me={me}
+    //                       handleDisplayMessages={this.handleDisplayMessages}
+    //                       subscribeToMore={subscribeToMore}
+    //                       threadIdSelected={threadIdSelected || ""}
+    //                       loadingGetMessagesByThreadId={
+    //                         loadingGetMessagesByThreadId
+    //                       }
+    //                       fetchMoreGetMessagesByThreadId={
+    //                         fetchMoreGetMessagesByThreadId
+    //                       }
+    //                       // handleRemoveInviteeToThread={
+    //                       //   this.handleRemoveInviteeToThread
+    //                       // }
+    //                       handleCloseThread={this.handleCloseThread}
+    //                     />
+    //                   ) : (
+    //                     ""
+    //                   )}
+    //                 </Flex>
+    //                 {/* <Flex> */}
 
-                    {/* <AbFlex position="absolute" bottom={0} width={[1]}> */}
-                    <SignS3Component>
-                      {signS3 => {
-                        // success: boolean;
-                        // threadId: string;
-                        // message: Message;
-                        // user: User;
-                        // invitees: User[];
-                        if (
-                          data !== null &&
-                          data.getMessagesByThreadId &&
-                          data.getMessagesByThreadId.edges.length > 0
-                        ) {
-                          let blahBy =
-                            data.getMessagesByThreadId.edges[
-                              data.getMessagesByThreadId.edges.length - 1
-                            ];
+    //                 {/* <AbFlex position="absolute" bottom={0} width={[1]}> */}
+    //                 <SignS3Component>
+    //                   {signS3 => {
+    //                     // success: boolean;
+    //                     // threadId: string;
+    //                     // message: Message;
+    //                     // user: User;
+    //                     // invitees: User[];
+    //                     if (
+    //                       data !== null &&
+    //                       data.getMessagesByThreadId &&
+    //                       data.getMessagesByThreadId.edges.length > 0
+    //                     ) {
+    //                       let blahBy =
+    //                         data.getMessagesByThreadId.edges[
+    //                           data.getMessagesByThreadId.edges.length - 1
+    //                         ];
 
-                          let userIdForComparison = blahBy
-                            ? blahBy.node.user.id
-                            : "it's null";
-                          let sentByIdForComparison = blahBy
-                            ? blahBy.node.sentBy.id
-                            : "it's null";
+    //                       let userIdForComparison = blahBy
+    //                         ? blahBy.node.user.id
+    //                         : "it's null";
+    //                       let sentByIdForComparison = blahBy
+    //                         ? blahBy.node.sentBy.id
+    //                         : "it's null";
 
-                          let sentToWinner =
-                            userIdForComparison === this.props.me
-                              ? sentByIdForComparison
-                              : userIdForComparison;
+    //                       let sentToWinner =
+    //                         userIdForComparison === this.props.me
+    //                           ? sentByIdForComparison
+    //                           : userIdForComparison;
 
-                          return (
-                            <ChatForm
-                              chatEmoji=""
-                              disabled={this.state.disabled}
-                              // emojiPickerVisible={this.state.emojiPickerVisible}
-                              files={[]}
-                              handleChatFieldChange={() =>
-                                log("handleChatFieldChange")
-                              }
-                              handleUploadFileClick={() =>
-                                log("handleUploadFile")
-                              }
-                              handleThreadSelection={this.handleThreadSelection}
-                              handleSetLastMessenger={
-                                this.handleSetLastMessenger
-                              }
-                              handleOpenEmojiMenuClick={
-                                this.handleOpenEmojiMenuClick
-                              }
-                              handleEngageMicrophoneClick={() => log}
-                              handleSetLastMessage={this.handleSetLastMessage}
-                              key="someKey"
-                              newThreadInvitees={[]}
-                              newThreadDisabled={this.state.newThreadDisabled}
-                              selectedThreadId={
-                                threadIdSelected ? threadIdSelected : ""
-                              }
-                              sentTo={sentToWinner}
-                              signS3Mutation={signS3}
-                              threadId={
-                                threadIdSelected ? threadIdSelected : ""
-                              }
-                            />
-                          );
-                        } else {
-                          return <div>null</div>;
-                        }
-                      }}
-                    </SignS3Component>
-                    {/* </Flex> */}
-                    {/* </AbFlex> */}
-                  </Flex>
-                );
-              } else {
-                return <div>Essentially null</div>;
-              }
-            }}
-          </GetMessagesByThreadIdComponent>
-        </>
-      );
-    }
+    //                       return (
+    //                         <ChatForm
+    //                           chatEmoji=""
+    //                           disabled={this.state.disabled}
+    //                           // emojiPickerVisible={this.state.emojiPickerVisible}
+    //                           files={[]}
+    //                           handleChatFieldChange={() =>
+    //                             log("handleChatFieldChange")
+    //                           }
+    //                           handleUploadFileClick={() =>
+    //                             log("handleUploadFile")
+    //                           }
+    //                           handleThreadSelection={this.handleThreadSelection}
+    //                           handleSetLastMessenger={
+    //                             this.handleSetLastMessenger
+    //                           }
+    //                           handleOpenEmojiMenuClick={
+    //                             this.handleOpenEmojiMenuClick
+    //                           }
+    //                           handleEngageMicrophoneClick={() => log}
+    //                           handleSetLastMessage={this.handleSetLastMessage}
+    //                           key="someKey"
+    //                           newThreadInvitees={[]}
+    //                           newThreadDisabled={this.state.newThreadDisabled}
+    //                           selectedThreadId={
+    //                             threadIdSelected ? threadIdSelected : ""
+    //                           }
+    //                           sentTo={sentToWinner}
+    //                           signS3Mutation={signS3}
+    //                           threadId={
+    //                             threadIdSelected ? threadIdSelected : ""
+    //                           }
+    //                         />
+    //                       );
+    //                     } else {
+    //                       return <div>null</div>;
+    //                     }
+    //                   }}
+    //                 </SignS3Component>
+    //                 {/* </Flex> */}
+    //                 {/* </AbFlex> */}
+    //               </Flex>
+    //             );
+    //           } else {
+    //             return <div>Essentially null</div>;
+    //           }
+    //         }}
+    //       </GetMessagesByThreadIdComponent>
+    //     </>
+    //   );
+    // }
     return <div>how weird</div>;
   }
 }
