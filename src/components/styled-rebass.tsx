@@ -8,7 +8,7 @@ import {
   Heading,
   Image,
   Text
-} from "rebass";
+} from "rebass/styled-components";
 import {
   maxWidth,
   minHeight,
