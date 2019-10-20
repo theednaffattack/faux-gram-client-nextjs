@@ -1,8 +1,11 @@
 import { NextPage } from "next";
+// import util from "util";
 
 import Layout from "../../src/components/layout";
 import GetMessagesByThreadIdPage from "../../src/components/messages/get-messages-by-thread-id-page";
 import { IMessagesPageProps } from "../../src/page-types/types";
+import { MyContext } from "../../src/interfaces";
+import { MeComponent } from "../../src/components/generated/apollo-graphql";
 
 const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
   let preppedId: string;
@@ -16,22 +19,45 @@ const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
   }
   return (
     <Layout>
-      <GetMessagesByThreadIdPage
-        threadIdSelected={preppedId}
-        handleCloseThread={() =>
-          console.log("handleCloseThread passed as prop")
-        }
-        me=""
-        handleDisplayMessages={() =>
-          console.log("handleDisplayMessages passed as prop")
-        }
-        formDisabled={false}
-      />
+      <MeComponent>
+        {({ data: dataMe, loading: loadingMe, error: errorMe }) => {
+          let isData = dataMe && dataMe.me ? dataMe.me : null;
+          let isLoading = loadingMe ? loadingMe : null;
+          let isError = errorMe ? errorMe : null;
+
+          if (isError) return <div>"Me" data loading Error!</div>;
+          if (isLoading) {
+            return <div>"Me" data is loading</div>;
+          }
+          if (isData) {
+            return (
+              <GetMessagesByThreadIdPage
+                threadIdSelected={preppedId}
+                handleCloseThread={() =>
+                  console.log("handleCloseThread passed as prop")
+                }
+                me={isData}
+                handleDisplayMessages={() =>
+                  console.log("handleDisplayMessages passed as prop")
+                }
+                formDisabled={false}
+              />
+            );
+          } else {
+            return (
+              <div>
+                None of three "Me" states (loaded data, loading data, error
+                loading data) is present!
+              </div>
+            );
+          }
+        }}
+      </MeComponent>
     </Layout>
   );
 };
 
-MessagesById.getInitialProps = async ({ pathname, query }) => {
+MessagesById.getInitialProps = async ({ pathname, query }: MyContext) => {
   const { id } = query;
 
   return { pathname, query, id };
