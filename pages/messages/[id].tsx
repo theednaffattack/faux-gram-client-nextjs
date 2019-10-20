@@ -6,6 +6,8 @@ import GetMessagesByThreadIdPage from "../../src/components/messages/get-message
 import { IMessagesPageProps } from "../../src/page-types/types";
 import { MyContext } from "../../src/interfaces";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
+import Router from "next/router";
+import { isBrowser } from "../../src/lib/isBrowser";
 
 const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
   let preppedId: string;
@@ -24,6 +26,10 @@ const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
           let isData = dataMe && dataMe.me ? dataMe.me : null;
           let isLoading = loadingMe ? loadingMe : null;
           let isError = errorMe ? errorMe : null;
+
+          if (!isError && !isLoading && !isData && isBrowser) {
+            Router.push("/login");
+          }
 
           if (isError) return <div>"Me" data loading Error!</div>;
           if (isLoading) {
