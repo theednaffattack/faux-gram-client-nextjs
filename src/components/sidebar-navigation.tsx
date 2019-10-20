@@ -7,42 +7,15 @@ import { useDimensions } from "./use-dimensions";
 import { MenuToggle } from "./menu-toggle";
 import { Navigation } from "./navigation";
 
-const sidebar = {
+const sidebarBackground = {
   open: {
-    x: 0,
-    opacity: 1
-    // transition: {
-    //   type: "spring",
-    //   stiffness: 20,
-    //   restDelta: 2
-    // }
+    x: 0
+    // opacity: 1
   },
   closed: {
-    x: -500,
-    opacity: 0
-    // transition: {
-    //   type: "spring",
-    //   stiffness: 20,
-    //   restDelta: 2
-    // }
+    x: "-100%"
+    // opacity: 0
   }
-  // open: (height = 1000) => ({
-  //   clipPath: `circle(${height * 2 + 200}px at 40px 40px)`,
-  //   transition: {
-  //     type: "spring",
-  //     stiffness: 20,
-  //     restDelta: 2
-  //   }
-  // }),
-  // closed: {
-  //   clipPath: "circle(30px at 40px 40px)",
-  //   transition: {
-  //     delay: 0.5,
-  //     type: "spring",
-  //     stiffness: 400,
-  //     damping: 40
-  //   }
-  // }
 };
 
 interface ISidebarNavigationProps {
@@ -81,10 +54,22 @@ export const SidebarNavigation: React.FunctionComponent<
     <MotionNav
       initial={false}
       animate={isOpen ? "open" : "closed"}
+      // variants={sidebar}
       custom={height}
       ref={containerRef}
     >
-      <BackgroundDiv variants={sidebar} />
+      <BackgroundDiv
+        // animate={{ x: 500 }}
+        transition={{ duration: 0.5 }}
+        // transition={{
+        //   ease: "easeInOut",
+        //   // type: "spring",
+        //   duration: 2
+        //   // stiffness: 20,
+        //   // restDelta: 2
+        // }}
+        variants={sidebarBackground}
+      />
 
       <Navigation />
       <MenuToggle toggle={() => toggleOpen()} />
