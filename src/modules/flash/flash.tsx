@@ -15,6 +15,7 @@ const Flash: React.FunctionComponent<IFlashProps> = (props: IFlashProps) => {
   return (
     <MotionBox
       animate={{ scaleZ: 2 }}
+      transition={{ ease: "easeOut", duration: 2 }}
       justifyContent="center"
       alignItems="center"
       border="crimson"
