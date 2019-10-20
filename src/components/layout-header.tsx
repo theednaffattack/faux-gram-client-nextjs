@@ -38,7 +38,6 @@ function LayoutHeader() {
       flexDirection="row"
       alignItems="center"
       width={breakWidths}
-      // border="lime"
       bg="#7386d5"
       color="white"
       px={[1, 1, 4]}

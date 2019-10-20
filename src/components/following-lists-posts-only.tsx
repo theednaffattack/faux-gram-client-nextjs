@@ -54,7 +54,6 @@ export const FollowingList = ({ data }: IFollowingListProps) => (
             borderRadius="15px"
             boxShadow="0 0 16px rgba(0, 0, 0, .25)"
             width={[1, "350px", "350px"]}
-            // border="lime"
             display="flex"
             style={{ opacity: 0, overflow: "hidden" }}
           >
