@@ -167,11 +167,8 @@ export default class DropZoneContainer extends Component<
   }
 
   openFileDialog() {
-    log({ ref: this.fileInputRef, currentRef: this.fileInputRef.current });
     if (this.state.disabled) return;
     if (this.fileInputRef && this.fileInputRef.current) {
-      log("attemtpting click of ref");
-
       this.fileInputRef.current.click();
     }
   }
@@ -258,7 +255,6 @@ export default class DropZoneContainer extends Component<
   };
 
   formatFilename = (file: any) => {
-    console.log("Filename", file);
     const filename = file.name;
 
     const date = dFormat(new Date(), "YYYYMMDD");
@@ -355,7 +351,6 @@ export default class DropZoneContainer extends Component<
   }
 
   onFilesAdded(evt: any) {
-    log({ evt });
     // evt && evt.preventDefault();
     if (this.state.disabled) return;
 
@@ -364,7 +359,6 @@ export default class DropZoneContainer extends Component<
     if (evt && evt.target) {
       array = this.fileListToArray(evt.target.files);
       const previewFiles = this.makeObjectUrls(array);
-      log("previewFiles if", previewFiles);
       this.setState({
         files: [...previewFiles]
       });

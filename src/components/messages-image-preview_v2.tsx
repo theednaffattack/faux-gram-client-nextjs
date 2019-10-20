@@ -127,11 +127,7 @@ const ImagePreview = ({
                                 type="button"
                                 onClick={event => {
                                   event.stopPropagation();
-                                  log("event.target from button", event.target);
-                                  log(
-                                    "event.currentTarget from button",
-                                    event.currentTarget
-                                  );
+
                                   handleRemoveIndividualImagePreview(index);
                                   arrayHelpers.remove(index);
                                 }} // remove a friend from the list

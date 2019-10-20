@@ -16,7 +16,7 @@ import {
 import { inputStyles } from "./dropzone";
 import { PosedFlash } from "./posed-components";
 
-const { log } = console;
+// const { log } = console;
 
 const CreatePostSchema = Yup.object().shape({
   title: Yup.string()
@@ -131,10 +131,7 @@ function CreatePostForm({
                         onDrop={onDrop}
                       >
                         <Field id="images" name="images">
-                          {({ field, form }: any) => {
-                            log({ form });
-                            log("field", { field });
-
+                          {() => {
                             return (
                               <input
                                 id="images"
@@ -151,10 +148,6 @@ function CreatePostForm({
                                   ) {
                                     let seeSomeFiles = onFilesAdded(event);
 
-                                    console.log(
-                                      "VIEW THE ONCHANGE EVENT and FILES",
-                                      seeSomeFiles
-                                    );
                                     setFieldValue(
                                       "images",
                                       values.images.concat(seeSomeFiles)
@@ -229,14 +222,7 @@ function CreatePostForm({
                                           type="button"
                                           onClick={event => {
                                             event.stopPropagation();
-                                            log(
-                                              "event.target from button",
-                                              event.target
-                                            );
-                                            log(
-                                              "event.currentTarget from button",
-                                              event.currentTarget
-                                            );
+
                                             handleRemoveIndividualImagePreview(
                                               index
                                             );
