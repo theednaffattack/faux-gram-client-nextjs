@@ -34,7 +34,6 @@ export const Navigation = () => (
 
 const pages = [
   "about",
-  "message",
   "login",
   "logout",
   "messages",
