@@ -37,6 +37,7 @@ const pages = [
   "login",
   "logout",
   "feed",
+  "post",
   "messages",
   "profile",
   "register",
