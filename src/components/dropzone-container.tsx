@@ -8,6 +8,22 @@ import { Flex } from "./styled-rebass";
 import CreatePostForm from "./create-post-form";
 import { SignS3Component } from "./generated/apollo-graphql";
 
+// interface FileObject {
+//   blobUrl: string;
+//   lastModified: number;
+//   lastModifiedDate: string;
+//   name: string;
+//   size: number;
+//   type: "image/png" | "file/pdf";
+//   webkitRelativePath: string;
+// }
+
+interface SignedS3 {
+  signedRequest: string;
+  url: string;
+  __typename: string;
+}
+
 const { log } = console;
 
 export const inputStyles = {
@@ -79,27 +95,20 @@ export default class DropZoneContainer extends Component<
   async handlePost(submissionData: any, { resetForm, setErrors }: any) {
     if (submissionData.images.length < 1) return;
 
-    // event.preventDefault();
-    log("WHAT IS FORMIK SENDING?");
-
-    log({ submissionData });
-    log("`handlePost` FIRING");
-
-    // const theImage = this.dataURItoBlob(submissionData.pic);
-
-    const imagesAreUploadedToS3 = await this.getSignature();
-
-    console.log("imagesAreUploadedToS3".toUpperCase());
-    console.log({ imagesAreUploadedToS3 });
+    const imagesAreUploadedToS3: [SignedS3] = await this.getSignature();
 
     if (imagesAreUploadedToS3) {
+      let successfullyUploadedFiles = imagesAreUploadedToS3.map(
+        image => image.url
+      );
+
       try {
-        this.props.mutate({
+        this.props.mutateCreatePost({
           variables: {
             data: {
               text: submissionData.text,
               title: submissionData.title,
-              images: [...submissionData.images],
+              images: [...successfullyUploadedFiles],
               user: submissionData.user //"de5527bc-58f4-4666-819c-c0e7983bdcc3"
             }
           }
@@ -113,12 +122,11 @@ export default class DropZoneContainer extends Component<
           displayErrors[errorThing.path[0]] = errorThing.message;
         });
         console.log(graphErrors);
+        console.log(error);
         return setErrors(displayErrors);
       }
     }
 
-    // `text` and `title` both come from the form inputs
-    log("is the error after mutate?");
     resetForm({
       text: "",
       title: "",
@@ -218,19 +226,6 @@ export default class DropZoneContainer extends Component<
           type: myFile.type
         });
       });
-
-    // return await Promise.all(
-    //   self.state.files.map(async myFile => {
-    //     return await fetch(myFile)
-    //       .then(r => r.blob())
-    //       .then(
-    //         blobFile =>
-    //           new File([blobFile], uuidv4(), {
-    //             type: "image/png"
-    //           })
-    //       );
-    //   })
-    // );
   }
 
   uploadToS3 = async ({ file, signedRequest }: any) => {
@@ -300,7 +295,7 @@ export default class DropZoneContainer extends Component<
     });
 
     const { signatures } = response.data.signS3;
-    let s3Uploads = await Promise.all(
+    await Promise.all(
       signatures.map(async (signature: any, signatureIndex: number) => {
         console.log({ signature, signatureIndex });
         return await this.uploadToS3({
@@ -310,21 +305,7 @@ export default class DropZoneContainer extends Component<
       })
     );
 
-    console.log("signatures?");
-    console.log(signatures);
-    console.log("s3Uploads?");
-    console.log(s3Uploads);
-
     return signatures;
-
-    // this needs to be a call to create Post?
-    // probably wrap w/ mutation component from outside and pass in
-    // const graphqlResponse = await this.props.createChampion({
-    //   variables: {
-    //     name,
-    //     pictureUrl: url
-    //   }
-    // });
   }
 
   makeObjectUrls(someArray: any) {
@@ -372,15 +353,9 @@ export default class DropZoneContainer extends Component<
       });
       return previewFiles;
     }
-
-    // if (this.onFilesAdded) {
-    //   this.onFilesAdded(array);
-    // }
   }
 
   render() {
-    // const { signS3 } = this.props;
-
     const { dataCreatePost, errorCreatePost, loadingCreatePost } = this.props;
     return (
       <SignS3Component>
@@ -388,47 +363,18 @@ export default class DropZoneContainer extends Component<
           signS3,
           { data: dataSignS3, error: errorSignS3, loading: loadingSignS3 }
         ) => {
-          if (errorCreatePost) return <div>Error creating post!</div>;
-
-          if (loadingCreatePost) return <div>loading...</div>;
-
-          if (dataCreatePost)
+          if (errorCreatePost)
             return (
               <div>
-                <pre>{JSON.stringify(dataCreatePost, null, 2)}</pre>
+                Error creating post!{" "}
+                <pre>{JSON.stringify(errorCreatePost, null, 2)}</pre>
               </div>
             );
 
+          if (loadingCreatePost) return <div>loading...</div>;
+
           return (
             <Flex justifyContent="center">
-              {/* <Dropzone
-                openFileDialog={this.openFileDialog}
-                onDragOver={this.onDragOver}
-                onDragLeave={this.onDragLeave}
-                onDrop={this.onDrop}
-                fileInputRef={this.fileInputRef}
-                onFilesAdded={this.onFilesAdded}
-                highlight={this.state.highlight}
-                getSignature={this.getSignature}
-                files={this.state.files}
-                disabled={this.state.disabled}
-                handleClearFilePreview={this.handleClearFilePreview}
-                // signS3={this.sig}
-              /> */}
-              {/* interface ICreatePostFormProps {
-              //   handleFormUpload: any;
-              handleDrop?: any;
-              handlePost: any;
-              me: any;
-              fileInputKey?: string;
-              setPreviewImageRef?: any;
-
-              mutationSignS3: any;
-              dataSignS3: any;
-              errorSignS3: any;
-              loadingSignS3: any;
-              disabled: boolean;
-            } */}
               <CreatePostForm
                 files={this.state.files}
                 handlePost={this.handlePost}
@@ -463,44 +409,6 @@ export default class DropZoneContainer extends Component<
           );
         }}
       </SignS3Component>
-      // <Flex flexDirection="column" width={[1, 1, 1]}>
-      //   The Drop DropZone
-      //   <Flex alignItems="center" flexDirection="column" width={[1, 1, 1]}>
-      //     <MaxFlex
-      //       bg={this.state.highlight ? "rgb(188,185,236)" : "#fff"}
-      //       width="350px"
-      //       border="2px dashed rgb(187, 186, 186)"
-      //       minHeight={["350px"]}
-      //       maxHeight="350px"
-      //       style={{
-      //         borderRadius: "50%",
-      //         fontSize: "16px",
-      //         cursor: this.props.disabled ? "default" : "pointer"
-      //       }}
-      //       onClick={this.openFileDialog}
-      //       onDragOver={this.onDragOver}
-      //       onDragLeave={this.onDragLeave}
-      //       onDrop={this.onDrop}
-      //     >
-      //       <input
-      //         ref={this.fileInputRef}
-      //         type="file"
-      //         onChange={this.onFilesAdded}
-      //         style={inputStyles}
-      //         multiple
-      //       />
-      //     </MaxFlex>
-      //   </Flex>
-      //   <Button type="button" onClick={this.getSignature}>
-      //     Upload to S3
-      //   </Button>
-      //   <Flex flexWrap="wrap" width={[1, 1, 1]} border="lime">
-      //     <ImagePreview imageFiles={this.state.files} />
-      //   </Flex>
-      //   <Button type="button" onClick={this.handleClearFilePreview}>
-      //     Clear `Files` State
-      //   </Button>
-      // </Flex>
     );
   }
 }
