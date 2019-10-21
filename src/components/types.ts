@@ -175,7 +175,7 @@ export interface IDropZoneProps {
 }
 
 export interface IDropZoneContainerProps {
-  mutate: any;
+  mutateCreatePost: any;
   me: any;
   mutateSignS3: any;
 
