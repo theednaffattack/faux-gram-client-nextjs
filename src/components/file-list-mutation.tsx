@@ -27,7 +27,7 @@ const CreatePostMutation = ({ me }: IFileListMutation) => {
             ) => (
               <DropZoneContainer
                 me={me}
-                mutate={createPost}
+                mutateCreatePost={createPost}
                 mutateSignS3={signS3}
                 dataCreatePost={dataCreatePost}
                 errorCreatePost={errorCreatePost}
