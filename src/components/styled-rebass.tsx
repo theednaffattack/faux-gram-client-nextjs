@@ -222,6 +222,7 @@ export const AbFlex: React.FC<IAbFlexProps> = styled(FlexBase)`
   ${left}
   ${bottom}
   ${overflow}
+  ${borders}
 `;
 
 export const MaxFlex: React.FC<TMaxFlexProps> = styled(FlexBase)`
