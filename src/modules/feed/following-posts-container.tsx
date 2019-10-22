@@ -2,7 +2,7 @@ import React from "react";
 
 import FeedCard from "./feed-card";
 import { MyFollowingPostsComponent } from "../../components/generated/apollo-graphql";
-import { MY_FOLLOWING_POSTS } from "../../graphql/user/queries/MyFollowingPosts";
+import { FOLLOWING_POSTS } from "../../graphql/user/subscriptions/FollowingPosts";
 
 export interface IFollowingPostsWrapperProps {}
 
@@ -20,14 +20,23 @@ export const FollowingPostsWrapper: React.FunctionComponent<
       }) => {
         if (errorMyFollowingPosts)
           return <div>ERROR! {JSON.stringify(errorMyFollowingPosts)}</div>;
-        if (loadingMyFollowingPosts)
+        if (loadingMyFollowingPosts) {
           return <div>loading MyFollowingPosts...</div>;
+        }
+
+        if (
+          dataMyFollowingPosts &&
+          dataMyFollowingPosts.myFollowingPosts &&
+          dataMyFollowingPosts.myFollowingPosts.length === 0
+        ) {
+          return <div>Try following someone to see posts</div>;
+        }
         if (dataMyFollowingPosts && dataMyFollowingPosts.myFollowingPosts) {
           return (
             <FollowingPostsContainer
               data={dataMyFollowingPosts.myFollowingPosts}
               subscribeToMore={subscribeToMoreMyFollowingPosts}
-              subscriptionDocument={MY_FOLLOWING_POSTS}
+              subscriptionDocument={FOLLOWING_POSTS}
             />
           );
         } else {
@@ -48,7 +57,7 @@ class FollowingPostsContainer extends React.Component<
   IFollowingPostsContainerProps
 > {
   componentDidMount() {
-    console.log("SUB RUNNING");
+    console.log("POSTS SUB RUNNING");
     this.props.subscribeToMore({
       document: this.props.subscriptionDocument,
       variables: {
@@ -59,13 +68,11 @@ class FollowingPostsContainer extends React.Component<
       },
       // @ts-ignore
       updateQuery: (prev, { subscriptionData }) => {
-        console.log("view prev", prev);
-        console.log("view subscriptionData", subscriptionData);
         return Object.assign({}, prev, {
           // @ts-ignore
           myFollowingPosts: [
             // @ts-ignore
-            subscriptionData.data.myFollowingPosts,
+            subscriptionData.data.followingPosts,
             // @ts-ignore
             ...prev.myFollowingPosts
           ]
