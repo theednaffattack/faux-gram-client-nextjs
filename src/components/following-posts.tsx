@@ -9,7 +9,7 @@ interface IThoseIFollowProps {
   loading: any;
   error: any;
   subscribeToMore: any;
-  subscribeToNewPosts: any;
+  subscribeToNewPosts?: any;
 }
 
 interface IThoseIFollowState {
