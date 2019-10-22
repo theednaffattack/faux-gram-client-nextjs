@@ -17,31 +17,6 @@ const Feed = ({ me }: any) => (
           loading={loading}
           error={error}
           subscribeToMore={subscribeToMore}
-          subscribeToNewPosts={() => {
-            console.log("SUB RUNNING");
-            subscribeToMore({
-              document: FOLLOWING_POSTS,
-              variables: {
-                data: {
-                  sentBy: "init",
-                  message: "init"
-                }
-              },
-              updateQuery: (prev, { subscriptionData }) => {
-                console.log("view prev", prev);
-                return Object.assign({}, prev, {
-                  // @ts-ignore
-                  myFollowingPosts: [
-                    // @ts-ignore
-                    subscriptionData.data.followingPosts,
-                    // @ts-ignore
-                    ...prev.myFollowingPosts
-                  ]
-                });
-              }
-              // updateFunctionMyFollows(prev, { subscriptionData })
-            });
-          }}
         />
       )}
     </MyFollowingPostsComponent>
