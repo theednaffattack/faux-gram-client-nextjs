@@ -18,6 +18,14 @@ export type Scalars = {
   Upload: any,
 };
 
+/** An Enum to help with CRUD operations */
+export enum Action {
+  Create = 'Create',
+  Read = 'Read',
+  Update = 'Update',
+  Delete = 'Delete'
+}
+
 export type AddMessagePayload = {
    __typename?: 'AddMessagePayload',
   success: Scalars['Boolean'],
@@ -73,6 +81,23 @@ export type GetMessagesFromUserInput = {
 export type GetMessageThreadsFromUserInput = {
   sentBy: Scalars['String'],
   user: Scalars['String'],
+};
+
+export type GetMyFollowingPostByIdInput = {
+  postId: Scalars['ID'],
+};
+
+export type HandlePostPayload = {
+   __typename?: 'HandlePostPayload',
+  success: Scalars['Boolean'],
+  action: Action,
+  id?: Maybe<Scalars['ID']>,
+  title?: Maybe<Scalars['Boolean']>,
+  images?: Maybe<Array<Image>>,
+  isCtxUserIdAFollowerOfPostUser?: Maybe<Scalars['Boolean']>,
+  user?: Maybe<User>,
+  created_at?: Maybe<Scalars['DateTime']>,
+  updated_at?: Maybe<Scalars['DateTime']>,
 };
 
 export type Image = {
@@ -254,6 +279,7 @@ export type Post = {
   title?: Maybe<Scalars['String']>,
   text?: Maybe<Scalars['String']>,
   images?: Maybe<Array<Image>>,
+  isCtxUserIdAFollowerOfPostUser?: Maybe<Scalars['Boolean']>,
   user?: Maybe<User>,
   created_at?: Maybe<Scalars['DateTime']>,
   updated_at?: Maybe<Scalars['DateTime']>,
@@ -276,6 +302,13 @@ export type PostInputOld = {
 export type PostSubInput = {
   sentBy: Scalars['String'],
   message: Scalars['String'],
+};
+
+export type PostSubscriptionInput = {
+  text: Scalars['String'],
+  title?: Maybe<Scalars['String']>,
+  user: Scalars['ID'],
+  images?: Maybe<Array<Maybe<Scalars['String']>>>,
 };
 
 export type PostSubType = {
@@ -309,6 +342,7 @@ export type Query = {
   getGlobalPosts?: Maybe<Array<Post>>,
   meAndAllFollowers?: Maybe<User>,
   myFollowingPosts?: Maybe<Array<Post>>,
+  getMyFollowingPostById?: Maybe<Post>,
   getAllMyMessages?: Maybe<User>,
   getMessageThreads?: Maybe<Array<Maybe<Thread>>>,
   getListToCreateThread?: Maybe<TransUserReturn>,
@@ -319,6 +353,11 @@ export type Query = {
 
 export type QueryGetMyMessagesFromUserArgs = {
   input: GetMessagesFromUserInput
+};
+
+
+export type QueryGetMyFollowingPostByIdArgs = {
+  getpostinput: GetMyFollowingPostByIdInput
 };
 
 
@@ -356,6 +395,7 @@ export type Subscription = {
   followingPosts: PostSubType,
   newMessage: MessageSubType,
   globalPosts?: Maybe<Post>,
+  followingPostsSub: HandlePostPayload,
   messageThreads: AddMessagePayload,
   getMessagesByThreadId: AddMessagePayload,
   newMessageByThreadId: AddMessagePayload,
@@ -788,7 +828,7 @@ export type GetGlobalPostsQuery = (
   { __typename?: 'Query' }
   & { getGlobalPosts: Maybe<Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'created_at'>
+    & Pick<Post, 'id' | 'title' | 'text' | 'created_at' | 'isCtxUserIdAFollowerOfPostUser'>
     & { images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
@@ -797,6 +837,26 @@ export type GetGlobalPostsQuery = (
       & Pick<User, 'id' | 'firstName' | 'lastName'>
     )> }
   )>> }
+);
+
+export type GetMyFollowingPostByIdQueryVariables = {
+  getpostinput: GetMyFollowingPostByIdInput
+};
+
+
+export type GetMyFollowingPostByIdQuery = (
+  { __typename?: 'Query' }
+  & { getMyFollowingPostById: Maybe<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'title' | 'text' | 'isCtxUserIdAFollowerOfPostUser'>
+    & { images: Maybe<Array<(
+      { __typename?: 'Image' }
+      & Pick<Image, 'id' | 'uri'>
+    )>>, user: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )> }
+  )> }
 );
 
 export type GetThoseIFollowAndTheirPostsResolverQueryVariables = {};
@@ -1630,6 +1690,7 @@ export const GetGlobalPostsDocument = gql`
       id
       uri
     }
+    isCtxUserIdAFollowerOfPostUser
     user {
       id
       firstName
@@ -1656,6 +1717,41 @@ export function withGetGlobalPosts<TProps, TChildProps = {}>(operationOptions?: 
     });
 };
 export type GetGlobalPostsQueryResult = ApolloReactCommon.QueryResult<GetGlobalPostsQuery, GetGlobalPostsQueryVariables>;
+export const GetMyFollowingPostByIdDocument = gql`
+    query GetMyFollowingPostById($getpostinput: GetMyFollowingPostByIdInput!) {
+  getMyFollowingPostById(getpostinput: $getpostinput) {
+    id
+    title
+    text
+    isCtxUserIdAFollowerOfPostUser
+    images {
+      id
+      uri
+    }
+    user {
+      id
+    }
+  }
+}
+    `;
+export type GetMyFollowingPostByIdComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetMyFollowingPostByIdQuery, GetMyFollowingPostByIdQueryVariables>, 'query'> & ({ variables: GetMyFollowingPostByIdQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetMyFollowingPostByIdComponent = (props: GetMyFollowingPostByIdComponentProps) => (
+      <ApolloReactComponents.Query<GetMyFollowingPostByIdQuery, GetMyFollowingPostByIdQueryVariables> query={GetMyFollowingPostByIdDocument} {...props} />
+    );
+    
+export type GetMyFollowingPostByIdProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetMyFollowingPostByIdQuery, GetMyFollowingPostByIdQueryVariables> & TChildProps;
+export function withGetMyFollowingPostById<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetMyFollowingPostByIdQuery,
+  GetMyFollowingPostByIdQueryVariables,
+  GetMyFollowingPostByIdProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetMyFollowingPostByIdQuery, GetMyFollowingPostByIdQueryVariables, GetMyFollowingPostByIdProps<TChildProps>>(GetMyFollowingPostByIdDocument, {
+      alias: 'getMyFollowingPostById',
+      ...operationOptions
+    });
+};
+export type GetMyFollowingPostByIdQueryResult = ApolloReactCommon.QueryResult<GetMyFollowingPostByIdQuery, GetMyFollowingPostByIdQueryVariables>;
 export const GetThoseIFollowAndTheirPostsResolverDocument = gql`
     query GetThoseIFollowAndTheirPostsResolver {
   getThoseIFollowAndTheirPostsResolver {
