@@ -6,9 +6,9 @@ import { GetGlobalPostsComponent } from "../../components/generated/apollo-graph
 import { DisplayPosts } from "./display-posts";
 import { GLOBAL_POSTS } from "../../graphql/user/subscriptions/GlobalPosts";
 
-export const subscribeFunction = (subscribeGlblPosts: any) => {
+export const subscribeFunction = (subscribeGlobalPosts: any) => {
   try {
-    return subscribeGlblPosts({
+    return subscribeGlobalPosts({
       document: GLOBAL_POSTS,
 
       updateQuery: (prev: any, { subscriptionData }: any) => {
@@ -27,13 +27,14 @@ export const subscribeFunction = (subscribeGlblPosts: any) => {
 const Feed = ({ me }: any) => (
   <GetGlobalPostsComponent>
     {({
-      data: dataGlblPosts,
-      error: errorGlblPosts,
-      loading: loadingGlblPosts,
-      subscribeToMore: subscribeGlblPosts
+      data: dataGlobalPosts,
+      error: errorGlobalPosts,
+      loading: loadingGlobalPosts,
+      subscribeToMore: subscribeGlobalPosts
     }) => {
-      if (errorGlblPosts) return <div>{JSON.stringify(errorGlblPosts)}</div>;
-      if (loadingGlblPosts) {
+      if (errorGlobalPosts)
+        return <div>{JSON.stringify(errorGlobalPosts)}</div>;
+      if (loadingGlobalPosts) {
         return <div>LOADING...</div>;
       }
       return (
@@ -62,10 +63,10 @@ const Feed = ({ me }: any) => (
                     errorFollowUser={errorFollowUser}
                     loadingFollowUser={loadingFollowUser}
                     followUser={followUser}
-                    data={dataGlblPosts}
-                    errorGlblPosts={errorGlblPosts}
-                    subscribeGlblPosts={() =>
-                      subscribeGlblPosts({
+                    data={dataGlobalPosts}
+                    errorGlobalPosts={errorGlobalPosts}
+                    subscribeGlobalPosts={() =>
+                      subscribeGlobalPosts({
                         document: GLOBAL_POSTS,
                         updateQuery: (prev, { subscriptionData }) => {
                           if (!subscriptionData.data) return prev;

@@ -1,15 +1,26 @@
 import React from "react";
 import { Button } from "rebass";
 
-import { IFollowButtonProps } from "./types";
 import { GET_GLOBAL_POSTS } from "../../graphql/user/queries/GetGlobalPosts";
 import { MY_FOLLOWING_POSTS } from "../../graphql/user/queries/MyFollowingPosts";
+import {
+  FollowUserMutationFn,
+  User,
+  GetGlobalPostsQueryResult
+} from "../../components/generated/apollo-graphql";
+
+export interface FollowButtonProps {
+  postUserId: User["id"];
+  errorGlobalPosts: GetGlobalPostsQueryResult["error"];
+  followUser: FollowUserMutationFn;
+  me: User;
+}
 
 export default class FollowButton extends React.Component<
-  IFollowButtonProps,
+  FollowButtonProps,
   object
 > {
-  constructor(props: IFollowButtonProps) {
+  constructor(props: FollowButtonProps) {
     super(props);
 
     this.handleMutationClick = this.handleMutationClick.bind(this);
@@ -63,7 +74,7 @@ export default class FollowButton extends React.Component<
     }
   }
   render() {
-    const { children, data, followUser, me, ...props } = this.props;
+    const { children, followUser, me, ...props } = this.props;
 
     return (
       <Button

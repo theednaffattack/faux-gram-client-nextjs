@@ -1,5 +1,4 @@
 import React from "react";
-import Maybe from "graphql/tsutils/Maybe";
 import styled from "styled-components";
 
 import Tabs from "./tabs";
@@ -7,7 +6,7 @@ import { Flex } from "../../components/styled-rebass";
 import { TFlexProps } from "./types";
 import GlobalFeed from "./global-feed";
 import MyFeed from "./my-feed";
-import { User } from "../../components/generated/apollo-graphql";
+import { MeQuery } from "../../components/generated/apollo-graphql";
 import { ApolloError } from "apollo-boost";
 
 interface SpecialFlexProps extends TFlexProps {
@@ -15,17 +14,7 @@ interface SpecialFlexProps extends TFlexProps {
 }
 
 interface ITabViewerProps {
-  dataMe:
-    | ({
-        __typename?: "Query" | undefined;
-      } & {
-        me: Maybe<
-          {
-            __typename?: "User" | undefined;
-          } & Pick<User, "id" | "firstName" | "lastName" | "email" | "name">
-        >;
-      })
-    | undefined;
+  dataMe: MeQuery["me"];
   errorMe: ApolloError | undefined;
   loadingMe: boolean;
 }
@@ -37,6 +26,7 @@ export const TabViewer: React.FunctionComponent<ITabViewerProps> = ({
   errorMe,
   loadingMe
 }) => {
+  console.log(dataMe);
   if (errorMe)
     return <div>Error loading "Me" data!{JSON.stringify(errorMe)}</div>;
   if (loadingMe) return <div>loading "ME" data...</div>;

@@ -47,7 +47,7 @@ function TabViewer() {
               <MyFeed me={data.me} />
             </SpecialFlex>
             <SpecialFlex label="Global Feed">
-              <GlobalFeed me={data.me} />
+              <GlobalFeed me={data} />
             </SpecialFlex>
           </Tabs>
           // </Flex>

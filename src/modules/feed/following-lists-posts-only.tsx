@@ -5,20 +5,6 @@ import { Box, Card, Flex, Heading, Text } from "../../components/styled-rebass";
 
 import UnFollowButton from "./unfollow-button";
 import WrappedAvatar from "./wrapped-avatar";
-// import { disableBodyScroll } from "body-scroll-lock";
-
-// const Box = styled(BoxBase)`
-//   ${borders}
-// `;
-
-// const Flex = styled(FlexBase)`
-//   ${borders}
-// `;
-
-// const Card = styled(CardBase)`
-//   ${display}
-//   ${overflow}
-// `;
 
 const staggerDuration = 100;
 
@@ -104,12 +90,7 @@ export class FollowingList extends React.Component<
                           handleRemoveInviteeToThread={console.log}
                         />
                       </Flex>
-                      <UnFollowButton
-                        oldData={data}
-                        followingId={post.user.id}
-                        bg="fuchsia"
-                        me=""
-                      >
+                      <UnFollowButton followingId={post.user.id}>
                         unfollow
                       </UnFollowButton>
                     </Flex>

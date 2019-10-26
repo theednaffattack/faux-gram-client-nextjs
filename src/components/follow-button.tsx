@@ -6,8 +6,7 @@ import { GET_GLOBAL_POSTS } from "../graphql/user/queries/GetGlobalPosts";
 import {
   FollowUserMutationFn,
   FollowUserMutationResult,
-  User,
-  GetGlobalPostsProps
+  User
 } from "./generated/apollo-graphql";
 
 type HandleMutationClickProps = FollowUserMutationFn;

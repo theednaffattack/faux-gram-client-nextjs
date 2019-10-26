@@ -12,6 +12,11 @@ import {
 } from "../../components/styled-rebass";
 
 import FollowButton from "./follow-button";
+import {
+  GetGlobalPostsQueryResult,
+  FollowUserMutationResult,
+  FollowUserMutationFn
+} from "../../components/generated/apollo-graphql";
 
 const staggerDuration = 100;
 
@@ -27,13 +32,13 @@ const PosedCard = posed(Card)({
 
 interface IDisplayPostsProps {
   data: any;
-  followUser: any;
+  followUser: FollowUserMutationFn;
   me: any;
-  errorGlblPosts: any;
-  loadingFollowUser?: any;
-  subscribeGlblPosts?: any;
-  dataFollowUser?: any;
-  errorFollowUser?: any;
+  errorGlobalPosts: GetGlobalPostsQueryResult["error"];
+  loadingFollowUser?: FollowUserMutationResult["loading"];
+  subscribeGlobalPosts?: any;
+  dataFollowUser?: FollowUserMutationResult["data"];
+  errorFollowUser?: FollowUserMutationResult["error"];
 }
 
 export const DisplayCards = ({
@@ -42,8 +47,9 @@ export const DisplayCards = ({
   followUser,
   loadingFollowUser,
   me,
-  errorGlblPosts
-}: IDisplayPostsProps) => (
+  errorGlobalPosts
+}: // errorGlobalPosts
+IDisplayPostsProps) => (
   <PoseGroup
     delta={1}
     preEnterPose="invisible"
@@ -115,7 +121,7 @@ export const DisplayCards = ({
                       me={me}
                       postUserId={post.user.id}
                       followUser={followUser}
-                      errorGlblPosts={errorGlblPosts}
+                      errorGlobalPosts={errorGlobalPosts}
                     >
                       follow
                     </FollowButton>
@@ -131,28 +137,18 @@ export const DisplayCards = ({
   </PoseGroup>
 );
 
-// interface IDisplayPostsProps {
-//   subscribeGlblPosts: any;
-//   dataFollowUser: any;
-// }
-
 export class DisplayPosts extends React.Component<IDisplayPostsProps, object> {
   componentDidMount() {
-    this.props.subscribeGlblPosts();
+    this.props.subscribeGlobalPosts();
   }
   render() {
     return (
       <DisplayCards
         me={this.props.me}
         followUser={this.props.followUser}
-        errorGlblPosts={this.props.errorGlblPosts}
+        errorGlobalPosts={this.props.errorGlobalPosts}
         data={this.props.data}
       />
     );
   }
 }
-
-// subcribeGlblPosts: any;
-// dataFollowerUser: any;
-// errorFollowUser: any;
-// loadingFollowUser: any;

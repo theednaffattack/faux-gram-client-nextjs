@@ -1,16 +1,21 @@
 import React from "react";
 
 import { Button } from "../../components/styled-rebass";
-
-import { IUnFollowButtonProps } from "./types";
-import { UnFollowUserComponent } from "../../components/generated/apollo-graphql";
+import {
+  UnFollowUserComponent,
+  User
+} from "../../components/generated/apollo-graphql";
 import { MY_FOLLOWING_POSTS } from "../../graphql/user/queries/MyFollowingPosts";
 
+interface UnFollowButtonProps {
+  followingId: User["id"];
+}
+
 export default class UnFollowButton extends React.Component<
-  IUnFollowButtonProps,
+  UnFollowButtonProps,
   object
 > {
-  constructor(props: IUnFollowButtonProps) {
+  constructor(props: UnFollowButtonProps) {
     super(props);
 
     this.handleMutationClick = this.handleMutationClick.bind(this);
@@ -45,8 +50,6 @@ export default class UnFollowButton extends React.Component<
     });
   }
   render() {
-    const { children, me, ...props } = this.props;
-
     return (
       <UnFollowUserComponent>
         {(unFollowUser, { error, loading }) => {
@@ -59,7 +62,7 @@ export default class UnFollowButton extends React.Component<
               type="button"
               bg="fuchsia"
               onClick={() => this.handleMutationClick({ unFollowUser })}
-              {...props}
+              // {...props}
             >
               unfollow
             </Button>
