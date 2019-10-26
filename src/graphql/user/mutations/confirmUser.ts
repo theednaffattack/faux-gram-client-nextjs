@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-export const confirmUserMutation = gql`
+export const CONFIRM_USER = gql`
   mutation ConfirmUser($token: String!) {
     confirmUser(token: $token)
   }
