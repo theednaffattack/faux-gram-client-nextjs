@@ -1,14 +1,18 @@
 import React from "react";
 
 import FeedCard from "./feed-card";
-import { MyFollowingPostsComponent } from "../../components/generated/apollo-graphql";
+import {
+  MyFollowingPostsComponent,
+  MyFollowingPostsQuery
+} from "../../components/generated/apollo-graphql";
 import { FOLLOWING_POSTS } from "../../graphql/user/subscriptions/FollowingPosts";
+import { IPageProps } from "../../page-types/types";
 
-export interface IFollowingPostsWrapperProps {}
+export interface IFollowingPostsWrapperProps extends IPageProps {}
 
 export const FollowingPostsWrapper: React.FunctionComponent<
   IFollowingPostsWrapperProps
-> = () => {
+> = ({ pathname, query }) => {
   return (
     <MyFollowingPostsComponent>
       {({
@@ -34,7 +38,9 @@ export const FollowingPostsWrapper: React.FunctionComponent<
         if (dataMyFollowingPosts && dataMyFollowingPosts.myFollowingPosts) {
           return (
             <FollowingPostsContainer
-              data={dataMyFollowingPosts.myFollowingPosts}
+              pathname={pathname}
+              query={query}
+              myFollowingPosts={dataMyFollowingPosts.myFollowingPosts}
               subscribeToMore={subscribeToMoreMyFollowingPosts}
               subscriptionDocument={FOLLOWING_POSTS}
             />
@@ -47,17 +53,18 @@ export const FollowingPostsWrapper: React.FunctionComponent<
   );
 };
 
-export interface IFollowingPostsContainerProps {
-  data: any[];
+export interface IFollowingPostsContainerProps
+  extends IPageProps,
+    MyFollowingPostsQuery {
+  // data: MyFollowingPostsQueryResult;
   subscribeToMore: any;
-  subscriptionDocument: string;
+  subscriptionDocument: any;
 }
 
 class FollowingPostsContainer extends React.Component<
   IFollowingPostsContainerProps
 > {
   componentDidMount() {
-    console.log("POSTS SUB RUNNING");
     this.props.subscribeToMore({
       document: this.props.subscriptionDocument,
       variables: {
@@ -68,6 +75,7 @@ class FollowingPostsContainer extends React.Component<
       },
       // @ts-ignore
       updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
         return Object.assign({}, prev, {
           // @ts-ignore
           myFollowingPosts: [
@@ -78,23 +86,36 @@ class FollowingPostsContainer extends React.Component<
           ]
         });
       }
-      // updateFunctionMyFollows(prev, { subscriptionData })
     });
   }
   render() {
-    const { data } = this.props;
+    const { pathname, query, myFollowingPosts } = this.props;
     return (
       <>
-        {data.map((post, index) => {
-          return (
-            <FeedCard
-              key={index}
-              title={post.title}
-              images={post.images}
-              description={post.description}
-            />
-          );
-        })}
+        {myFollowingPosts &&
+          myFollowingPosts.map((post, index) => {
+            let { text, id, title, images, user } = post;
+
+            // perform checks for TypeScript
+            // maybe these should be type guards
+            id = id || "no id";
+            title = title || "no title";
+            let useUser = user && user.id ? user.id : "no user";
+            images = images || [{ id: "no-image", uri: "http://no-image.com" }];
+            let description = text || "no description";
+            return (
+              <FeedCard
+                pathname={pathname}
+                postUserId={useUser as string}
+                query={query}
+                id={id}
+                key={index}
+                title={title}
+                images={images}
+                description={description}
+              />
+            );
+          })}
       </>
     );
   }
