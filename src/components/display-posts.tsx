@@ -111,13 +111,17 @@ export const DisplayCards = ({
                     <Text color="text">
                       {post.user.firstName} {post.user.lastName}
                     </Text>
+                    {post.isCtxUserIdAFollowerOfPostUser === true
+                      ? "UNFOLLOW"
+                      : "FOLLOW"}
                     <FollowButton
+                      isCtxUserIdAFollower={post.isCtxUserIdAFollower}
                       me={me}
                       postUserId={post.user.id}
                       followUser={followUser}
                       errorGlblPosts={errorGlblPosts}
                     >
-                      follow
+                      Follow
                     </FollowButton>
                   </Flex>
                 </Flex>
