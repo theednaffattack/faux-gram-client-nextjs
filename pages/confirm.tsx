@@ -3,7 +3,7 @@ import {
   ConfirmUserMutation,
   ConfirmUserMutationVariables
 } from "../src/components/generated/apollo-graphql";
-import { confirmUserMutation } from "../src/graphql/user/mutations/confirmUser";
+import { CONFIRM_USER } from "../src/graphql/user/mutations/confirmUser";
 import { MyContext } from "../src/components/interfaces/my-context";
 import redirect from "../src/lib/redirect";
 
@@ -21,7 +21,7 @@ export default class Confirm extends React.PureComponent {
       ConfirmUserMutation,
       ConfirmUserMutationVariables
     >({
-      mutation: confirmUserMutation,
+      mutation: CONFIRM_USER,
       variables: {
         token: token as string
       }
