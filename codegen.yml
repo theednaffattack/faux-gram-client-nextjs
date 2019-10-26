@@ -2,7 +2,10 @@ overwrite: true
 schema: "http://192.168.1.24:4000/graphql"
 documents: "src/graphql/**/*.ts"
 generates:
-  src/components/generated/apollo-graphql:
+  ./src/components/generated/fragmentTypes.ts:
+    plugins:
+      - "fragment-matcher"
+  src/components/generated/apollo-graphql.tsx:
     config:
       # withMutationFn: true
       noNamespaces: true
