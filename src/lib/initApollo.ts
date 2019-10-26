@@ -1,7 +1,8 @@
 import {
   ApolloClient,
   InMemoryCache,
-  NormalizedCacheObject
+  NormalizedCacheObject,
+  IntrospectionFragmentMatcher
 } from "apollo-boost";
 import { setContext } from "apollo-link-context";
 import { WebSocketLink } from "apollo-link-ws";
@@ -11,6 +12,8 @@ import { onError } from "apollo-link-error";
 import { split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
 import Router from "next/router";
+
+import introspectionQueryResultData from "../components/generated/fragmentTypes";
 
 import { isBrowser } from "./isBrowser";
 
@@ -37,6 +40,10 @@ const prodGraphqlUrl: string = `${prefix}${domain}/graphql`;
 const prodWebsocketsUrl: string = `${wsPrefix}${domain}/subscriptions`;
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData
+});
 
 // Polyfill fetch() on the server (used by apollo-client)
 if (!isBrowser) {
@@ -85,7 +92,12 @@ function create(
       )
     : httpLink;
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
+  const errorLink = onError(({ graphQLErrors }) => {
+    // console.log({
+    //   operation,
+    //   response,
+    //   forward
+    // });
     if (graphQLErrors)
       graphQLErrors.map(({ message, locations, path }) => {
         console.log(
@@ -103,7 +115,6 @@ function create(
           });
         }
       });
-    if (networkError) console.log(`[Network error]: ${networkError}`);
   });
 
   const authLink = setContext((_, { headers }) => {
@@ -121,7 +132,10 @@ function create(
     connectToDevTools: isBrowser,
     ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
     link: errorLink.concat(authLink.concat(splitLink)),
-    cache: new InMemoryCache().restore(initialState || {})
+    cache: new InMemoryCache({
+      addTypename: true,
+      fragmentMatcher
+    }).restore(initialState || {})
   });
 }
 
