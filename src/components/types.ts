@@ -206,15 +206,6 @@ export interface IUnFollowButtonProps extends ButtonProps {
   followingId: string;
 }
 
-export interface IFollowButtonProps {
-  data?: any;
-  children: any;
-  followUser: any;
-  me: any;
-  postUserId: string;
-  errorGlblPosts: any;
-}
-
 export interface IChatBodyProps {
   data: any;
   chatEmoji: string;
