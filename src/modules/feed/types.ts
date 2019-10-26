@@ -1,5 +1,13 @@
 import { MinHeightProps, BordersProps, FlexProps } from "styled-system";
-import { ButtonProps } from "rebass";
+import {
+  FollowUserMutationFn,
+  FollowUserMutationResult,
+  MeQuery,
+  User,
+  UnFollowUserMutationFn,
+  UnFollowUserMutationResult
+} from "src/components/generated/apollo-graphql";
+import { SubscribeToMoreOptions } from "apollo-boost";
 
 export interface CardData {
   id: string;
@@ -9,19 +17,26 @@ export interface CardData {
   backgroundColor: string;
 }
 
-export interface IUnFollowButtonProps extends ButtonProps {
-  me: string;
-  oldData: any;
-  followingId: string;
+export interface IFollowButtonProps {
+  data: FollowUserMutationResult["data"];
+  error: FollowUserMutationResult["error"];
+  loading: FollowUserMutationResult["loading"];
+  mutationFn: FollowUserMutationFn;
+  postUserId: User["id"];
+  dataMe: MeQuery;
+  subscribeToMore?: any;
+  subscribeToMoreOptions?: SubscribeToMoreOptions;
 }
 
-export interface IFollowButtonProps {
-  data?: any;
-  children: any;
-  followUser: any;
-  me: any;
-  postUserId: string;
-  errorGlblPosts: any;
+export interface IUnFollowButtonProps {
+  data: UnFollowUserMutationResult["data"];
+  error: UnFollowUserMutationResult["error"];
+  loading: UnFollowUserMutationResult["loading"];
+  mutationFn: UnFollowUserMutationFn;
+  postUserId: User["id"];
+  dataMe: MeQuery;
+  subscribeToMore?: any;
+  subscribeToMoreOptions?: SubscribeToMoreOptions;
 }
 
 export interface IWrappedAvatar {
