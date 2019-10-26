@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/eddienaff/.nvm/versions/node/v11.9.0/bin/node /Users/eddienaff/.yarn/bin/yarn.js add -D @types/react-lorem-ipsum
+  /Users/eddienaff/.nvm/versions/node/v11.9.0/bin/node /Users/eddienaff/.yarn/bin/yarn.js add -D @graphql-codegen/fragment-matcherr@1.8.0
 
 PATH: 
   /Users/eddienaff/.yarn/bin:/Users/eddienaff/.config/yarn/global/node_modules/.bin:/Users/eddienaff/.nvm/versions/node/v11.9.0/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/Applications/Postgres.app/Contents/Versions/latest/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-lorem-ipsum: Not found
+  Error: https://registry.yarnpkg.com/@graphql-codegen%2ffragment-matcherr: Not found
       at Request.params.callback [as _callback] (/Users/eddienaff/.yarn/lib/cli.js:66255:18)
       at Request.self.callback (/Users/eddienaff/.yarn/lib/cli.js:129397:22)
       at Request.emit (events.js:197:13)
@@ -76,6 +76,7 @@ npm manifest:
       "graphql-tag": "^2.10.1",
       "internal-ip": "^4.3.0",
       "isomorphic-unfetch": "^3.0.0",
+      "lorem-ipsum": "^2.0.3",
       "next": "latest",
       "next-routes": "^1.4.2",
       "react": "^16.8.4",
@@ -108,6 +109,8 @@ npm manifest:
       "@types/dotenv-webpack": "^1.7.0",
       "@types/emoji-mart": "^2.11.0",
       "@types/jest": "^24.0.18",
+      "@types/lodash": "^4.14.144",
+      "@types/lorem-ipsum": "^1.0.2",
       "@types/node": "^12.0.12",
       "@types/react": "^16.8.17",
       "@types/react-dom": "16.8.4",
@@ -1739,6 +1742,16 @@ Lockfile:
     integrity sha512-jcDDXdjTcrQzdN06+TSVsPPqxvsZA/5QkYfIZlq1JMw7FdP5AZylbOc+6B/cuDurctRe+MziUMtQ3xQdrbjqyQ==
     dependencies:
       "@types/jest-diff" "*"
+  
+  "@types/lodash@^4.14.144":
+    version "4.14.144"
+    resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.144.tgz#12e57fc99064bce45e5ab3c8bc4783feb75eab8e"
+    integrity sha512-ogI4g9W5qIQQUhXAclq6zhqgqNUr7UlFaqDHbch7WLSLeeM/7d3CRaw7GLajxvyFvhJqw4Rpcz5bhoaYtIx6Tg==
+  
+  "@types/lorem-ipsum@^1.0.2":
+    version "1.0.2"
+    resolved "https://registry.yarnpkg.com/@types/lorem-ipsum/-/lorem-ipsum-1.0.2.tgz#77b11b0284fe315efedb9a31c0f1e1488469d99c"
+    integrity sha1-d7EbAoT+MV7+25oxwPHhSIRp2Zw=
   
   "@types/minimatch@*":
     version "3.0.3"
@@ -3633,7 +3646,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/commander/-/commander-3.0.2.tgz#6837c3fb677ad9933d1cfba42dd14d5117d6b39e"
     integrity sha512-Gar0ASD4BDyKC4hl4DwHqDrmvjoxWKZigVnAbn5H1owvm4CxCPdb0HQDehwNYMJpla5+M2tPmPARzhtYuwpHow==
   
-  commander@^2.13.0:
+  commander@^2.13.0, commander@^2.17.1:
     version "2.20.3"
     resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
     integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -7355,6 +7368,13 @@ Lockfile:
     integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
     dependencies:
       js-tokens "^3.0.0 || ^4.0.0"
+  
+  lorem-ipsum@^2.0.3:
+    version "2.0.3"
+    resolved "https://registry.yarnpkg.com/lorem-ipsum/-/lorem-ipsum-2.0.3.tgz#9f1fa634780c9f58a349d4e091c3ba74f733164e"
+    integrity sha512-CX2r84DMWjW/DWiuzicTI9aRaJPAw2cvAGMJYZh/nx12OkTGqloj8y8FU0S8ZkKwOdqhfxEA6Ly8CW2P6Yxjwg==
+    dependencies:
+      commander "^2.17.1"
   
   lower-case-first@^1.0.0:
     version "1.0.2"
