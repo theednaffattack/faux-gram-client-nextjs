@@ -22,7 +22,7 @@ export const theme = {
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256],
   fonts: {
-    sans: "montserrat, sans-serif",
+    mySans: "montserrat, sans-serif",
     mono: "Menlo, monospace"
   },
   shadows: {
