@@ -1081,6 +1081,13 @@
     graphql-toolkit "0.5.16"
     tslib "1.10.0"
 
+"@graphql-codegen/fragment-matcher@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/fragment-matcher/-/fragment-matcher-1.8.0.tgz#aafb9c0785b1689a7dc9111c78879bf79f2fc84d"
+  integrity sha512-eyEqXAHQ/r+oKNBjhzHH5DOlLDd5/9c/O0kZ1AtFvflwt+IsWYYarxwRuBQ+Es0l21OYpEBeDfG3tJXLeg1pFQ==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.8.0"
+
 "@graphql-codegen/introspection@1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/introspection/-/introspection-1.8.0.tgz#dcd7fa98ac6ca0363a6b4c906be99de7e43336d0"
