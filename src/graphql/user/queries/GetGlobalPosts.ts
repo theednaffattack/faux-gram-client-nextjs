@@ -11,6 +11,7 @@ export const GET_GLOBAL_POSTS = gql`
         id
         uri
       }
+      isCtxUserIdAFollowerOfPostUser
       user {
         id
         firstName
