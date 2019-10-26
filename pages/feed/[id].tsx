@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import Router from "next/router";
-// import util from "util";
 
 import Layout from "../../src/components/layout";
 import { IMessagesPageProps } from "../../src/page-types/types";
@@ -9,7 +8,11 @@ import { MeComponent } from "../../src/components/generated/apollo-graphql";
 import { isBrowser } from "../../src/lib/isBrowser";
 import { FeedItemPage } from "../../src/modules/feed/feed-item-page";
 
-const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
+const MessagesById: NextPage<IMessagesPageProps> = ({
+  id,
+  pathname,
+  query
+}) => {
   let preppedId: string;
   if (id && id.constructor === Array) {
     preppedId = id[0];
@@ -21,7 +24,7 @@ const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
   }
 
   return (
-    <Layout>
+    <Layout title={`Feed: ${id}`}>
       <MeComponent>
         {({ data: dataMe, loading: loadingMe, error: errorMe }) => {
           let isData = dataMe && dataMe.me ? dataMe.me : null;
@@ -37,7 +40,13 @@ const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
             return <div>"Me" data is loading</div>;
           }
           if (isData) {
-            return <FeedItemPage itemId={preppedId} />;
+            return (
+              <FeedItemPage
+                pathname={pathname}
+                query={query}
+                itemId={preppedId}
+              />
+            );
           } else {
             return (
               <div>
