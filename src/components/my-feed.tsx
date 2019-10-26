@@ -2,7 +2,6 @@ import React from "react";
 
 import { Heading } from "./styled-rebass";
 import { MyFollowingPostsComponent } from "./generated/apollo-graphql";
-import { FOLLOWING_POSTS } from "./FollowingPosts";
 import FollowingPosts from "./following-posts";
 
 const Feed = ({ me }: any) => (
