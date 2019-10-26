@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-export const changePasswordMutation = gql`
+export const CHANGE_PASSWORD = gql`
   mutation ChangePassword($data: ChangePasswordInput!) {
     changePassword(data: $data) {
       id
