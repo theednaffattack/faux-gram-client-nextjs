@@ -14,7 +14,7 @@ Logout.getInitialProps = async ({ apolloClient, ...ctx }: MyContext) => {
   await apolloClient.mutate({
     mutation: LogoutDocument
   });
-  await apolloClient.resetStore();
+  await apolloClient.clearStore();
 
   redirect(ctx, "/login", { message: "You have been logged out" });
 
