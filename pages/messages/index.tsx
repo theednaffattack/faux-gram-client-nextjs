@@ -1,7 +1,6 @@
 import React from "react";
 
 import MessagePageContainer from "../../src/modules/messages/message-page-container";
-import Layout from "../../src/components/layout";
 
 // import {
 //   MeComponent,
@@ -22,9 +21,7 @@ import Layout from "../../src/components/layout";
 
 const Messages = () => {
   return (
-    <Layout>
-      <MessagePageContainer />
-    </Layout>
+    <MessagePageContainer />
     // <HelloWorldComponent>
     //   {({ data: dataHello, error: errorHello, loading: loadingHello }) => {
     //     if (errorHello) {

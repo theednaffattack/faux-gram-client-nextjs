@@ -1,7 +1,6 @@
 import React from "react";
 import { NextPage } from "next";
 
-import Layout from "../../src/components/layout";
 import { MyContext } from "../../src/components/interfaces/my-context";
 import { IPageProps } from "../../src/page-types/types";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
@@ -10,15 +9,13 @@ import GlobalFeed from "../../src/components/global-feed";
 
 const Feed: NextPage<IPageProps> = () => {
   return (
-    <Layout title="Feed">
-      <MeComponent>
-        {({ data, error, loading }) => {
-          if (error) return <div>Error, {JSON.stringify(error)}</div>;
-          if (loading) return <div>loading...</div>;
-          return <GlobalFeed me={data} />;
-        }}
-      </MeComponent>
-    </Layout>
+    <MeComponent>
+      {({ data, error, loading }) => {
+        if (error) return <div>Error, {JSON.stringify(error)}</div>;
+        if (loading) return <div>loading...</div>;
+        return <GlobalFeed me={data} />;
+      }}
+    </MeComponent>
   );
 };
 

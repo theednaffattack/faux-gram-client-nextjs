@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import Router from "next/router";
 
-import Layout from "../../src/components/layout";
 import { IMessagesPageProps } from "../../src/page-types/types";
 import { MyContext } from "../../src/interfaces";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
@@ -24,40 +23,38 @@ const MessagesById: NextPage<IMessagesPageProps> = ({
   }
 
   return (
-    <Layout title={`Feed: ${id}`}>
-      <MeComponent>
-        {({ data: dataMe, loading: loadingMe, error: errorMe }) => {
-          let isData = dataMe && dataMe.me ? dataMe.me : null;
-          let isLoading = loadingMe ? loadingMe : null;
-          let isError = errorMe ? errorMe : null;
+    <MeComponent>
+      {({ data: dataMe, loading: loadingMe, error: errorMe }) => {
+        let isData = dataMe && dataMe.me ? dataMe.me : null;
+        let isLoading = loadingMe ? loadingMe : null;
+        let isError = errorMe ? errorMe : null;
 
-          if (!isError && !isLoading && !isData && isBrowser) {
-            Router.push("/login");
-          }
+        if (!isError && !isLoading && !isData && isBrowser) {
+          Router.push("/login");
+        }
 
-          if (isError) return <div>"Me" data loading Error!</div>;
-          if (isLoading) {
-            return <div>"Me" data is loading</div>;
-          }
-          if (isData) {
-            return (
-              <FeedItemPage
-                pathname={pathname}
-                query={query}
-                itemId={preppedId}
-              />
-            );
-          } else {
-            return (
-              <div>
-                None of three "Me" states (loaded data, loading data, error
-                loading data) is present!
-              </div>
-            );
-          }
-        }}
-      </MeComponent>
-    </Layout>
+        if (isError) return <div>"Me" data loading Error!</div>;
+        if (isLoading) {
+          return <div>"Me" data is loading</div>;
+        }
+        if (isData) {
+          return (
+            <FeedItemPage
+              pathname={pathname}
+              query={query}
+              itemId={preppedId}
+            />
+          );
+        } else {
+          return (
+            <div>
+              None of three "Me" states (loaded data, loading data, error
+              loading data) is present!
+            </div>
+          );
+        }
+      }}
+    </MeComponent>
   );
 };
 

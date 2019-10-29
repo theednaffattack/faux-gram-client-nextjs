@@ -1,8 +1,7 @@
-// import { useRouter } from "next/router";
 import { NextPage } from "next";
-import Layout from "../../src/components/layout";
-import { Header } from "../../src/components/Header";
 import { ParsedUrlQuery } from "querystring";
+
+import { Header } from "../../src/components/Header";
 
 type Props = {
   pathname: string;
@@ -15,13 +14,13 @@ const Comment: NextPage<Props> = ({ pathname, pid, query }) => {
   // const { id, comment } = router.query;
 
   return (
-    <Layout>
+    <>
       <Header />
       <h1>Post: {JSON.stringify({ pid })}</h1>
       <h1>Post: {JSON.stringify({ pathname })}</h1>
       <h1>Post: {JSON.stringify({ query })}</h1>
       {/* <h1>Comment: {comment}</h1> */}
-    </Layout>
+    </>
   );
 };
 
