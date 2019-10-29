@@ -1,9 +1,9 @@
 import { Field, Formik } from "formik";
 import React from "react";
+import Router from "next/router";
 
 import { InputField } from "../src/components/fields/input-field";
 import { ChangePasswordComponent } from "../src/components/generated/apollo-graphql";
-import Router from "next/router";
 
 const ChangePassword = () => {
   return (
