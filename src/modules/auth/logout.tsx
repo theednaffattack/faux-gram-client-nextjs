@@ -11,8 +11,17 @@ const Logout: NextPage<Props> = () => {
 };
 
 Logout.getInitialProps = async ({ apolloClient, ...ctx }: MyContext) => {
-  await apolloClient.mutate({ mutation: LogoutDocument });
-  await apolloClient.resetStore();
+  await apolloClient.mutate({
+    mutation: LogoutDocument
+  });
+
+  // await apolloClient.resetStore();
+  await apolloClient.clearStore();
+
+  let now = new Date();
+
+  // To trigger the event listener we save some random data into the `logout` key
+  window.localStorage.setItem("logout", now.toISOString()); // new
 
   redirect(ctx, "/login");
 
