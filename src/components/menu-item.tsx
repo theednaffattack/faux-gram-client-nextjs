@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import Link from "next/link";
 
-// import { NavLink } from "./styled-rebass";
+import { PageListProps } from "../types/types";
 
 const NavLi = styled(motion.li)`
   list-style: none;
@@ -50,10 +50,19 @@ const variants = {
 
 const colors = ["#FF008C", "#D309E1", "#9C1AFF", "#7700FF", "#4400FF"];
 
-export const MenuItem = ({ page, i }: any) => {
-  const style = { border: `2px solid ${colors[i]}` };
+interface MenuItemProps extends PageListProps {
+  index: number;
+}
+
+export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
+  as,
+  href,
+  index,
+  label
+}) => {
+  const style = { border: `2px solid ${colors[index]}` };
   const defaultStyle = { border: `2px solid grey` };
-  const itemBorderColor = colors[i] ? style : defaultStyle;
+  const itemBorderColor = colors[index] ? style : defaultStyle;
 
   return (
     <NavLi
@@ -63,8 +72,8 @@ export const MenuItem = ({ page, i }: any) => {
     >
       <IconPlaceholder className="icon-placeholder" style={itemBorderColor} />
       <TextPlaceholder style={itemBorderColor}>
-        <Link href={page} as={page}>
-          <a>{page}</a>
+        <Link href={href} as={as}>
+          <a>{label}</a>
         </Link>
       </TextPlaceholder>
     </NavLi>
