@@ -12,6 +12,6 @@ export default (context: any, target: string, query?: ParsedUrlQueryInput) => {
     Router.replace({
       pathname: target,
       query
-    }); // target
+    });
   }
 };
