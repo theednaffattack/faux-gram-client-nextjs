@@ -1,32 +1,13 @@
 import App from "next/app";
 import React from "react";
-// import { Global, css } from "@emotion/core";
-// import { ThemeProvider } from "theme-ui";
-import { theme } from "../src/styles/theme";
-
 import { ApolloProvider } from "react-apollo";
-import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { ThemeProvider } from "styled-components";
 
+import { theme } from "../src/styles/theme";
 import withApollo from "../src/lib/withApollo";
 import "./empty.css";
-
-const GlobalStyles = createGlobalStyle`
-html {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  text-size-adjust: 100%;
-  font-family: "Montserrat", sans-serif;
-}
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
-#__next { min-height: 100vh; display: flex }
-`;
+import { GlobalStyles } from "../src/styles/global-styles";
+import Layout from "../src/components/layout";
 
 class MyApp extends App<any> {
   render() {
@@ -35,7 +16,9 @@ class MyApp extends App<any> {
       <ThemeProvider theme={theme}>
         <ApolloProvider client={apolloClient}>
           <GlobalStyles />
-          <Component {...pageProps} />
+          <Layout title="A title">
+            <Component {...pageProps} />
+          </Layout>
         </ApolloProvider>
       </ThemeProvider>
     );
