@@ -4,9 +4,12 @@ import Head from "next/head";
 import PropTypes from "prop-types";
 import React from "react";
 import { getDataFromTree } from "react-apollo";
+import Router from "next/router";
+
 import initApollo from "./initApollo";
 import { isBrowser } from "./isBrowser";
 import redirect from "./redirect";
+import { LogoutDocument } from "../components/generated/apollo-graphql";
 
 function parseCookies(req?: any, options = {}) {
   return cookie.parse(
@@ -68,9 +71,7 @@ export default (App: any) => {
           // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
           console.error("Error while running `getDataFromTree`", error);
           if (error.message.includes("Not authenticated")) {
-            redirect(ctx.ctx, "/login", {
-              message: "You are not authenticated"
-            });
+            redirect(ctx.ctx, "/login");
           }
         }
 
@@ -92,6 +93,9 @@ export default (App: any) => {
 
     constructor(props: any) {
       super(props);
+
+      this.syncLogout = this.syncLogout.bind(this);
+
       // `getDataFromTree` renders the component first, the client is passed off as a property.
       // After that rendering is done using Next's normal rendering pipeline
       this.apolloClient = initApollo(props.apolloState, {
@@ -99,6 +103,38 @@ export default (App: any) => {
           return parseCookies().token;
         }
       });
+    }
+
+    // New: Add event listener when a restricted Page Component mounts
+    componentDidMount() {
+      if (isBrowser) {
+        window.addEventListener("storage", this.syncLogout, true);
+      }
+    }
+
+    // New: Remove event listener when the Component unmount and
+    // delete all data
+    componentWillUnmount() {
+      if (isBrowser) {
+        window.removeEventListener("storage", this.syncLogout, true);
+
+        window.localStorage.removeItem("logout");
+      }
+    }
+
+    // New: Method to redirect the user when the event is called
+    syncLogout(event: any) {
+      if (event.key === "logout") {
+        console.log("logged out from storage!");
+
+        this.apolloClient.mutate({
+          mutation: LogoutDocument
+        });
+
+        Router.push("/login");
+
+        // redirect(ctx,"logout")
+      }
     }
 
     render() {
