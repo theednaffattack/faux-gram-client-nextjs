@@ -18,6 +18,22 @@ const sidebarBackground = {
   }
 };
 
+const BackgroundDiv = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  background: #fff;
+`;
+
+/**
+ * ```ts
+ * interface ISidebarNavigationProps {
+ * sidebarStatus?: "open" | "closed";
+ * }
+ * ```
+ */
 interface ISidebarNavigationProps {
   sidebarStatus?: "open" | "closed";
 }
@@ -28,7 +44,7 @@ export const SidebarNavigation: React.FunctionComponent<
   // @ts-ignore
 
   const [isOpen, toggleOpen] = useCycle(false, true);
-  const containerRef = useRef(null);
+  const containerRef: React.MutableRefObject<null> = useRef(null);
   const { height } = useDimensions(containerRef);
 
   const MotionNav = styled(motion.nav)`
@@ -39,15 +55,6 @@ export const SidebarNavigation: React.FunctionComponent<
     height: ${isOpen ? "100%" : null};
     width: 300px;
     z-index: 999;
-  `;
-
-  const BackgroundDiv = styled(motion.div)`
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 300px;
-    background: #fff;
   `;
 
   return (
