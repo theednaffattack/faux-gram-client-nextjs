@@ -151,6 +151,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             name="viewport"
             content="initial-scale=1.0, width=device-width"
           />
+          <meta httpEquiv="Content-Language" content="en" />
         </Head>
         {/* <LayoutHeader
         // handleCreateNewMessageThread={this.handleCreateNewMessageThread}
