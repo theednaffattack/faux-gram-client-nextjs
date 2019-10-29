@@ -16,7 +16,7 @@ export const InputField = ({
   ...props
 }: FieldProps & InputProps & IInputFieldProps) => {
   const errorMessage = touched[field.name] && errors[field.name];
-
+  const { type } = props;
   return (
     <>
       <Text fontFamily="montserrat">
@@ -24,20 +24,20 @@ export const InputField = ({
       </Text>
       <InputB
         id={field && props.id ? props.id : field.name}
+        type={type}
         name={field.name}
         {...field}
-        // {...props}
-        // fontSize={1}
-        // width={1}
-        // bg="rgba(0,0,0,0.1)"
-        // color="text"
-        // borderRadius={0}
-        // p={2}
-        // mt={2}
-        // mb={3}
-        // letterSpacing=".1em"
-        // border="0"
-        // borderBottom="2.5px rgba(244, 50, 127, 1) solid"
+        fontSize={1}
+        width={1}
+        bg="rgba(0,0,0,0.1)"
+        color="text"
+        borderRadius={0}
+        p={2}
+        mt={2}
+        mb={3}
+        letterSpacing=".1em"
+        border="0"
+        borderBottom="2.5px rgba(244, 50, 127, 1) solid"
       />
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
     </>
