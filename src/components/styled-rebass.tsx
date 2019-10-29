@@ -10,14 +10,15 @@ import {
   Text
 } from "rebass/styled-components";
 import {
-  maxWidth,
-  minHeight,
+  // backgroundColor,
   borders,
   boxShadow,
   borderRadius,
+  color,
+  maxWidth,
+  minHeight,
   height,
   space,
-  color,
   width,
   fontFamily,
   fontSize,
@@ -39,9 +40,11 @@ import {
   FontWeightProps,
   LetterSpacingProps,
   BorderRadiusProps,
-  HeightProps
+  HeightProps,
+  BackgroundColorProps,
+  ColorProps
 } from "styled-system";
-import styled from "styled-components";
+import styled, { StyledComponent } from "styled-components";
 import IconBase from "../modules/icon/icon";
 import { motion } from "framer-motion";
 
@@ -239,8 +242,9 @@ export const LogoFlex: React.FC<TLogoFlexProps> = styled(FlexBase)`
   ${height}
 `;
 
-export interface IInputBProps
-  extends BordersProps,
+export interface StylingProps
+  extends ColorProps,
+    BordersProps,
     SpaceProps,
     WidthProps,
     HeightProps,
@@ -248,11 +252,17 @@ export interface IInputBProps
     FontFamilyProps,
     FontSizeProps,
     FontWeightProps,
-    LetterSpacingProps {}
+    LetterSpacingProps,
+    BackgroundColorProps {}
 
-export const InputB = styled.input`
-/* ${color} */
-/* ${borders}
+const MotionInputBase = () => {
+  return <motion.input>Some stuff?</motion.input>;
+};
+
+export const MotionInput = styled(MotionInputBase)`
+
+${color}
+${borders}
 ${space}
 ${width}
 ${height}
@@ -260,11 +270,28 @@ ${borderRadius}
 ${fontFamily}
 ${fontSize}
 ${fontWeight}
-${letterSpacing} */
+${letterSpacing}
+    `;
+
+export const InputB: StyledComponent<
+  "input",
+  any,
+  StylingProps,
+  never
+> = styled.input`
+${color}
+${borders}
+${space}
+${width}
+${height}
+${borderRadius}
+${fontFamily}
+${fontSize}
+${fontWeight}
+${letterSpacing}
 outline: none;
 box-sizing:border-box;
 transition: all 0.30s ease-in-out;
-box-sizing: border-box;
 :focus {
   border-bottom: 2.5px lawngreen solid;
   // box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
