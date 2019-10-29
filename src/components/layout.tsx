@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { AbFlex, Flex } from "./styled-rebass";
 import LayoutFooter from "./layout-footer";
 import { SidebarNavigation } from "./sidebar-navigation";
