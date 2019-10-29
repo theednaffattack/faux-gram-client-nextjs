@@ -1,9 +1,9 @@
 import React from "react";
 import Head from "next/head";
+
 import { AbFlex, Flex } from "./styled-rebass";
 import LayoutFooter from "./layout-footer";
 import { SidebarNavigation } from "./sidebar-navigation";
-import Head from "next/head";
 
 interface ILayoutProps {
   title?: string;
@@ -172,27 +172,26 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         >
           <SidebarNavigation sidebarStatus={this.state.sidebarStatus} />
         </Flex> */}
-        <>
+        <Flex
+          flex="1 1 auto"
+          width={[1, 1, 1, "960px"]}
+          flexDirection="column"
+          style={{ position: "relative" }}
+        >
           <Flex
-            flex="1 1 auto"
             width={[1, 1, 1, "960px"]}
-            flexDirection="column"
-            style={{ position: "relative" }}
+            minHeight="70px"
+            style={{
+              position: "static",
+              background: "linear-gradient(5deg, #745fb5, #9066b8)"
+            }}
+            bg="#7386d5"
           >
-            <Flex
-              width={[1, 1, 1, "960px"]}
-              minHeight="70px"
-              style={{
-                position: "static",
-                background: "linear-gradient(5deg, #745fb5, #9066b8)"
-              }}
-              bg="#7386d5"
-            >
-              <SidebarNavigation />
-            </Flex>
-            {children}
+            <SidebarNavigation />
           </Flex>
-        </>
+
+          {children}
+        </Flex>
         <LayoutFooter />
       </AbFlex>
     );
