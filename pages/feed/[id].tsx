@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Router from "next/router";
 
 import { IMessagesPageProps } from "../../src/page-types/types";
-import { MyContext } from "../../src/interfaces";
+import { MyContext } from "../../types/types";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
 import { isBrowser } from "../../src/lib/isBrowser";
 import { FeedItemPage } from "../../src/modules/feed/feed-item-page";

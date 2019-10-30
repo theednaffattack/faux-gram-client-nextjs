@@ -1,11 +1,10 @@
 import React from "react";
 import { NextPage } from "next";
 
-import { MyContext } from "../../src/components/interfaces/my-context";
+import { MyContext } from "../../types/types";
 import { IPageProps } from "../../src/page-types/types";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
 import GlobalFeed from "../../src/components/global-feed";
-// import FeedPage from "../../src/modules/feed/feed-page";
 
 const Feed: NextPage<IPageProps> = () => {
   return (

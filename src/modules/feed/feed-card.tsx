@@ -12,8 +12,8 @@ import {
 } from "../../components/styled-rebass";
 import Icon from "../icon/icon";
 import { IPageProps } from "../../page-types/types";
-import { User } from "../../interfaces";
 import UnFollowUserButtonGqlWrapper from "./unfollow-user-button-gql-wrapper";
+import { User } from "../../../src/components/generated/apollo-graphql";
 
 export type TImage = {
   id: string;

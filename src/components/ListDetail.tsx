@@ -1,9 +1,7 @@
 import React from "react";
 
-import { User } from "../interfaces";
-
 type ListDetailProps = {
-  item: User;
+  item: any;
 };
 
 const ListDetail: React.FunctionComponent<ListDetailProps> = ({

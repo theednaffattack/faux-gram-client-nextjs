@@ -2,7 +2,7 @@ import { NextPage } from "next";
 
 import { LogoutDocument } from "../../components/generated/apollo-graphql";
 import redirect from "../../lib/redirect";
-import { MyContext } from "../../../src/interfaces";
+import { MyContext } from "../../../types/types";
 import { logout } from "../../../src/lib/localstorage-logout";
 
 interface Props {}

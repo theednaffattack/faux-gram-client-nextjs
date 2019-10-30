@@ -3,7 +3,7 @@ import Router from "next/router";
 
 import GetMessagesByThreadIdPage from "../../src/components/messages/get-messages-by-thread-id-page";
 import { IMessagesPageProps } from "../../src/page-types/types";
-import { MyContext } from "../../src/interfaces";
+import { MyContext } from "../../types/types";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
 import { isBrowser } from "../../src/lib/isBrowser";
 
