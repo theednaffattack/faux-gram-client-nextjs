@@ -4,6 +4,7 @@ import Layout from "../src/components/layout";
 import { User } from "../src/interfaces";
 import { findData } from "../src/utils/sample-api";
 import ListDetail from "../src/components/ListDetail";
+import { MyContext } from "../types/types";
 
 type Props = {
   item?: User;
