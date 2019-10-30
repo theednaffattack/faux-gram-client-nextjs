@@ -1,6 +1,10 @@
 // import react from "React";
-import { Flex as FlexBase, Text as TextBase } from "rebass";
-import styled from "@emotion/styled";
+import {
+  Flex as FlexBase,
+  Text as TextBase,
+  TextProps
+} from "rebass/styled-components";
+import styled, { StyledComponent } from "styled-components";
 import {
   borders,
   space,
@@ -9,6 +13,7 @@ import {
   SpaceProps
 } from "styled-system";
 import MyLink from "./my-link";
+import { FunctionComponent } from "react";
 
 interface Props {
   width: number | string | string[];
@@ -20,12 +25,19 @@ interface IFlexWithBorder
     SpaceProps,
     Props {}
 
-const Flex: React.FunctionComponent<IFlexWithBorder> = styled(FlexBase)`
+interface MyTextProps extends TextProps, BordersProps {}
+
+const Flex = styled(FlexBase)<IFlexWithBorder>`
   ${borders}
   ${space}
 `;
 
-const Text = styled(TextBase)`
+const Text: StyledComponent<
+  FunctionComponent<MyTextProps>,
+  any,
+  MyTextProps,
+  never
+> = styled(TextBase)`
   ${borders}
 `;
 
@@ -40,11 +52,11 @@ export const SignUpLink: React.FunctionComponent<Props> = ({
       p={3}
       my={4}
     >
-      <Text fontFamily="montserrat" color="rgba(255,255,255,.6)">
+      <Text fontFamily="main" color="rgba(255,255,255,.6)">
         Not a user?
       </Text>
       &nbsp; &nbsp;
-      <Text fontFamily="montserrat" color="rgba(255,255,255,.8)">
+      <Text fontFamily="main" color="rgba(255,255,255,.8)">
         <MyLink href="register" name="Sign Up" />
       </Text>
     </Flex>

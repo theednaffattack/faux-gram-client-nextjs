@@ -30,7 +30,7 @@ export default class FeedPage extends React.Component<IFeedPageProps, object> {
     return (
       <>
         <Flex bg="#eee">
-          <Heading as="h1" fontFamily="mySans">
+          <Heading as="h1" fontFamily="main">
             My Feed
           </Heading>
         </Flex>
