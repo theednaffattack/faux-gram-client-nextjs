@@ -4,8 +4,8 @@ import {
   ConfirmUserMutationVariables
 } from "../src/components/generated/apollo-graphql";
 import { CONFIRM_USER } from "../src/graphql/user/mutations/confirmUser";
-import { MyContext } from "../src/components/interfaces/my-context";
 import redirect from "../src/lib/redirect";
+import { MyContext } from "../types/types";
 
 export default class Confirm extends React.PureComponent {
   static async getInitialProps({
