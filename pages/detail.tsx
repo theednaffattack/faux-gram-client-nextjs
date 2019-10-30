@@ -1,29 +1,30 @@
 import React from "react";
-import { NextPageContext } from "next";
 import Layout from "../src/components/layout";
-import { User } from "../src/interfaces";
+// import { User } from "../src/interfaces";
 import { findData } from "../src/utils/sample-api";
 import ListDetail from "../src/components/ListDetail";
 import { MyContext } from "../types/types";
 
 type Props = {
-  item?: User;
+  item?: any;
   errors?: string;
+  referer: string;
 };
 
 class InitialPropsDetail extends React.Component<Props> {
-  static getInitialProps = async ({ query }: NextPageContext) => {
+  static getInitialProps = async ({ query, referer }: MyContext) => {
+    console.log({ referer });
     try {
       const { id } = query;
       const item = await findData(Array.isArray(id) ? id[0] : id);
-      return { item };
+      return { item, referer };
     } catch (err) {
       return { errors: err.message };
     }
   };
 
   render() {
-    const { item, errors } = this.props;
+    const { item, errors, referer } = this.props;
 
     if (errors) {
       return (

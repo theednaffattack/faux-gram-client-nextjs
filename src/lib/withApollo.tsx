@@ -10,6 +10,7 @@ import initApollo from "./initApollo";
 import { isBrowser } from "./isBrowser";
 import redirect from "./redirect";
 import { LogoutDocument } from "../components/generated/apollo-graphql";
+import { MyContext } from "../../types/types";
 
 function parseCookies(req?: any, options = {}) {
   return cookie.parse(
@@ -18,14 +19,30 @@ function parseCookies(req?: any, options = {}) {
   );
 }
 
+let refererInfo: string;
+
 export default (App: any) => {
-  return class WithData extends React.Component {
+  return class WithData extends React.Component<any, object> {
     static displayName = `WithData(${App.displayName})`;
     static propTypes = {
       apolloState: PropTypes.object.isRequired
     };
 
     static async getInitialProps(ctx: any) {
+      let referer: MyContext["referer"];
+      if (!isBrowser) {
+        // on thew server we get request headers so attach
+        // the referer to apollo context
+        referer =
+          ctx && ctx.ctx && ctx.ctx.req && ctx.ctx.req.headers
+            ? ctx.ctx.req.headers.referer
+            : "";
+        ctx.ctx.referer = referer;
+      } else {
+        // since we're only using referer for `/login` redirects
+        // we can set it to login. A better solution is needed
+        referer = "/login";
+      }
       const {
         Component,
         router,
@@ -35,7 +52,11 @@ export default (App: any) => {
       const apollo = initApollo(
         {},
         {
-          getToken: () => parseCookies(req).mfg
+          getToken: () => parseCookies(req).mfg,
+          getReferer: () => {
+            refererInfo = req.headers.referer;
+            return refererInfo;
+          }
         }
       );
 
@@ -69,9 +90,10 @@ export default (App: any) => {
           // Prevent Apollo Client GraphQL errors from crashing SSR.
           // Handle them in components via the data.error prop:
           // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
-          console.error("Error while running `getDataFromTree`", error);
           if (error.message.includes("Not authenticated")) {
-            redirect(ctx.ctx, "/login");
+            redirect(ctx.ctx, "/login", referer);
+          } else {
+            console.error("Error while running `getDataFromTree`", error);
           }
         }
 
@@ -101,6 +123,12 @@ export default (App: any) => {
       this.apolloClient = initApollo(props.apolloState, {
         getToken: () => {
           return parseCookies().token;
+        },
+        getReferer: () => {
+          console.log("WHAT PROPS AM I GETTING", this.props);
+          console.log("can I see REQUEST?", refererInfo);
+
+          return this.props.pageProps.referer;
         }
       });
     }

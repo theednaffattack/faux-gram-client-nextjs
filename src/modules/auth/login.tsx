@@ -7,7 +7,7 @@ import {
   Card as CardBase,
   Heading,
   Box
-} from "rebass";
+} from "rebass/styled-components";
 import styled, { StyledComponent } from "styled-components";
 import {
   boxShadow,
@@ -30,6 +30,7 @@ import { SignUpLink } from "../../components/sign-up-link";
 import { CheckBox } from "../../components/fields/checkbox";
 
 import { ICardProps, IButtonProps } from "./types";
+import { MyContext } from "types/types";
 
 const Button: StyledComponent<
   React.FunctionComponent<IButtonProps>,
@@ -84,7 +85,11 @@ const Card: StyledComponent<React.FunctionComponent<ICardProps>, any> = styled(
   ${boxShadow}
 `;
 
-export default () => {
+interface LoginModuleProps {
+  referer: MyContext["referer"];
+}
+
+export default ({ referer }: LoginModuleProps) => {
   return (
     <Flex minHeight="100vh">
       <InnerFlex width={[1]} minHeight="100vh">
@@ -105,10 +110,12 @@ export default () => {
             boxShadow="0 2px 16px rgba(0, 0, 0, 0.25)"
           >
             <ContentFlex mt={3} mb={4} justifyContent="center">
-              <Heading color="text" fontSize={[5]} fontFamily="montserrat">
+              <Heading color="text" fontSize={[5]} fontFamily="main">
                 Sign in
               </Heading>
             </ContentFlex>
+
+            <Text>Referer: {referer}</Text>
             <LoginComponent>
               {login => (
                 <Formik
@@ -125,7 +132,6 @@ export default () => {
 
                             return;
                           }
-                          console.log("BEFORE WRITEQUERY");
 
                           cache.writeQuery<MeQuery>({
                             query: meQuery,
@@ -137,7 +143,7 @@ export default () => {
                           console.log("AFTER WRITEQUERY");
                         }
                       });
-                      Router.push("/login");
+                      // Router.push("/login");
                     } catch (error) {
                       const displayErrors: { [key: string]: string } = {};
 
@@ -172,7 +178,10 @@ export default () => {
                       return;
                     }
 
-                    Router.push("/welcome");
+                    let pathname =
+                      referer && referer.length > 0 ? referer : "/welcome";
+
+                    Router.push(pathname);
                   }}
                   initialValues={{
                     email: "",
@@ -198,10 +207,7 @@ export default () => {
                       />
                       <ContentFlex my={2}>
                         <Box mr="auto">
-                          <Text
-                            htmlFor="keepMeSignedIn"
-                            fontFamily="montserrat"
-                          >
+                          <Text htmlFor="keepMeSignedIn" fontFamily="main">
                             Keep me logged in
                           </Text>
                         </Box>

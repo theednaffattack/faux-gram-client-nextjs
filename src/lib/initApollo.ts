@@ -52,11 +52,12 @@ if (!isBrowser) {
 
 interface Options {
   getToken: () => string;
+  getReferer: () => string;
 }
 
 function create(
   initialState: any,
-  { getToken }: Options
+  { getToken, getReferer }: Options
 ): ApolloClient<NormalizedCacheObject> {
   const httpLink = new HttpLink({
     uri: prodGraphqlUrl, // Server URL (must be absolute)
@@ -100,19 +101,20 @@ function create(
     // });
     if (graphQLErrors)
       graphQLErrors.map(({ message, locations, path }) => {
-        console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-            locations,
-            null,
-            2
-          )}, Path: ${path}`
-        );
-        if (isBrowser && message.includes("Not authenticated")) {
-          // Router.replace("/login");
-          Router.replace({
-            pathname: "/login",
-            query: { message: "You are not authenticated" }
-          });
+        let authErrorMessage = "Not authenticated";
+        if (isBrowser && message.includes(authErrorMessage)) {
+          console.log("BROWSER REDIRECT in initApollo", getReferer());
+          Router.replace(
+            `/login?referer=${getReferer()}&message=${authErrorMessage}`
+          );
+        } else {
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+              locations,
+              null,
+              2
+            )}, Path: ${path}`
+          );
         }
       });
   });

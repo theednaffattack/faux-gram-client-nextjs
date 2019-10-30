@@ -1,8 +1,23 @@
 import Router from "next/router";
-import { ParsedUrlQueryInput } from "querystring";
+// import { ParsedUrlQueryInput } from "querystring";
 
-export default (context: any, target: string, query?: ParsedUrlQueryInput) => {
-  if (context.res) {
+// import { MyContext } from "../../types/types";
+
+// interface RedirectOptions {
+//   query?: ParsedUrlQueryInput;
+//   referer?: string;
+//   newTarget?: string;
+// }
+
+export default (context: any, target: string, originalTarget?: string) => {
+  let myQuery;
+  let pathname;
+  if (originalTarget) {
+    pathname = originalTarget;
+  } else {
+    pathname = target;
+  }
+  if (context && context.res) {
     // server
     // 303: "See other"
     context.res.writeHead(303, { Location: target });
@@ -10,8 +25,8 @@ export default (context: any, target: string, query?: ParsedUrlQueryInput) => {
   } else {
     // In the browser, we just pretend like this never even happened ;)
     Router.replace({
-      pathname: target,
-      query
+      pathname: pathname,
+      query: myQuery || null
     });
   }
 };
