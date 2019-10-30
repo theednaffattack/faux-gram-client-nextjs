@@ -35,11 +35,10 @@ class InitialPropsDetail extends React.Component<Props> {
     }
 
     return (
-      <Layout
-        title={`${item ? item.name : "Detail"} | Next.js + TypeScript Example`}
-      >
+      <>
+        <p>Referer: {referer}</p>
         {item && <ListDetail item={item} />}
-      </Layout>
+      </>
     );
   }
 }

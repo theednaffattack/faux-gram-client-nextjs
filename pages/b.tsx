@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "../src/components/layout";
 import { NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 
@@ -9,11 +8,11 @@ export type TBProps = {
 };
 
 const BPage: NextPage<TBProps> = ({ pathname, query }) => (
-  <Layout title="b">
+  <>
     <div>b</div>
     <div>{pathname}</div>
     {JSON.stringify(query)}
-  </Layout>
+  </>
 );
 
 BPage.getInitialProps = async ({ pathname, query }) => {
