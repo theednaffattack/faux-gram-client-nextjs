@@ -114,6 +114,13 @@ export type ImageSubInput = {
   filetype: Scalars['String'],
 };
 
+export type Like = {
+   __typename?: 'Like',
+  id: Scalars['ID'],
+  post: Post,
+  user: User,
+};
+
 export type Message = {
    __typename?: 'Message',
   id: Scalars['ID'],
@@ -175,6 +182,7 @@ export type Mutation = {
   createMessageThread: Thread,
   addMessageToThread: AddMessagePayload,
   signS3: SignedS3Payload,
+  createOrUpdateLikes?: Maybe<Scalars['String']>,
 };
 
 
@@ -261,6 +269,11 @@ export type MutationSignS3Args = {
   files: Array<ImageSubInput>
 };
 
+
+export type MutationCreateOrUpdateLikesArgs = {
+  input: UpdateLikesInput
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   startCursor: Scalars['String'],
@@ -279,6 +292,7 @@ export type Post = {
   title?: Maybe<Scalars['String']>,
   text?: Maybe<Scalars['String']>,
   images?: Maybe<Array<Image>>,
+  likes?: Maybe<Array<Like>>,
   isCtxUserIdAFollowerOfPostUser?: Maybe<Scalars['Boolean']>,
   user?: Maybe<User>,
   created_at?: Maybe<Scalars['DateTime']>,
@@ -399,6 +413,7 @@ export type Subscription = {
   messageThreads: AddMessagePayload,
   getMessagesByThreadId: AddMessagePayload,
   newMessageByThreadId: AddMessagePayload,
+  likesUpdated: Scalars['String'],
 };
 
 
@@ -425,6 +440,11 @@ export type SubscriptionGetMessagesByThreadIdArgs = {
 
 export type SubscriptionNewMessageByThreadIdArgs = {
   data: AddMessageToThreadInput_V2
+};
+
+
+export type SubscriptionLikesUpdatedArgs = {
+  data: UpdateLikesInput
 };
 
 export type Thread = {
@@ -462,6 +482,10 @@ export type UnFollowUserInput = {
   userIDToUnFollow: Scalars['String'],
 };
 
+export type UpdateLikesInput = {
+  postId: Scalars['ID'],
+};
+
 
 export type User = {
    __typename?: 'User',
@@ -471,6 +495,7 @@ export type User = {
   lastName: Scalars['String'],
   email: Scalars['String'],
   threads?: Maybe<Array<Thread>>,
+  likes?: Maybe<Array<Like>>,
   name: Scalars['String'],
   confirmed: Scalars['Boolean'],
   posts?: Maybe<Array<Post>>,
@@ -703,6 +728,16 @@ export type NewMessageSubscription = (
       & Pick<User, 'id' | 'firstName' | 'lastName'>
     ) }
   ) }
+);
+
+export type CreateOrUpdateLikesMutationVariables = {
+  input: UpdateLikesInput
+};
+
+
+export type CreateOrUpdateLikesMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createOrUpdateLikes'>
 );
 
 export type ChangePasswordMutationVariables = {
@@ -1402,6 +1437,31 @@ export function withNewMessage<TProps, TChildProps = {}>(operationOptions?: Apol
     });
 };
 export type NewMessageSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewMessageSubscription>;
+export const CreateOrUpdateLikesDocument = gql`
+    mutation CreateOrUpdateLikes($input: UpdateLikesInput!) {
+  createOrUpdateLikes(input: $input)
+}
+    `;
+export type CreateOrUpdateLikesMutationFn = ApolloReactCommon.MutationFunction<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables>;
+export type CreateOrUpdateLikesComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables>, 'mutation'>;
+
+    export const CreateOrUpdateLikesComponent = (props: CreateOrUpdateLikesComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables> mutation={CreateOrUpdateLikesDocument} {...props} />
+    );
+    
+export type CreateOrUpdateLikesProps<TChildProps = {}> = ApolloReactHoc.MutateProps<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables> & TChildProps;
+export function withCreateOrUpdateLikes<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  CreateOrUpdateLikesMutation,
+  CreateOrUpdateLikesMutationVariables,
+  CreateOrUpdateLikesProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables, CreateOrUpdateLikesProps<TChildProps>>(CreateOrUpdateLikesDocument, {
+      alias: 'createOrUpdateLikes',
+      ...operationOptions
+    });
+};
+export type CreateOrUpdateLikesMutationResult = ApolloReactCommon.MutationResult<CreateOrUpdateLikesMutation>;
+export type CreateOrUpdateLikesMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($data: ChangePasswordInput!) {
   changePassword(data: $data) {
