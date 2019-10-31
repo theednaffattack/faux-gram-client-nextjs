@@ -14,11 +14,20 @@ import Icon from "../icon/icon";
 import { IPageProps } from "../../page-types/types";
 import UnFollowUserButtonGqlWrapper from "./unfollow-user-button-gql-wrapper";
 import { User } from "../../../src/components/generated/apollo-graphql";
+import { Button } from "../../../src/components/styled-rebass";
 
 export type TImage = {
   id: string;
   uri: string;
   __typename: string;
+};
+
+interface FakeOnClickProps {
+  fakeHandlerName: string;
+}
+
+const fakeOnClick = ({ fakeHandlerName }: FakeOnClickProps) => {
+  console.log(`${fakeHandlerName} firing!!!🚀`);
 };
 
 /**
@@ -96,9 +105,24 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
         <Text fontSize={0}>{description}</Text>
       </Box>
       <Flex border="lime">
-        <Icon name="heart" fill="fuchsia" size="3em" />
+        <Button
+          bg="transparent"
+          p={0}
+          type="button"
+          onClick={() => fakeOnClick({ fakeHandlerName: "Likes Click Event" })}
+        >
+          <Icon name="heart" fill="fuchsia" size="3em" />
+        </Button>
 
-        <Icon name="chat" fill="fuchsia" size="3em" />
+        <Button
+          bg="transparent"
+          p={0}
+          type="button"
+          onClick={() => fakeOnClick({ fakeHandlerName: "Chat Click Event" })}
+        >
+          <Icon name="chat" fill="fuchsia" size="3em" />
+        </Button>
+
         <UnFollowUserButtonGqlWrapper postUserId={postUserId as string} />
       </Flex>
     </Card>
