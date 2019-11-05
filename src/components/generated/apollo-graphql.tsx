@@ -18,13 +18,14 @@ export type Scalars = {
   Upload: any,
 };
 
-/** An Enum to help with CRUD operations */
-export enum Action {
-  Create = 'Create',
-  Read = 'Read',
-  Update = 'Update',
-  Delete = 'Delete'
-}
+export type AddCommentPayloadType = {
+   __typename?: 'AddCommentPayloadType',
+  id: Scalars['ID'],
+  postId: Scalars['ID'],
+  userId: Scalars['ID'],
+  created_at?: Maybe<Scalars['String']>,
+  content: Scalars['String'],
+};
 
 export type AddMessagePayload = {
    __typename?: 'AddMessagePayload',
@@ -46,6 +47,15 @@ export type AddMessageToThreadInput_V2 = {
 export type ChangePasswordInput = {
   password: Scalars['String'],
   token: Scalars['String'],
+};
+
+export type Comment = {
+   __typename?: 'Comment',
+  id: Scalars['ID'],
+  post: Post,
+  user: User,
+  created_at?: Maybe<Scalars['DateTime']>,
+  content: Scalars['String'],
 };
 
 
@@ -90,7 +100,7 @@ export type GetMyFollowingPostByIdInput = {
 export type HandlePostPayload = {
    __typename?: 'HandlePostPayload',
   success: Scalars['Boolean'],
-  action: Action,
+  action: Scalars['String'],
   id?: Maybe<Scalars['ID']>,
   title?: Maybe<Scalars['Boolean']>,
   images?: Maybe<Array<Image>>,
@@ -120,6 +130,19 @@ export type Like = {
   post: Post,
   user: User,
 };
+
+export type LikeReturnType = {
+   __typename?: 'LikeReturnType',
+  postId: Scalars['ID'],
+  status: LikeStatus,
+};
+
+/** Describes whether a like has been created or deleted in the database. */
+export enum LikeStatus {
+  Created = 'Created',
+  Deleted = 'Deleted',
+  Undetermined = 'Undetermined'
+}
 
 export type Message = {
    __typename?: 'Message',
@@ -174,7 +197,6 @@ export type Mutation = {
   login?: Maybe<User>,
   logout: Scalars['Boolean'],
   register: User,
-  addProfilePicture: Scalars['Boolean'],
   createPost: Post,
   followUser: Scalars['Boolean'],
   addNewMessage: Scalars['Boolean'],
@@ -182,7 +204,8 @@ export type Mutation = {
   createMessageThread: Thread,
   addMessageToThread: AddMessagePayload,
   signS3: SignedS3Payload,
-  createOrUpdateLikes?: Maybe<Scalars['String']>,
+  createOrUpdateLikes?: Maybe<LikeReturnType>,
+  addCommentToPost: AddCommentPayloadType,
 };
 
 
@@ -219,11 +242,6 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   data: RegisterInput
-};
-
-
-export type MutationAddProfilePictureArgs = {
-  picture: Scalars['Upload']
 };
 
 
@@ -274,6 +292,16 @@ export type MutationCreateOrUpdateLikesArgs = {
   input: UpdateLikesInput
 };
 
+
+export type MutationAddCommentToPostArgs = {
+  input: NewCommentsArgs
+};
+
+export type NewCommentsArgs = {
+  postId: Scalars['ID'],
+  content: Scalars['String'],
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   startCursor: Scalars['String'],
@@ -293,6 +321,7 @@ export type Post = {
   text?: Maybe<Scalars['String']>,
   images?: Maybe<Array<Image>>,
   likes?: Maybe<Array<Like>>,
+  comments?: Maybe<Array<Comment>>,
   isCtxUserIdAFollowerOfPostUser?: Maybe<Scalars['Boolean']>,
   user?: Maybe<User>,
   created_at?: Maybe<Scalars['DateTime']>,
@@ -350,7 +379,6 @@ export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
   helloWorld: Scalars['String'],
-  GetAllMyImages: Array<Image>,
   getThoseIFollowAndTheirPostsResolver?: Maybe<User>,
   getMyMessagesFromUser?: Maybe<Array<Message>>,
   getGlobalPosts?: Maybe<Array<Post>>,
@@ -413,7 +441,8 @@ export type Subscription = {
   messageThreads: AddMessagePayload,
   getMessagesByThreadId: AddMessagePayload,
   newMessageByThreadId: AddMessagePayload,
-  likesUpdated: Scalars['String'],
+  likesUpdated: LikeReturnType,
+  newComment: AddCommentPayloadType,
 };
 
 
@@ -444,7 +473,12 @@ export type SubscriptionNewMessageByThreadIdArgs = {
 
 
 export type SubscriptionLikesUpdatedArgs = {
-  data: UpdateLikesInput
+  input: UpdateLikesInput
+};
+
+
+export type SubscriptionNewCommentArgs = {
+  input: NewCommentsArgs
 };
 
 export type Thread = {
@@ -730,6 +764,19 @@ export type NewMessageSubscription = (
   ) }
 );
 
+export type AddCommentToPostMutationVariables = {
+  input: NewCommentsArgs
+};
+
+
+export type AddCommentToPostMutation = (
+  { __typename?: 'Mutation' }
+  & { addCommentToPost: (
+    { __typename?: 'AddCommentPayloadType' }
+    & Pick<AddCommentPayloadType, 'id' | 'postId' | 'content' | 'created_at'>
+  ) }
+);
+
 export type CreateOrUpdateLikesMutationVariables = {
   input: UpdateLikesInput
 };
@@ -737,7 +784,23 @@ export type CreateOrUpdateLikesMutationVariables = {
 
 export type CreateOrUpdateLikesMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'createOrUpdateLikes'>
+  & { createOrUpdateLikes: Maybe<(
+    { __typename?: 'LikeReturnType' }
+    & Pick<LikeReturnType, 'postId' | 'status'>
+  )> }
+);
+
+export type NewCommentSubscriptionVariables = {
+  input: NewCommentsArgs
+};
+
+
+export type NewCommentSubscription = (
+  { __typename?: 'Subscription' }
+  & { newComment: (
+    { __typename?: 'AddCommentPayloadType' }
+    & Pick<AddCommentPayloadType, 'id' | 'postId' | 'content' | 'created_at'>
+  ) }
 );
 
 export type ChangePasswordMutationVariables = {
@@ -843,17 +906,6 @@ export type RegisterMutation = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'name'>
   ) }
-);
-
-export type GetAllMyImagesQueryVariables = {};
-
-
-export type GetAllMyImagesQuery = (
-  { __typename?: 'Query' }
-  & { GetAllMyImages: Array<(
-    { __typename?: 'Image' }
-    & Pick<Image, 'id' | 'uri'>
-  )> }
 );
 
 export type GetGlobalPostsQueryVariables = {};
@@ -1437,9 +1489,42 @@ export function withNewMessage<TProps, TChildProps = {}>(operationOptions?: Apol
     });
 };
 export type NewMessageSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewMessageSubscription>;
+export const AddCommentToPostDocument = gql`
+    mutation AddCommentToPost($input: NewCommentsArgs!) {
+  addCommentToPost(input: $input) {
+    id
+    postId
+    content
+    created_at
+  }
+}
+    `;
+export type AddCommentToPostMutationFn = ApolloReactCommon.MutationFunction<AddCommentToPostMutation, AddCommentToPostMutationVariables>;
+export type AddCommentToPostComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddCommentToPostMutation, AddCommentToPostMutationVariables>, 'mutation'>;
+
+    export const AddCommentToPostComponent = (props: AddCommentToPostComponentProps) => (
+      <ApolloReactComponents.Mutation<AddCommentToPostMutation, AddCommentToPostMutationVariables> mutation={AddCommentToPostDocument} {...props} />
+    );
+    
+export type AddCommentToPostProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddCommentToPostMutation, AddCommentToPostMutationVariables> & TChildProps;
+export function withAddCommentToPost<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddCommentToPostMutation,
+  AddCommentToPostMutationVariables,
+  AddCommentToPostProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddCommentToPostMutation, AddCommentToPostMutationVariables, AddCommentToPostProps<TChildProps>>(AddCommentToPostDocument, {
+      alias: 'addCommentToPost',
+      ...operationOptions
+    });
+};
+export type AddCommentToPostMutationResult = ApolloReactCommon.MutationResult<AddCommentToPostMutation>;
+export type AddCommentToPostMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCommentToPostMutation, AddCommentToPostMutationVariables>;
 export const CreateOrUpdateLikesDocument = gql`
     mutation CreateOrUpdateLikes($input: UpdateLikesInput!) {
-  createOrUpdateLikes(input: $input)
+  createOrUpdateLikes(input: $input) {
+    postId
+    status
+  }
 }
     `;
 export type CreateOrUpdateLikesMutationFn = ApolloReactCommon.MutationFunction<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables>;
@@ -1462,6 +1547,34 @@ export function withCreateOrUpdateLikes<TProps, TChildProps = {}>(operationOptio
 };
 export type CreateOrUpdateLikesMutationResult = ApolloReactCommon.MutationResult<CreateOrUpdateLikesMutation>;
 export type CreateOrUpdateLikesMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables>;
+export const NewCommentDocument = gql`
+    subscription NewComment($input: NewCommentsArgs!) {
+  newComment(input: $input) {
+    id
+    postId
+    content
+    created_at
+  }
+}
+    `;
+export type NewCommentComponentProps = Omit<ApolloReactComponents.SubscriptionComponentOptions<NewCommentSubscription, NewCommentSubscriptionVariables>, 'subscription'>;
+
+    export const NewCommentComponent = (props: NewCommentComponentProps) => (
+      <ApolloReactComponents.Subscription<NewCommentSubscription, NewCommentSubscriptionVariables> subscription={NewCommentDocument} {...props} />
+    );
+    
+export type NewCommentProps<TChildProps = {}> = ApolloReactHoc.DataProps<NewCommentSubscription, NewCommentSubscriptionVariables> & TChildProps;
+export function withNewComment<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  NewCommentSubscription,
+  NewCommentSubscriptionVariables,
+  NewCommentProps<TChildProps>>) {
+    return ApolloReactHoc.withSubscription<TProps, NewCommentSubscription, NewCommentSubscriptionVariables, NewCommentProps<TChildProps>>(NewCommentDocument, {
+      alias: 'newComment',
+      ...operationOptions
+    });
+};
+export type NewCommentSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewCommentSubscription>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($data: ChangePasswordInput!) {
   changePassword(data: $data) {
@@ -1713,32 +1826,6 @@ export function withRegister<TProps, TChildProps = {}>(operationOptions?: Apollo
 };
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const GetAllMyImagesDocument = gql`
-    query GetAllMyImages {
-  GetAllMyImages {
-    id
-    uri
-  }
-}
-    `;
-export type GetAllMyImagesComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetAllMyImagesQuery, GetAllMyImagesQueryVariables>, 'query'>;
-
-    export const GetAllMyImagesComponent = (props: GetAllMyImagesComponentProps) => (
-      <ApolloReactComponents.Query<GetAllMyImagesQuery, GetAllMyImagesQueryVariables> query={GetAllMyImagesDocument} {...props} />
-    );
-    
-export type GetAllMyImagesProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetAllMyImagesQuery, GetAllMyImagesQueryVariables> & TChildProps;
-export function withGetAllMyImages<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  GetAllMyImagesQuery,
-  GetAllMyImagesQueryVariables,
-  GetAllMyImagesProps<TChildProps>>) {
-    return ApolloReactHoc.withQuery<TProps, GetAllMyImagesQuery, GetAllMyImagesQueryVariables, GetAllMyImagesProps<TChildProps>>(GetAllMyImagesDocument, {
-      alias: 'getAllMyImages',
-      ...operationOptions
-    });
-};
-export type GetAllMyImagesQueryResult = ApolloReactCommon.QueryResult<GetAllMyImagesQuery, GetAllMyImagesQueryVariables>;
 export const GetGlobalPostsDocument = gql`
     query GetGlobalPosts {
   getGlobalPosts {
