@@ -379,6 +379,7 @@ export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
   helloWorld: Scalars['String'],
+  GetAllMyImages: Array<Image>,
   getThoseIFollowAndTheirPostsResolver?: Maybe<User>,
   getMyMessagesFromUser?: Maybe<Array<Message>>,
   getGlobalPosts?: Maybe<Array<Post>>,
@@ -996,6 +997,17 @@ export type MyFollowingPostsQuery = (
       & Pick<User, 'id' | 'firstName' | 'lastName'>
     )> }
   )>> }
+);
+
+export type GetAllMyImagesQueryVariables = {};
+
+
+export type GetAllMyImagesQuery = (
+  { __typename?: 'Query' }
+  & { GetAllMyImages: Array<(
+    { __typename?: 'Image' }
+    & Pick<Image, 'id' | 'uri'>
+  )> }
 );
 
 export type GetOnlyThreadsQueryVariables = {
@@ -2008,6 +2020,32 @@ export function withMyFollowingPosts<TProps, TChildProps = {}>(operationOptions?
     });
 };
 export type MyFollowingPostsQueryResult = ApolloReactCommon.QueryResult<MyFollowingPostsQuery, MyFollowingPostsQueryVariables>;
+export const GetAllMyImagesDocument = gql`
+    query GetAllMyImages {
+  GetAllMyImages {
+    id
+    uri
+  }
+}
+    `;
+export type GetAllMyImagesComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetAllMyImagesQuery, GetAllMyImagesQueryVariables>, 'query'>;
+
+    export const GetAllMyImagesComponent = (props: GetAllMyImagesComponentProps) => (
+      <ApolloReactComponents.Query<GetAllMyImagesQuery, GetAllMyImagesQueryVariables> query={GetAllMyImagesDocument} {...props} />
+    );
+    
+export type GetAllMyImagesProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetAllMyImagesQuery, GetAllMyImagesQueryVariables> & TChildProps;
+export function withGetAllMyImages<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetAllMyImagesQuery,
+  GetAllMyImagesQueryVariables,
+  GetAllMyImagesProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetAllMyImagesQuery, GetAllMyImagesQueryVariables, GetAllMyImagesProps<TChildProps>>(GetAllMyImagesDocument, {
+      alias: 'getAllMyImages',
+      ...operationOptions
+    });
+};
+export type GetAllMyImagesQueryResult = ApolloReactCommon.QueryResult<GetAllMyImagesQuery, GetAllMyImagesQueryVariables>;
 export const GetOnlyThreadsDocument = gql`
     query GetOnlyThreads($feedinput: FeedInput!) {
   getOnlyThreads(feedinput: $feedinput) {
