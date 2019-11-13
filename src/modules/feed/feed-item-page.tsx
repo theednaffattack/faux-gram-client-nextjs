@@ -115,6 +115,8 @@ export const FeedItemPage: React.FC<IFeedItemPageProps> = ({
                         ? getMyFollowingPostById.id
                         : "no id"
                     }
+                    initialLikesCount={-1}
+                    initialCommentsCount={-1}
                     postUserId={getUserId as string}
                     pathname={pathname}
                     query={query}
