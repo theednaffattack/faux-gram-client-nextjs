@@ -153,6 +153,13 @@ export type LikesCountArgs = {
   postId: Scalars['ID'],
 };
 
+export type LikesCountReturnType = {
+   __typename?: 'LikesCountReturnType',
+  postId: Scalars['ID'],
+  status: LikeStatus,
+  count: Scalars['Int'],
+};
+
 export type LikesCountType = {
    __typename?: 'LikesCountType',
   count: Scalars['Int'],
@@ -163,6 +170,7 @@ export type LikesCountType = {
 export enum LikeStatus {
   Created = 'Created',
   Deleted = 'Deleted',
+  CountUpdated = 'CountUpdated',
   Undetermined = 'Undetermined'
 }
 
@@ -496,11 +504,6 @@ export type SubscriptionGetMessagesByThreadIdArgs = {
 
 export type SubscriptionNewMessageByThreadIdArgs = {
   data: AddMessageToThreadInput_V2
-};
-
-
-export type SubscriptionLikesUpdatedArgs = {
-  input: UpdateLikesInput
 };
 
 
@@ -998,7 +1001,7 @@ export type GetMyFollowingPostByIdQuery = (
   { __typename?: 'Query' }
   & { getMyFollowingPostById: Maybe<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'isCtxUserIdAFollowerOfPostUser'>
+    & Pick<Post, 'id' | 'title' | 'text' | 'comments_count' | 'likes_count' | 'isCtxUserIdAFollowerOfPostUser'>
     & { images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
@@ -1998,6 +2001,8 @@ export const GetMyFollowingPostByIdDocument = gql`
     id
     title
     text
+    comments_count
+    likes_count
     isCtxUserIdAFollowerOfPostUser
     images {
       id
