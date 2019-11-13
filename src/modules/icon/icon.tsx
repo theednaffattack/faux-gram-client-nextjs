@@ -31,7 +31,7 @@ const Icon = ({
       width={width || size}
       height={height || size}
       fill={fill}
-      data-id={`geomicon-${name}`}
+      data-id={`${name}`}
       viewBox="0 0 32 32"
     >
       <path d={path} />
