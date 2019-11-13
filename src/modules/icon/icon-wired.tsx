@@ -40,7 +40,7 @@ const Icon = ({
       width={width || size}
       height={height || size}
       fill={fill}
-      data-id={`geomicon-${name}`}
+      data-id={`${name}`}
       viewBox="0 0 32 32"
     >
       <path d={path} />
@@ -64,7 +64,7 @@ export const WiredIcon = ({
       width={width || size}
       height={height || size}
       fill={fill}
-      data-id={`geomicon-${index}`}
+      data-id={`${index}`}
       viewBox="0 0 32 32"
     >
       <path d={path} />
