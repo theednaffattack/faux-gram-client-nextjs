@@ -29,9 +29,7 @@ const CreateComment: React.FunctionComponent<Props> = () => {
             </Button>
           </Modal>
         )}
-      >
-        <Modal />
-      </ToggleContent>
+      />
     </div>
   );
 };
