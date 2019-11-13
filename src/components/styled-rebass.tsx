@@ -89,7 +89,7 @@ export interface ITabListItemProps {
 }
 
 interface IAvatarProps {
-  src: string;
+  src?: string;
 }
 
 export const Avatar: React.FunctionComponent<IAvatarProps> = ({ src }) => {
