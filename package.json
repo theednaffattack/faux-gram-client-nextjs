@@ -47,6 +47,7 @@
     "graphql-tag": "^2.10.1",
     "internal-ip": "^4.3.0",
     "isomorphic-unfetch": "^3.0.0",
+    "js-file-download": "^0.4.8",
     "lorem-ipsum": "^2.0.3",
     "next": "latest",
     "next-routes": "^1.4.2",
