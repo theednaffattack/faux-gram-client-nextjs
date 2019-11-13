@@ -13,8 +13,14 @@ import {
 import Icon from "../icon/icon";
 import { IPageProps } from "../../page-types/types";
 import UnFollowUserButtonGqlWrapper from "./unfollow-user-button-gql-wrapper";
-import { User } from "../../../src/components/generated/apollo-graphql";
+import {
+  CreateOrUpdateLikesComponent,
+  User
+} from "../../../src/components/generated/apollo-graphql";
 import { Button } from "../../../src/components/styled-rebass";
+import { CommentCounter } from "./comments-counter";
+import { LikesCounter } from "./likes-counter";
+import UserProfileImage from "../../../src/components/user-profile-image";
 
 export type TImage = {
   id: string;
@@ -53,16 +59,24 @@ export interface ISingleFeedCardProps extends IPageProps {
   title: string;
   /** image description of the image */
   description: string;
-  /** pageProps from top-level getInitialProps */
+  /** count of Post comments */
+  initialCommentsCount: number;
+  /** count of Post likes */
+  initialLikesCount: number;
+
+  userInfo?: any;
 }
 
 export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
+  initialLikesCount,
+  initialCommentsCount,
   id,
   images,
   description,
   title,
   pathname,
-  postUserId
+  postUserId,
+  userInfo
 }) => {
   const isThisADynamicRoute =
     pathname && pathname[pathname.length - 1] === "]" ? true : false;
@@ -83,7 +97,15 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
         // flex: "1 1 auto"
       }}
     >
-      <Flex>
+      <Flex border="crimson">
+        <Box>
+          <UserProfileImage
+            flexInstruction="column"
+            buttonThing={false}
+            color="blue"
+            user={userInfo}
+          />
+        </Box>
         <Box ml="auto">
           <Link href={isThisADynamicRoute === true ? "/feed" : `/feed/${id}`}>
             <a>
@@ -104,25 +126,42 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
         <Heading as="h3">{title}</Heading>
         <Text fontSize={0}>{description}</Text>
       </Box>
-      <Flex border="lime">
-        <Button
-          bg="transparent"
-          p={0}
-          type="button"
-          onClick={() => fakeOnClick({ fakeHandlerName: "Likes Click Event" })}
-        >
-          <Icon name="heart" fill="fuchsia" size="3em" />
-        </Button>
+      <Flex border="lime" alignItems="center">
+        <Flex flexDirection="column" alignItems="center">
+          <LikesCounter initialLikesCount={initialLikesCount} postId={id} />
+          <CreateOrUpdateLikesComponent>
+            {likesMutation => {
+              return (
+                <Button
+                  bg="transparent"
+                  p={0}
+                  type="button"
+                  onClick={() => {
+                    likesMutation({ variables: { input: { postId: id } } });
+                  }}
+                >
+                  <Icon name="heart" fill="fuchsia" size="3em" />
+                </Button>
+              );
+            }}
+          </CreateOrUpdateLikesComponent>
+        </Flex>
 
-        <Button
-          bg="transparent"
-          p={0}
-          type="button"
-          onClick={() => fakeOnClick({ fakeHandlerName: "Chat Click Event" })}
-        >
-          <Icon name="chat" fill="fuchsia" size="3em" />
-        </Button>
+        <Flex flexDirection="column" alignItems="center">
+          <CommentCounter
+            initialCommentsCount={initialCommentsCount}
+            postId={id}
+          />
 
+          <Button
+            bg="transparent"
+            p={0}
+            type="button"
+            onClick={() => fakeOnClick({ fakeHandlerName: "Chat Click Event" })}
+          >
+            <Icon name="chat" fill="fuchsia" size="3em" />
+          </Button>
+        </Flex>
         <UnFollowUserButtonGqlWrapper postUserId={postUserId as string} />
       </Flex>
     </Card>
@@ -159,6 +198,8 @@ export class FeedCards extends React.Component<IFeedCardsProps> {
         {cardData.map((card, index) => {
           return (
             <FeedCard
+              initialLikesCount={card.initialLikesCount}
+              initialCommentsCount={card.initialCommentsCount}
               pathname={pathname}
               postUserId={card.postUserId}
               query={query}
