@@ -5,7 +5,7 @@ import { ThemeProvider } from "styled-components";
 
 import { theme } from "../src/styles/theme";
 import withApollo from "../src/lib/withApollo";
-import "./empty.css";
+// import "./empty.css";
 import { GlobalStyles } from "../src/styles/global-styles";
 import Layout from "../src/components/layout";
 
