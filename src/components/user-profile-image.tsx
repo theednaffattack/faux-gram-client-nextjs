@@ -8,7 +8,15 @@ import {
   FlexUserProfileWrap,
   Avatar
 } from "./styled-rebass";
-import { IUserProfileImage } from "./types";
+
+export interface IUserProfileImage {
+  user?: any;
+  flexInstruction?: "row" | "column";
+  color?: string;
+  handleRemoveInviteeToThread?: any;
+  isMe?: boolean;
+  buttonThing?: boolean;
+}
 
 function UserProfileImage({
   user,
@@ -39,16 +47,19 @@ function UserProfileImage({
         justifyContent="center"
         boxShadow="2px 2px 16px rgba(0, 0, 0, 0.25)"
       >
-        {user.profileImage ? (
+        {user && user.profileImage ? (
           <Avatar src={user.profileImage} />
         ) : (
           <Icon mt={3} size="2em" name="user" fill="white" />
         )}
       </FlexUserProfileWrap>
-
-      <Text color={color ? color : "text"}>
-        {user.firstName} {user.lastName}
-      </Text>
+      {user ? (
+        <Text color={color ? color : "text"}>
+          {user.firstName} {user.lastName}
+        </Text>
+      ) : (
+        ""
+      )}
       {buttonThing}
       {flexInstruction === "column" || !buttonThing ? (
         ""
