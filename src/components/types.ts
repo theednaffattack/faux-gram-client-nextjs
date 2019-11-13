@@ -236,15 +236,6 @@ export interface IChatBodyProps {
 
 export interface IMinButtonProps extends MinHeightProps, ButtonProps {}
 
-export interface IUserProfileImage {
-  user: any;
-  flexInstruction: "row" | "column";
-  color: string;
-  handleRemoveInviteeToThread: any;
-  isMe: boolean;
-  buttonThing: boolean;
-}
-
 export interface IUserProfileImageCards {
   user: any;
   flexInstruction: "row" | "column";
