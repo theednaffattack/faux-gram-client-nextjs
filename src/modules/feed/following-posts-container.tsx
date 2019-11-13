@@ -94,7 +94,15 @@ class FollowingPostsContainer extends React.Component<
       <>
         {myFollowingPosts &&
           myFollowingPosts.map((post, index) => {
-            let { text, id, title, images, user } = post;
+            let {
+              text,
+              id,
+              title,
+              images,
+              user,
+              comments_count,
+              likes_count
+            } = post;
 
             // perform checks for TypeScript
             // maybe these should be type guards
@@ -105,8 +113,11 @@ class FollowingPostsContainer extends React.Component<
             let description = text || "no description";
             return (
               <FeedCard
+                initialLikesCount={likes_count}
+                initialCommentsCount={comments_count}
                 pathname={pathname}
                 postUserId={useUser as string}
+                userInfo={user}
                 query={query}
                 id={id}
                 key={index}
