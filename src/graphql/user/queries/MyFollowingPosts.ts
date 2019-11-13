@@ -7,6 +7,8 @@ export const MY_FOLLOWING_POSTS = gql`
       title
       text
       created_at
+      likes_count
+      comments_count
       images {
         id
         uri
