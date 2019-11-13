@@ -58,6 +58,16 @@ export type Comment = {
   content: Scalars['String'],
 };
 
+export type CommentCountArgs = {
+  postId: Scalars['ID'],
+};
+
+export type CommentCountType = {
+   __typename?: 'CommentCountType',
+  count: Scalars['Int'],
+  postId: Scalars['ID'],
+};
+
 
 export type FeedInput = {
   cursor?: Maybe<Scalars['String']>,
@@ -108,6 +118,7 @@ export type HandlePostPayload = {
   user?: Maybe<User>,
   created_at?: Maybe<Scalars['DateTime']>,
   updated_at?: Maybe<Scalars['DateTime']>,
+  comment_count?: Maybe<Scalars['Int']>,
 };
 
 export type Image = {
@@ -129,12 +140,23 @@ export type Like = {
   id: Scalars['ID'],
   post: Post,
   user: User,
+  count: Scalars['Int'],
 };
 
 export type LikeReturnType = {
    __typename?: 'LikeReturnType',
   postId: Scalars['ID'],
   status: LikeStatus,
+};
+
+export type LikesCountArgs = {
+  postId: Scalars['ID'],
+};
+
+export type LikesCountType = {
+   __typename?: 'LikesCountType',
+  count: Scalars['Int'],
+  postId: Scalars['ID'],
 };
 
 /** Describes whether a like has been created or deleted in the database. */
@@ -326,6 +348,8 @@ export type Post = {
   user?: Maybe<User>,
   created_at?: Maybe<Scalars['DateTime']>,
   updated_at?: Maybe<Scalars['DateTime']>,
+  comments_count: Scalars['Int'],
+  likes_count: Scalars['Int'],
 };
 
 export type PostInput = {
@@ -444,6 +468,8 @@ export type Subscription = {
   newMessageByThreadId: AddMessagePayload,
   likesUpdated: LikeReturnType,
   newComment: AddCommentPayloadType,
+  commentCount: CommentCountType,
+  likesCount: LikesCountType,
 };
 
 
@@ -480,6 +506,16 @@ export type SubscriptionLikesUpdatedArgs = {
 
 export type SubscriptionNewCommentArgs = {
   input: NewCommentsArgs
+};
+
+
+export type SubscriptionCommentCountArgs = {
+  input: CommentCountArgs
+};
+
+
+export type SubscriptionLikesCountArgs = {
+  input: LikesCountArgs
 };
 
 export type Thread = {
@@ -791,6 +827,32 @@ export type CreateOrUpdateLikesMutation = (
   )> }
 );
 
+export type CommentCountSubscriptionVariables = {
+  input: CommentCountArgs
+};
+
+
+export type CommentCountSubscription = (
+  { __typename?: 'Subscription' }
+  & { commentCount: (
+    { __typename?: 'CommentCountType' }
+    & Pick<CommentCountType, 'count' | 'postId'>
+  ) }
+);
+
+export type LikesCountSubscriptionVariables = {
+  input: LikesCountArgs
+};
+
+
+export type LikesCountSubscription = (
+  { __typename?: 'Subscription' }
+  & { likesCount: (
+    { __typename?: 'LikesCountType' }
+    & Pick<LikesCountType, 'count' | 'postId'>
+  ) }
+);
+
 export type NewCommentSubscriptionVariables = {
   input: NewCommentsArgs
 };
@@ -916,7 +978,7 @@ export type GetGlobalPostsQuery = (
   { __typename?: 'Query' }
   & { getGlobalPosts: Maybe<Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'created_at' | 'isCtxUserIdAFollowerOfPostUser'>
+    & Pick<Post, 'id' | 'title' | 'text' | 'created_at' | 'likes_count' | 'comments_count' | 'isCtxUserIdAFollowerOfPostUser'>
     & { images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
@@ -988,7 +1050,7 @@ export type MyFollowingPostsQuery = (
   { __typename?: 'Query' }
   & { myFollowingPosts: Maybe<Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'created_at'>
+    & Pick<Post, 'id' | 'title' | 'text' | 'created_at' | 'likes_count' | 'comments_count'>
     & { images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
@@ -1559,6 +1621,58 @@ export function withCreateOrUpdateLikes<TProps, TChildProps = {}>(operationOptio
 };
 export type CreateOrUpdateLikesMutationResult = ApolloReactCommon.MutationResult<CreateOrUpdateLikesMutation>;
 export type CreateOrUpdateLikesMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrUpdateLikesMutation, CreateOrUpdateLikesMutationVariables>;
+export const CommentCountDocument = gql`
+    subscription CommentCount($input: CommentCountArgs!) {
+  commentCount(input: $input) {
+    count
+    postId
+  }
+}
+    `;
+export type CommentCountComponentProps = Omit<ApolloReactComponents.SubscriptionComponentOptions<CommentCountSubscription, CommentCountSubscriptionVariables>, 'subscription'>;
+
+    export const CommentCountComponent = (props: CommentCountComponentProps) => (
+      <ApolloReactComponents.Subscription<CommentCountSubscription, CommentCountSubscriptionVariables> subscription={CommentCountDocument} {...props} />
+    );
+    
+export type CommentCountProps<TChildProps = {}> = ApolloReactHoc.DataProps<CommentCountSubscription, CommentCountSubscriptionVariables> & TChildProps;
+export function withCommentCount<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  CommentCountSubscription,
+  CommentCountSubscriptionVariables,
+  CommentCountProps<TChildProps>>) {
+    return ApolloReactHoc.withSubscription<TProps, CommentCountSubscription, CommentCountSubscriptionVariables, CommentCountProps<TChildProps>>(CommentCountDocument, {
+      alias: 'commentCount',
+      ...operationOptions
+    });
+};
+export type CommentCountSubscriptionResult = ApolloReactCommon.SubscriptionResult<CommentCountSubscription>;
+export const LikesCountDocument = gql`
+    subscription LikesCount($input: LikesCountArgs!) {
+  likesCount(input: $input) {
+    count
+    postId
+  }
+}
+    `;
+export type LikesCountComponentProps = Omit<ApolloReactComponents.SubscriptionComponentOptions<LikesCountSubscription, LikesCountSubscriptionVariables>, 'subscription'>;
+
+    export const LikesCountComponent = (props: LikesCountComponentProps) => (
+      <ApolloReactComponents.Subscription<LikesCountSubscription, LikesCountSubscriptionVariables> subscription={LikesCountDocument} {...props} />
+    );
+    
+export type LikesCountProps<TChildProps = {}> = ApolloReactHoc.DataProps<LikesCountSubscription, LikesCountSubscriptionVariables> & TChildProps;
+export function withLikesCount<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  LikesCountSubscription,
+  LikesCountSubscriptionVariables,
+  LikesCountProps<TChildProps>>) {
+    return ApolloReactHoc.withSubscription<TProps, LikesCountSubscription, LikesCountSubscriptionVariables, LikesCountProps<TChildProps>>(LikesCountDocument, {
+      alias: 'likesCount',
+      ...operationOptions
+    });
+};
+export type LikesCountSubscriptionResult = ApolloReactCommon.SubscriptionResult<LikesCountSubscription>;
 export const NewCommentDocument = gql`
     subscription NewComment($input: NewCommentsArgs!) {
   newComment(input: $input) {
@@ -1845,6 +1959,8 @@ export const GetGlobalPostsDocument = gql`
     title
     text
     created_at
+    likes_count
+    comments_count
     images {
       id
       uri
@@ -1990,6 +2106,8 @@ export const MyFollowingPostsDocument = gql`
     title
     text
     created_at
+    likes_count
+    comments_count
     images {
       id
       uri
