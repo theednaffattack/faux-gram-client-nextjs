@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { motion, useInvertedScale } from "framer-motion";
 import { closeSpring, openSpring } from "./animations";
 
