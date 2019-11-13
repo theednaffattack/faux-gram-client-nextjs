@@ -1,4 +1,9 @@
-import Document, { DocumentContext } from "next/document";
+import Document, {
+  DocumentContext,
+  Head,
+  Main,
+  NextScript
+} from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
 export default class MyDocument extends Document {
@@ -25,5 +30,19 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+
+  render() {
+    return (
+      <html>
+        <Head />
+        <body>
+          <Main />
+          {/* Here we will mount our modal portal */}
+          <div id="modal-root" />
+          <NextScript />
+        </body>
+      </html>
+    );
   }
 }
