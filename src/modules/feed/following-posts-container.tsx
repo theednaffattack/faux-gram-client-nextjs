@@ -3,7 +3,8 @@ import React from "react";
 import FeedCard from "./feed-card";
 import {
   MyFollowingPostsComponent,
-  MyFollowingPostsQuery
+  MyFollowingPostsQuery,
+  MyFollowingPostsQueryResult
 } from "../../components/generated/apollo-graphql";
 import { FOLLOWING_POSTS } from "../../graphql/user/subscriptions/FollowingPosts";
 import { IPageProps } from "../../page-types/types";
@@ -57,7 +58,7 @@ export interface IFollowingPostsContainerProps
   extends IPageProps,
     MyFollowingPostsQuery {
   // data: MyFollowingPostsQueryResult;
-  subscribeToMore: any;
+  subscribeToMore: MyFollowingPostsQueryResult["subscribeToMore"];
   subscriptionDocument: any;
 }
 
@@ -100,6 +101,8 @@ class FollowingPostsContainer extends React.Component<
               title,
               images,
               user,
+              comments,
+              already_liked,
               comments_count,
               likes_count
             } = post;
@@ -113,6 +116,8 @@ class FollowingPostsContainer extends React.Component<
             let description = text || "no description";
             return (
               <FeedCard
+                alreadyLiked={already_liked}
+                comments={comments}
                 initialLikesCount={likes_count}
                 initialCommentsCount={comments_count}
                 pathname={pathname}
