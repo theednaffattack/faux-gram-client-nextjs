@@ -7,7 +7,13 @@ export const MY_FOLLOWING_POSTS = gql`
       title
       text
       created_at
+      already_liked
       likes_count
+      comments {
+        id
+        content
+        created_at
+      }
       comments_count
       images {
         id
