@@ -74,6 +74,23 @@ export type FeedInput = {
   take?: Maybe<Scalars['Int']>,
 };
 
+export type FollowingPostReturnType = {
+   __typename?: 'FollowingPostReturnType',
+  id?: Maybe<Scalars['ID']>,
+  title?: Maybe<Scalars['String']>,
+  text?: Maybe<Scalars['String']>,
+  images?: Maybe<Array<Image>>,
+  likes?: Maybe<Array<Like>>,
+  comments?: Maybe<Array<Comment>>,
+  isCtxUserIdAFollowerOfPostUser?: Maybe<Scalars['Boolean']>,
+  user?: Maybe<User>,
+  created_at?: Maybe<Scalars['DateTime']>,
+  updated_at?: Maybe<Scalars['DateTime']>,
+  comments_count: Scalars['Int'],
+  likes_count: Scalars['Int'],
+  currently_liked: Scalars['Boolean'],
+};
+
 export type FollowUserInput = {
   userIDToFollow: Scalars['String'],
 };
@@ -119,6 +136,8 @@ export type HandlePostPayload = {
   created_at?: Maybe<Scalars['DateTime']>,
   updated_at?: Maybe<Scalars['DateTime']>,
   comment_count?: Maybe<Scalars['Int']>,
+  likes_count: Scalars['Int'],
+  currently_liked: Scalars['Boolean'],
 };
 
 export type Image = {
@@ -414,10 +433,10 @@ export type Query = {
   GetAllMyImages: Array<Image>,
   getThoseIFollowAndTheirPostsResolver?: Maybe<User>,
   getMyMessagesFromUser?: Maybe<Array<Message>>,
-  getGlobalPosts?: Maybe<Array<Post>>,
+  getGlobalPosts?: Maybe<Array<FollowingPostReturnType>>,
   meAndAllFollowers?: Maybe<User>,
-  myFollowingPosts?: Maybe<Array<Post>>,
-  getMyFollowingPostById?: Maybe<Post>,
+  myFollowingPosts?: Maybe<Array<FollowingPostReturnType>>,
+  getMyFollowingPostById?: Maybe<FollowingPostReturnType>,
   getAllMyMessages?: Maybe<User>,
   getMessageThreads?: Maybe<Array<Maybe<Thread>>>,
   getListToCreateThread?: Maybe<TransUserReturn>,
@@ -499,11 +518,6 @@ export type SubscriptionMessageThreadsArgs = {
 
 export type SubscriptionGetMessagesByThreadIdArgs = {
   input: GetMessagesByThreadIdInput
-};
-
-
-export type SubscriptionNewMessageByThreadIdArgs = {
-  data: AddMessageToThreadInput_V2
 };
 
 
@@ -980,8 +994,8 @@ export type GetGlobalPostsQueryVariables = {};
 export type GetGlobalPostsQuery = (
   { __typename?: 'Query' }
   & { getGlobalPosts: Maybe<Array<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'created_at' | 'likes_count' | 'comments_count' | 'isCtxUserIdAFollowerOfPostUser'>
+    { __typename?: 'FollowingPostReturnType' }
+    & Pick<FollowingPostReturnType, 'id' | 'title' | 'text' | 'created_at' | 'currently_liked' | 'likes_count' | 'comments_count' | 'isCtxUserIdAFollowerOfPostUser'>
     & { images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
@@ -1000,9 +1014,12 @@ export type GetMyFollowingPostByIdQueryVariables = {
 export type GetMyFollowingPostByIdQuery = (
   { __typename?: 'Query' }
   & { getMyFollowingPostById: Maybe<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'comments_count' | 'likes_count' | 'isCtxUserIdAFollowerOfPostUser'>
-    & { images: Maybe<Array<(
+    { __typename?: 'FollowingPostReturnType' }
+    & Pick<FollowingPostReturnType, 'id' | 'title' | 'text' | 'currently_liked' | 'comments_count' | 'likes_count' | 'isCtxUserIdAFollowerOfPostUser'>
+    & { comments: Maybe<Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'id' | 'content' | 'created_at'>
+    )>>, images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
     )>>, user: Maybe<(
@@ -1052,9 +1069,12 @@ export type MyFollowingPostsQueryVariables = {};
 export type MyFollowingPostsQuery = (
   { __typename?: 'Query' }
   & { myFollowingPosts: Maybe<Array<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'created_at' | 'likes_count' | 'comments_count'>
-    & { images: Maybe<Array<(
+    { __typename?: 'FollowingPostReturnType' }
+    & Pick<FollowingPostReturnType, 'id' | 'title' | 'text' | 'created_at' | 'currently_liked' | 'likes_count' | 'comments_count'>
+    & { comments: Maybe<Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'id' | 'content' | 'created_at'>
+    )>>, images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
     )>>, user: Maybe<(
@@ -1962,6 +1982,7 @@ export const GetGlobalPostsDocument = gql`
     title
     text
     created_at
+    currently_liked
     likes_count
     comments_count
     images {
@@ -2001,6 +2022,12 @@ export const GetMyFollowingPostByIdDocument = gql`
     id
     title
     text
+    currently_liked
+    comments {
+      id
+      content
+      created_at
+    }
     comments_count
     likes_count
     isCtxUserIdAFollowerOfPostUser
@@ -2111,7 +2138,13 @@ export const MyFollowingPostsDocument = gql`
     title
     text
     created_at
+    currently_liked
     likes_count
+    comments {
+      id
+      content
+      created_at
+    }
     comments_count
     images {
       id

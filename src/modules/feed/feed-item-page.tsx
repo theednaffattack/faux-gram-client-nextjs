@@ -118,7 +118,7 @@ export const FeedItemPage: React.FC<IFeedItemPageProps> = ({
                           ? getMyFollowingPostById.id
                           : "no id"
                       }
-                      alreadyLiked={getMyFollowingPostById.already_liked}
+                      currentlyLiked={getMyFollowingPostById.currently_liked}
                       comments={comments}
                       initialLikesCount={getMyFollowingPostById.likes_count}
                       initialCommentsCount={

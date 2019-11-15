@@ -86,7 +86,7 @@ export interface ISingleFeedCardProps extends IPageProps {
   renderTextarea?: any;
 
   /** Has the user already liked this Post */
-  alreadyLiked: boolean;
+  currentlyLiked: boolean;
 }
 
 interface CommentFieldProps {
@@ -264,7 +264,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
   description,
   id,
   images,
-  alreadyLiked,
+  currentlyLiked,
   initialLikesCount,
   initialCommentsCount,
   postUserId,
@@ -359,7 +359,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
                         ) {
                           let newCacheData = {
                             ...fromCache.getMyFollowingPostById,
-                            already_liked: false
+                            currently_liked: false
                           };
 
                           cache.writeQuery<GetMyFollowingPostByIdQuery>({
@@ -391,7 +391,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
                         ) {
                           let newCacheData = {
                             ...fromCache.getMyFollowingPostById,
-                            already_liked: true
+                            currently_liked: true
                           };
 
                           cache.writeQuery<GetMyFollowingPostByIdQuery>({
@@ -421,7 +421,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
                 >
                   <Icon
                     name="heart"
-                    fill={alreadyLiked ? "crimson" : "yellow"}
+                    fill={currentlyLiked ? "crimson" : "yellow"}
                     size="3em"
                   />
                 </Button>

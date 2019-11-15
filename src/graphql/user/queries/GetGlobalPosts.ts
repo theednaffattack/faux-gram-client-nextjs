@@ -7,7 +7,7 @@ export const GET_GLOBAL_POSTS = gql`
       title
       text
       created_at
-      already_liked
+      currently_liked
       likes_count
       comments_count
       images {

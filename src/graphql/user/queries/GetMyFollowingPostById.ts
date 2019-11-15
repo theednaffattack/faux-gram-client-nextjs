@@ -6,7 +6,7 @@ export const GET_MY_FOLLOWING_POST_BY_ID = gql`
       id
       title
       text
-      already_liked
+      currently_liked
       comments {
         id
         content

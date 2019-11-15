@@ -102,7 +102,7 @@ class FollowingPostsContainer extends React.Component<
               images,
               user,
               comments,
-              already_liked,
+              currently_liked,
               comments_count,
               likes_count
             } = post;
@@ -116,7 +116,7 @@ class FollowingPostsContainer extends React.Component<
             let description = text || "no description";
             return (
               <FeedCard
-                alreadyLiked={already_liked}
+                currentlyLiked={currently_liked}
                 comments={comments}
                 initialLikesCount={likes_count}
                 initialCommentsCount={comments_count}
