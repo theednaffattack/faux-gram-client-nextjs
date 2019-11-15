@@ -89,6 +89,7 @@ interface LoginModuleProps {
   referer: MyContext["referer"];
 }
 
+// @ts-ignore
 export default ({ referer }: LoginModuleProps) => {
   return (
     <Flex minHeight="100vh">
@@ -115,7 +116,7 @@ export default ({ referer }: LoginModuleProps) => {
               </Heading>
             </ContentFlex>
 
-            <Text>Referer: {referer}</Text>
+            {/* <Text>Referer: {referer}</Text> */}
             <LoginComponent>
               {login => (
                 <Formik
