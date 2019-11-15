@@ -95,9 +95,6 @@ const CreateThreadAndAddMessageToThread = ({
                 response = await createMessageThread({
                   variables: dataForSubmitting,
                   update: (cache, { data }) => {
-                    console.log("ERROR UPDATING?", data);
-                    console.log("CACHE?", cache);
-
                     if (!data || !data.createMessageThread) {
                       return;
                     }
@@ -110,9 +107,6 @@ const CreateThreadAndAddMessageToThread = ({
                     });
 
                     if (fromCache && fromCache.getOnlyThreads) {
-                      console.log("ERROR UPDATING?", data);
-                      console.log("MYSTUFF?", fromCache);
-
                       // COME BACK TO THIS
                       // fromCache.getOnlyThreads.push(data.createMessageThread);
 
