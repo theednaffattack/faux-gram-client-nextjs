@@ -59,7 +59,8 @@ export default class FeedPage extends React.Component<IFeedPageProps, object> {
                   overflow="auto"
                   position="absolute"
                   flexDirection="column"
-                  alignItems="stretch"
+                  alignItems="center"
+                  // alignItems="stretch"v
                   width={1}
                   style={{
                     WebkitOverflowScrolling: "touch"
