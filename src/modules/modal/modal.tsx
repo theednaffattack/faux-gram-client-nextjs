@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createPortal } from "react-dom";
 
 import { Flex } from "../../components/styled-rebass";
 
@@ -19,7 +19,7 @@ const styles: React.CSSProperties = {
 
 const Modal: React.FunctionComponent<ModalProps> = ({ children }) => {
   const modalRoot = document.getElementById("modal-root") as HTMLElement;
-  return ReactDOM.createPortal(
+  return createPortal(
     <div style={styles}>
       <Flex pt="115px" width={1} justifyContent="center" border="crimson">
         <Flex flexDirection="column" width={[1, 1, "960px"]} border="lime">
