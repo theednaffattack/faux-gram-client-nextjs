@@ -1,8 +1,7 @@
 import React from "react";
-import { Text, Heading } from "rebass/styled-components";
 import { disableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
 
-import { AbFlex, Flex } from "../../components/styled-rebass";
+import { AbFlex, Flex, Heading } from "../../components/styled-rebass";
 import FeedCard, { TImage } from "./feed-card";
 import { GetMyFollowingPostByIdComponent } from "../../components/generated/apollo-graphql";
 import { IPageProps } from "../../page-types/types";
@@ -61,8 +60,9 @@ export const FeedItemPage: React.FC<IFeedItemPageProps> = ({
   return (
     <Flex flex="1 1 auto" flexDirection="column">
       <Flex bg="#eee" p={2}>
-        <Heading as="h1">Feed Item Page</Heading>
-        <Text>Item Id: {itemId}</Text>
+        <Heading fontFamily="main" as="h1">
+          Feed Item Page
+        </Heading>
       </Flex>
       <Flex id="ab-wrapper" flex="1 1 auto" style={{ position: "relative" }}>
         <AbFlex
@@ -103,35 +103,44 @@ export const FeedItemPage: React.FC<IFeedItemPageProps> = ({
                 dataGetMyFollowingPostById.getMyFollowingPostById
               ) {
                 const { getMyFollowingPostById } = dataGetMyFollowingPostById;
+
+                let comments = getMyFollowingPostById.comments;
                 const { images } = getMyFollowingPostById;
                 const getUserId =
                   getMyFollowingPostById && getMyFollowingPostById.user
                     ? getMyFollowingPostById.user
                     : "skdfjdksjdkf";
                 return (
-                  <FeedCard
-                    id={
-                      getMyFollowingPostById.id
-                        ? getMyFollowingPostById.id
-                        : "no id"
-                    }
-                    initialLikesCount={getMyFollowingPostById.likes_count}
-                    initialCommentsCount={getMyFollowingPostById.comments_count}
-                    postUserId={getUserId as string}
-                    pathname={pathname}
-                    query={query}
-                    title={
-                      getMyFollowingPostById.title
-                        ? getMyFollowingPostById.title
-                        : "no title"
-                    }
-                    description={
-                      getMyFollowingPostById.text
-                        ? getMyFollowingPostById.text
-                        : "no description"
-                    }
-                    images={images as TImage[]}
-                  />
+                  <Flex flexDirection="column">
+                    <FeedCard
+                      id={
+                        getMyFollowingPostById.id
+                          ? getMyFollowingPostById.id
+                          : "no id"
+                      }
+                      alreadyLiked={getMyFollowingPostById.already_liked}
+                      comments={comments}
+                      initialLikesCount={getMyFollowingPostById.likes_count}
+                      initialCommentsCount={
+                        getMyFollowingPostById.comments_count
+                      }
+                      postUserId={getUserId as string}
+                      pathname={pathname}
+                      query={query}
+                      title={
+                        getMyFollowingPostById.title
+                          ? getMyFollowingPostById.title
+                          : "no title"
+                      }
+                      description={
+                        getMyFollowingPostById.text
+                          ? getMyFollowingPostById.text
+                          : "no description"
+                      }
+                      images={images as TImage[]}
+                      renderTextarea
+                    />
+                  </Flex>
                 );
               } else {
                 return <div>You shouldn't be able to see this</div>;
