@@ -62,6 +62,7 @@ export interface IFlexShadowProps extends FlexProps, BoxShadowProps {}
 
 export interface IFlexUserProfileWrapProps
   extends FlexProps,
+    BordersProps,
     BorderRadiusProps,
     BoxShadowProps,
     OverflowProps,
