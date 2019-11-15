@@ -203,6 +203,7 @@ ${boxShadow}
 ${overflow}
 ${maxHeight}
 ${maxWidth}
+${borders}
 `;
 
 export const MinButton: React.FC<IMinButtonProps> = styled(Button)`
