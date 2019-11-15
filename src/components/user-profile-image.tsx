@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  Box,
   Button,
   Flex,
   Icon,
@@ -27,7 +28,7 @@ function UserProfileImage({
   buttonThing
 }: IUserProfileImage) {
   const isMeLeftMargin = isMe ? 0 : 3;
-  const isMeRightMargin = isMe ? 3 : 0;
+  const isMeRightMargin = isMe ? 3 : 1;
   return (
     <Flex
       mt={2}
@@ -36,6 +37,7 @@ function UserProfileImage({
       flexDirection={flexInstruction ? flexInstruction : "row"}
       alignItems="center"
       style={{ minHeight: "40px" }}
+      // width="200px"
     >
       <FlexUserProfileWrap
         height="40px"
@@ -53,13 +55,20 @@ function UserProfileImage({
           <Icon mt={3} size="2em" name="user" fill="white" />
         )}
       </FlexUserProfileWrap>
-      {user ? (
-        <Text color={color ? color : "text"}>
-          {user.firstName} {user.lastName}
-        </Text>
-      ) : (
-        ""
-      )}
+      <Box>
+        {user ? (
+          <Text
+            ml={flexInstruction === "row" ? 2 : 0}
+            color={color ? color : "text"}
+          >
+            {user.firstName} {user.lastName}
+          </Text>
+        ) : (
+          ""
+        )}
+        {user && user.username ? <Text>{user.username}</Text> : ""}
+      </Box>
+
       {buttonThing}
       {flexInstruction === "column" || !buttonThing ? (
         ""
