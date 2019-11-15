@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Field, Formik } from "formik";
 // import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 
+import { MutationUpdaterFn } from "apollo-boost";
+import Maybe from "graphql/tsutils/Maybe";
+
 import {
   Box,
   Button,
@@ -21,7 +24,10 @@ import {
   Comment,
   AddCommentToPostComponent,
   GetMyFollowingPostByIdQuery,
-  GetMyFollowingPostByIdDocument
+  GetMyFollowingPostByIdDocument,
+  LikeReturnType,
+  MyFollowingPostsQuery,
+  MyFollowingPostsDocument
 } from "../../../src/components/generated/apollo-graphql";
 import { CommentCounter } from "./comments-counter";
 import { LikesCounter } from "./likes-counter";
@@ -43,12 +49,19 @@ const fakeOnClick = ({ fakeHandlerName }: FakeOnClickProps) => {
   console.log(`${fakeHandlerName} firing!!!🚀`);
 };
 
-const fakeComments = [
-  { __typename: "Comment", content: "hey hey hey", id: "1" },
-  { __typename: "Comment", content: "hey hey hey", id: "2" },
-  { __typename: "Comment", content: "hey hey hey", id: "3" },
-  { __typename: "Comment", content: "hey hey hey", id: "4" }
-];
+type MutationUpdateFunc =
+  | MutationUpdaterFn<
+      {
+        __typename?: "Mutation" | undefined;
+      } & {
+        createOrUpdateLikes: Maybe<
+          {
+            __typename?: "LikeReturnType" | undefined;
+          } & Pick<LikeReturnType, "postId" | "status">
+        >;
+      }
+    >
+  | undefined;
 
 /**
  * ISingleFeedCardProps
@@ -112,7 +125,6 @@ const RenderCommentField: React.FunctionComponent<CommentFieldProps> = ({
                 validateOnChange={false}
                 // @ts-ignore
                 onSubmit={async (data, { setErrors, resetForm }) => {
-                  console.log("submitting");
                   addCommentToPost({
                     variables: {
                       input: {
@@ -121,9 +133,6 @@ const RenderCommentField: React.FunctionComponent<CommentFieldProps> = ({
                       }
                     },
                     update: (cache, { data }) => {
-                      // console.log("ERROR UPDATING?", data);
-                      // console.log("CACHE?", cache);
-
                       if (!data || !data.addCommentToPost) {
                         return;
                       }
@@ -144,9 +153,6 @@ const RenderCommentField: React.FunctionComponent<CommentFieldProps> = ({
                         fromCache.getMyFollowingPostById &&
                         fromCache.getMyFollowingPostById.comments
                       ) {
-                        console.log("ERROR UPDATING?", data);
-                        console.log("MYSTUFF?", fromCache);
-
                         cache.writeQuery<GetMyFollowingPostByIdQuery>({
                           query: GetMyFollowingPostByIdDocument,
                           data: {
@@ -275,6 +281,181 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
 }) => {
   const isThisADynamicRoute =
     pathname && pathname[pathname.length - 1] === "]" ? true : false;
+
+  const myFolloiwngPostsUpdateFunction: MutationUpdateFunc = (
+    cache,
+    { data }
+  ) => {
+    let fromCache = cache.readQuery<MyFollowingPostsQuery>({
+      query: MyFollowingPostsDocument,
+      variables: {
+        getpostinput: {
+          postId: id
+        }
+      }
+    });
+
+    if (
+      data &&
+      data.createOrUpdateLikes &&
+      data.createOrUpdateLikes.status === "Deleted" &&
+      fromCache &&
+      fromCache.myFollowingPosts
+    ) {
+      let newCacheData = [
+        ...fromCache.myFollowingPosts.map(post => {
+          if (post.id === id) {
+            post.currently_liked = false;
+          }
+          return post;
+        })
+      ];
+
+      cache.writeQuery<MyFollowingPostsQuery>({
+        query: MyFollowingPostsDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        },
+        data: { myFollowingPosts: newCacheData }
+      });
+
+      cache.readQuery<MyFollowingPostsQuery>({
+        query: MyFollowingPostsDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        }
+      });
+
+      return fromCache;
+    }
+
+    if (
+      data &&
+      data.createOrUpdateLikes &&
+      data.createOrUpdateLikes.status === "Created" &&
+      fromCache &&
+      fromCache.myFollowingPosts
+    ) {
+      let newCacheData = [
+        ...fromCache.myFollowingPosts.map(post => {
+          if (post.id === id) {
+            post.currently_liked = true;
+          }
+          return post;
+        })
+      ];
+
+      cache.writeQuery<MyFollowingPostsQuery>({
+        query: MyFollowingPostsDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        },
+        data: { myFollowingPosts: newCacheData }
+      });
+
+      cache.readQuery<MyFollowingPostsQuery>({
+        query: MyFollowingPostsDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        }
+      });
+
+      return fromCache;
+    }
+    return fromCache;
+  };
+
+  const getMyFollowingPostsByIdUpdateFunction: MutationUpdateFunc = (
+    cache,
+    { data }
+  ) => {
+    let fromCache = cache.readQuery<GetMyFollowingPostByIdQuery>({
+      query: GetMyFollowingPostByIdDocument,
+      variables: {
+        getpostinput: {
+          postId: id
+        }
+      }
+    });
+
+    if (
+      data &&
+      data.createOrUpdateLikes &&
+      data.createOrUpdateLikes.status === "Deleted" &&
+      fromCache &&
+      fromCache.getMyFollowingPostById
+    ) {
+      let newCacheData = {
+        ...fromCache.getMyFollowingPostById,
+        currently_liked: false
+      };
+
+      cache.writeQuery<GetMyFollowingPostByIdQuery>({
+        query: GetMyFollowingPostByIdDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        },
+        data: { getMyFollowingPostById: newCacheData }
+      });
+
+      cache.readQuery<GetMyFollowingPostByIdQuery>({
+        query: GetMyFollowingPostByIdDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        }
+      });
+
+      return fromCache;
+    }
+
+    if (
+      data &&
+      data.createOrUpdateLikes &&
+      data.createOrUpdateLikes.status === "Created" &&
+      fromCache &&
+      fromCache.getMyFollowingPostById
+    ) {
+      let newCacheData = {
+        ...fromCache.getMyFollowingPostById,
+        currently_liked: true
+      };
+
+      cache.writeQuery<GetMyFollowingPostByIdQuery>({
+        query: GetMyFollowingPostByIdDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        },
+        data: { getMyFollowingPostById: newCacheData }
+      });
+
+      cache.readQuery<GetMyFollowingPostByIdQuery>({
+        query: GetMyFollowingPostByIdDocument,
+        variables: {
+          getpostinput: {
+            postId: id
+          }
+        }
+      });
+
+      return fromCache;
+    }
+    return fromCache;
+  };
+
   return (
     <Card
       px={3}
@@ -339,82 +520,11 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
                     likesMutation({
                       variables: { input: { postId: id } },
                       update: (cache, { data }) => {
-                        let fromCache = cache.readQuery<
-                          GetMyFollowingPostByIdQuery
-                        >({
-                          query: GetMyFollowingPostByIdDocument,
-                          variables: {
-                            getpostinput: {
-                              postId: id
-                            }
-                          }
-                        });
-
-                        if (
-                          data &&
-                          data.createOrUpdateLikes &&
-                          data.createOrUpdateLikes.status === "Deleted" &&
-                          fromCache &&
-                          fromCache.getMyFollowingPostById
-                        ) {
-                          let newCacheData = {
-                            ...fromCache.getMyFollowingPostById,
-                            currently_liked: false
-                          };
-
-                          cache.writeQuery<GetMyFollowingPostByIdQuery>({
-                            query: GetMyFollowingPostByIdDocument,
-                            variables: {
-                              getpostinput: {
-                                postId: id
-                              }
-                            },
-                            data: { getMyFollowingPostById: newCacheData }
-                          });
-
-                          cache.readQuery<GetMyFollowingPostByIdQuery>({
-                            query: GetMyFollowingPostByIdDocument,
-                            variables: {
-                              getpostinput: {
-                                postId: id
-                              }
-                            }
-                          });
-                        }
-
-                        if (
-                          data &&
-                          data.createOrUpdateLikes &&
-                          data.createOrUpdateLikes.status === "Created" &&
-                          fromCache &&
-                          fromCache.getMyFollowingPostById
-                        ) {
-                          let newCacheData = {
-                            ...fromCache.getMyFollowingPostById,
-                            currently_liked: true
-                          };
-
-                          cache.writeQuery<GetMyFollowingPostByIdQuery>({
-                            query: GetMyFollowingPostByIdDocument,
-                            variables: {
-                              getpostinput: {
-                                postId: id
-                              }
-                            },
-                            data: { getMyFollowingPostById: newCacheData }
-                          });
-
-                          cache.readQuery<GetMyFollowingPostByIdQuery>({
-                            query: GetMyFollowingPostByIdDocument,
-                            variables: {
-                              getpostinput: {
-                                postId: id
-                              }
-                            }
-                          });
-                        }
-
-                        // return fromCache;
+                        isThisADynamicRoute === true
+                          ? getMyFollowingPostsByIdUpdateFunction(cache, {
+                              data
+                            })
+                          : myFolloiwngPostsUpdateFunction(cache, { data });
                       }
                     });
                   }}
@@ -449,7 +559,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
         <UnFollowUserButtonGqlWrapper postUserId={postUserId as string} />
       </Flex>
       {renderTextarea ? <RenderCommentField postId={id} /> : null}
-      {renderTextarea && fakeComments && fakeComments.length > 0 ? (
+      {renderTextarea && comments && comments.length > 0 ? (
         <RenderCommentList comments={comments} />
       ) : null}
     </Card>
@@ -457,50 +567,3 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
 };
 
 export default FeedCard;
-
-// interface IFeedCardListProps extends IPageProps {
-//   cardData: ISingleFeedCardProps[];
-// }
-
-// export class FeedCardList extends React.Component<IFeedCardListProps> {
-//   listRef: React.RefObject<HTMLDivElement>;
-//   constructor(props: IFeedCardListProps) {
-//     super(props);
-//     this.listRef = React.createRef();
-//   }
-
-//   componentDidMount() {
-//     if (this.listRef.current) {
-//       disableBodyScroll(this.listRef.current);
-//     }
-//   }
-
-//   componentWillUnmount() {
-//     clearAllBodyScrollLocks();
-//   }
-//   render() {
-//     const { cardData, pathname, query } = this.props;
-
-//     return (
-//       <Flex flexDirection="column" flex="1 1 auto" ref={this.listRef}>
-//         {cardData.map((card, index) => {
-//           return (
-//             <FeedCard
-//               comments={null}
-//               initialLikesCount={card.initialLikesCount}
-//               initialCommentsCount={card.initialCommentsCount}
-//               pathname={pathname}
-//               postUserId={card.postUserId}
-//               query={query}
-//               id={card.id}
-//               key={`card-${index}`}
-//               images={card.images}
-//               title={card.title}
-//               description={card.description}
-//             />
-//           );
-//         })}
-//       </Flex>
-//     );
-//   }
-// }
