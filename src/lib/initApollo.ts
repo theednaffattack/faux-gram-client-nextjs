@@ -103,7 +103,6 @@ function create(
       graphQLErrors.map(({ message, locations, path }) => {
         let authErrorMessage = "Not authenticated";
         if (isBrowser && message.includes(authErrorMessage)) {
-          console.log("BROWSER REDIRECT in initApollo", getReferer());
           Router.replace(
             `/login?referer=${getReferer()}&message=${authErrorMessage}`
           );

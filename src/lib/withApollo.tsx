@@ -125,9 +125,6 @@ export default (App: any) => {
           return parseCookies().token;
         },
         getReferer: () => {
-          console.log("WHAT PROPS AM I GETTING", this.props);
-          console.log("can I see REQUEST?", refererInfo);
-
           return this.props.pageProps.referer;
         }
       });
