@@ -14,8 +14,7 @@ const pages: PageListProps[] = [
   { href: "/post", as: "/post", label: "post image" },
   { href: "/messages", as: "/messages", label: "messages" },
   { href: "/profile", as: "/profile", label: "profile" },
-  { href: "/register", as: "/register", label: "register" },
-  { href: "/welcome", as: "/welcome", label: "welcome" }
+  { href: "/register", as: "/register", label: "register" }
 ];
 
 const MenuUl = styled(motion.ul)`
