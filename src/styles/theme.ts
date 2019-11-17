@@ -39,9 +39,11 @@ export const theme = {
       backgroundColor: blue
     },
     outline: {
-      color: "#fff",
-      backgroundColor: "transparent",
-      boxShadow: "inset 0 0 0 2px"
+      color: "text",
+      backgroundColor: "#dedcf7",
+      // boxShadow: "inset 0 0 0 2px",
+      border: "2px rebeccapurple solid",
+      borderRadius: 20
     },
     gradient: {
       backgroundImage:
@@ -54,5 +56,26 @@ export const theme = {
     crimson: "2px crimson dashed",
     lime: "2px limegreen dashed",
     purp: "2px rebeccapurple dashed"
+  },
+  variants: {
+    card: {
+      p: 2,
+      bg: "background",
+      boxShadow: "card",
+      borderRadius: 2
+    },
+    badge: {
+      display: "inline-block",
+      p: 1,
+      color: "white",
+      bg: "primary",
+      borderRadius: 2
+    },
+    minshew: {
+      color: "#fff",
+      backgroundColor: "yellow",
+      boxShadow: "inset 0 0 0 2px",
+      border: "2px limegreen solid"
+    }
   }
 };
