@@ -2,7 +2,7 @@ import React from "react";
 import distanceInWords from "date-fns/distance_in_words";
 
 import { Card, Flex, Text } from "./styled-rebass";
-import UserProfileImage from "./user-profile-image";
+import UserProfileImage from "./user-avatar";
 import { TImageModalState } from "./infinite-loader";
 
 interface IMessageBoxProps {
