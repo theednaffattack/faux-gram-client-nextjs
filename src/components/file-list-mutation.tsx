@@ -1,8 +1,10 @@
 import React from "react";
 
-import { CreatePostComponent } from "./generated/apollo-graphql";
+import {
+  CreatePostComponent,
+  SignS3Component
+} from "./generated/apollo-graphql";
 import DropZoneContainer from "./dropzone-container";
-import { SignS3Component } from "./generated/apollo-graphql";
 
 interface IFileListMutation {
   me: string;
