@@ -6,7 +6,7 @@ import { MenuDots } from "./menu-dots-icon";
 import { MessageBox } from "./message-box";
 import ChatForm from "./chat-form";
 import { IChatBodyProps } from "./types";
-import UserProfileImage from "./user-profile-image";
+import UserProfileImage from "./user-avatar";
 import AddressBookMutation from "./address-book-mutation";
 import { MessagesWindow } from "./messages-window";
 
