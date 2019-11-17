@@ -2,8 +2,8 @@ import { FieldProps } from "formik";
 import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import { Text } from "rebass";
 
-import { InputB } from "../styled-rebass";
 import { IInputFieldProps } from "../types";
+import { InputB } from "../styled-rebass";
 
 type InputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -19,7 +19,7 @@ export const InputField = ({
   const { type } = props;
   return (
     <>
-      <Text fontFamily="montserrat">
+      <Text fontFamily="main">
         <label htmlFor={field.name}>{props.label}</label>
       </Text>
       <InputB
@@ -39,6 +39,7 @@ export const InputField = ({
         border="0"
         borderBottom="2.5px rgba(244, 50, 127, 1) solid"
       />
+
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
     </>
   );
