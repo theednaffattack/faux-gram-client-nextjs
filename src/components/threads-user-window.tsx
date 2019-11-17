@@ -3,7 +3,7 @@ import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 import { Button, Flex, Text } from "./styled-rebass";
-import UserProfileImage from "./user-profile-image";
+import UserProfileImage from "./user-avatar";
 
 import Router from "next/router";
 import { Heading } from "rebass";
