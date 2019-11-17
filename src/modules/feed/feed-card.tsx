@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { Field, Formik } from "formik";
-// import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
-
 import { MutationUpdaterFn } from "apollo-boost";
 import Maybe from "graphql/tsutils/Maybe";
 
@@ -31,7 +29,7 @@ import {
 } from "../../../src/components/generated/apollo-graphql";
 import { CommentCounter } from "./comments-counter";
 import { LikesCounter } from "./likes-counter";
-import UserProfileImage from "../../../src/components/user-profile-image";
+import UserProfileImage from "../../components/user-avatar";
 import { TextareaField } from "../../../src/modules/form-fields/textarea";
 import Badge from "./badge";
 
