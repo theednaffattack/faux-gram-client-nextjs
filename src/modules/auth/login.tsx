@@ -182,7 +182,7 @@ export default ({ referer }: LoginModuleProps) => {
                     // let pathname =
                     //   referer && referer.length > 0 ? referer : "/welcome";
 
-                    Router.push("/welcome");
+                    Router.push("/profile");
                   }}
                   initialValues={{
                     email: "",
