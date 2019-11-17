@@ -90,16 +90,25 @@ export interface ITabListItemProps {
 
 interface IAvatarProps {
   src?: string;
+  width?: number | string;
+  height?: number | string;
 }
 
-export const Avatar: React.FunctionComponent<IAvatarProps> = ({ src }) => {
+export const Avatar: React.FunctionComponent<IAvatarProps> = ({
+  height,
+  src,
+  width
+}) => {
+  let checkWidth = width ? width : 0;
+  let checkHeight = height ? height : 0;
+
   if (src) {
     return (
       <Image
         src={src}
         sx={{
-          width: 48,
-          height: 48,
+          width: checkWidth,
+          height: checkHeight,
           borderRadius: 9999
         }}
       />
