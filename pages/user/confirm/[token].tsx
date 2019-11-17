@@ -29,7 +29,7 @@ const Confirm: NextPage<IConfirmProps> = ({ pathname, query, token }) => {
           .catch(error => console.error({ error }))
           // @ts-ignore
           .then(data => {
-            Router.push("/welcome");
+            Router.push("/profile");
           });
         return <div>hello</div>;
       }}
