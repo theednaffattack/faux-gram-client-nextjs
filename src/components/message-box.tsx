@@ -3,7 +3,7 @@ import distanceInWords from "date-fns/distance_in_words";
 
 import { Card, Flex, Text, Box } from "./styled-rebass";
 import { Image } from "rebass";
-import UserProfileImage from "./user-profile-image";
+import UserProfileImage from "./user-avatar";
 
 interface IMessageBox {
   me: any;
