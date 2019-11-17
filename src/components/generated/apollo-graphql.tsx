@@ -246,6 +246,7 @@ export type Mutation = {
   login?: Maybe<User>,
   logout: Scalars['Boolean'],
   register: User,
+  addProfilePicture: UploadProfilePictueReturnType,
   createPost: Post,
   followUser: Scalars['Boolean'],
   addNewMessage: Scalars['Boolean'],
@@ -291,6 +292,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   data: RegisterInput
+};
+
+
+export type MutationAddProfilePictureArgs = {
+  data: UploadProfilePictureInput
 };
 
 
@@ -575,6 +581,16 @@ export type UpdateLikesInput = {
 };
 
 
+export type UploadProfilePictueReturnType = {
+   __typename?: 'UploadProfilePictueReturnType',
+  message: Scalars['String'],
+};
+
+export type UploadProfilePictureInput = {
+  user: Scalars['ID'],
+  image?: Maybe<Scalars['String']>,
+};
+
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
@@ -587,8 +603,8 @@ export type User = {
   name: Scalars['String'],
   confirmed: Scalars['Boolean'],
   posts?: Maybe<Array<Post>>,
-  images?: Maybe<Array<Image>>,
-  profileImgUrl?: Maybe<Image>,
+  images?: Maybe<Array<Maybe<Image>>>,
+  profileImgUrl?: Maybe<Scalars['String']>,
   messages?: Maybe<Array<Message>>,
   sent_messages?: Maybe<Array<Message>>,
   followers?: Maybe<Array<Maybe<User>>>,
@@ -951,6 +967,19 @@ export type UnFollowUserMutation = (
   & Pick<Mutation, 'unFollowUser'>
 );
 
+export type AddProfilePictureMutationVariables = {
+  data: UploadProfilePictureInput
+};
+
+
+export type AddProfilePictureMutation = (
+  { __typename?: 'Mutation' }
+  & { addProfilePicture: (
+    { __typename?: 'UploadProfilePictueReturnType' }
+    & Pick<UploadProfilePictueReturnType, 'message'>
+  ) }
+);
+
 export type ConfirmUserMutationVariables = {
   token: Scalars['String']
 };
@@ -1059,7 +1088,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'firstName' | 'lastName' | 'email' | 'name' | 'id'>
+    & Pick<User, 'firstName' | 'lastName' | 'email' | 'name' | 'id' | 'profileImgUrl'>
   )> }
 );
 
@@ -1888,6 +1917,33 @@ export function withUnFollowUser<TProps, TChildProps = {}>(operationOptions?: Ap
 };
 export type UnFollowUserMutationResult = ApolloReactCommon.MutationResult<UnFollowUserMutation>;
 export type UnFollowUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UnFollowUserMutation, UnFollowUserMutationVariables>;
+export const AddProfilePictureDocument = gql`
+    mutation AddProfilePicture($data: UploadProfilePictureInput!) {
+  addProfilePicture(data: $data) {
+    message
+  }
+}
+    `;
+export type AddProfilePictureMutationFn = ApolloReactCommon.MutationFunction<AddProfilePictureMutation, AddProfilePictureMutationVariables>;
+export type AddProfilePictureComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddProfilePictureMutation, AddProfilePictureMutationVariables>, 'mutation'>;
+
+    export const AddProfilePictureComponent = (props: AddProfilePictureComponentProps) => (
+      <ApolloReactComponents.Mutation<AddProfilePictureMutation, AddProfilePictureMutationVariables> mutation={AddProfilePictureDocument} {...props} />
+    );
+    
+export type AddProfilePictureProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddProfilePictureMutation, AddProfilePictureMutationVariables> & TChildProps;
+export function withAddProfilePicture<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddProfilePictureMutation,
+  AddProfilePictureMutationVariables,
+  AddProfilePictureProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddProfilePictureMutation, AddProfilePictureMutationVariables, AddProfilePictureProps<TChildProps>>(AddProfilePictureDocument, {
+      alias: 'addProfilePicture',
+      ...operationOptions
+    });
+};
+export type AddProfilePictureMutationResult = ApolloReactCommon.MutationResult<AddProfilePictureMutation>;
+export type AddProfilePictureMutationOptions = ApolloReactCommon.BaseMutationOptions<AddProfilePictureMutation, AddProfilePictureMutationVariables>;
 export const ConfirmUserDocument = gql`
     mutation ConfirmUser($token: String!) {
   confirmUser(token: $token)
@@ -2110,6 +2166,7 @@ export const MeDocument = gql`
     email
     name
     id
+    profileImgUrl
   }
 }
     `;
