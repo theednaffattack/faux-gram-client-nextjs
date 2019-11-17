@@ -3,7 +3,10 @@ import dFormat from "date-fns/format";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 
-import { IDropZoneContainerProps, IDropZoneContainerState } from "./types";
+import {
+  IDropZoneContainerProps,
+  IDropZoneContainerState
+} from "../../types/types";
 import { Flex } from "./styled-rebass";
 import CreatePostForm from "./create-post-form";
 import { SignS3Component } from "./generated/apollo-graphql";
