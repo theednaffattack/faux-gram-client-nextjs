@@ -8,6 +8,7 @@ export const meQuery = gql`
       email
       name
       id
+      profileImgUrl
     }
   }
 `;
