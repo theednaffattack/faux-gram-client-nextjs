@@ -14,12 +14,12 @@ export interface IUserProfileImage {
 }
 
 function UserProfileImage({ user, flexInstruction, isMe }: IUserProfileImage) {
-  const isMeLeftMargin = isMe ? 0 : 3;
+  // const isMeLeftMargin = isMe ? 0 : 3;
   const isMeRightMargin = isMe ? 3 : 1;
 
   return (
     <Flex
-      ml={isMeLeftMargin}
+      // ml={isMeLeftMargin}
       mr={isMeRightMargin}
       flexDirection={flexInstruction ? flexInstruction : "row"}
       alignItems="center"
