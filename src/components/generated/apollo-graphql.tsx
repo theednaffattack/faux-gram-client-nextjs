@@ -69,6 +69,12 @@ export type CommentCountType = {
 };
 
 
+export type EditUserInput = {
+  firstName: Scalars['String'],
+  lastName: Scalars['String'],
+  email: Scalars['String'],
+};
+
 export type FeedInput = {
   cursor?: Maybe<Scalars['String']>,
   take?: Maybe<Scalars['Int']>,
@@ -248,6 +254,7 @@ export type Mutation = {
   register: User,
   addProfilePicture: UploadProfilePictueReturnType,
   createPost: Post,
+  editUserInfo: User,
   followUser: Scalars['Boolean'],
   addNewMessage: Scalars['Boolean'],
   unFollowUser: Scalars['Boolean'],
@@ -302,6 +309,11 @@ export type MutationAddProfilePictureArgs = {
 
 export type MutationCreatePostArgs = {
   data: PostInput
+};
+
+
+export type MutationEditUserInfoArgs = {
+  data: EditUserInput
 };
 
 
@@ -584,6 +596,7 @@ export type UpdateLikesInput = {
 export type UploadProfilePictueReturnType = {
    __typename?: 'UploadProfilePictueReturnType',
   message: Scalars['String'],
+  profileImgUrl: Scalars['String'],
 };
 
 export type UploadProfilePictureInput = {
@@ -976,7 +989,7 @@ export type AddProfilePictureMutation = (
   { __typename?: 'Mutation' }
   & { addProfilePicture: (
     { __typename?: 'UploadProfilePictueReturnType' }
-    & Pick<UploadProfilePictueReturnType, 'message'>
+    & Pick<UploadProfilePictueReturnType, 'message' | 'profileImgUrl'>
   ) }
 );
 
@@ -988,6 +1001,19 @@ export type ConfirmUserMutationVariables = {
 export type ConfirmUserMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'confirmUser'>
+);
+
+export type EditUserInfoMutationVariables = {
+  data: EditUserInput
+};
+
+
+export type EditUserInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { editUserInfo: (
+    { __typename?: 'User' }
+    & Pick<User, 'firstName' | 'lastName' | 'email' | 'name' | 'id' | 'profileImgUrl'>
+  ) }
 );
 
 export type LoginMutationVariables = {
@@ -1921,6 +1947,7 @@ export const AddProfilePictureDocument = gql`
     mutation AddProfilePicture($data: UploadProfilePictureInput!) {
   addProfilePicture(data: $data) {
     message
+    profileImgUrl
   }
 }
     `;
@@ -1969,6 +1996,38 @@ export function withConfirmUser<TProps, TChildProps = {}>(operationOptions?: Apo
 };
 export type ConfirmUserMutationResult = ApolloReactCommon.MutationResult<ConfirmUserMutation>;
 export type ConfirmUserMutationOptions = ApolloReactCommon.BaseMutationOptions<ConfirmUserMutation, ConfirmUserMutationVariables>;
+export const EditUserInfoDocument = gql`
+    mutation EditUserInfo($data: EditUserInput!) {
+  editUserInfo(data: $data) {
+    firstName
+    lastName
+    email
+    name
+    id
+    profileImgUrl
+  }
+}
+    `;
+export type EditUserInfoMutationFn = ApolloReactCommon.MutationFunction<EditUserInfoMutation, EditUserInfoMutationVariables>;
+export type EditUserInfoComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<EditUserInfoMutation, EditUserInfoMutationVariables>, 'mutation'>;
+
+    export const EditUserInfoComponent = (props: EditUserInfoComponentProps) => (
+      <ApolloReactComponents.Mutation<EditUserInfoMutation, EditUserInfoMutationVariables> mutation={EditUserInfoDocument} {...props} />
+    );
+    
+export type EditUserInfoProps<TChildProps = {}> = ApolloReactHoc.MutateProps<EditUserInfoMutation, EditUserInfoMutationVariables> & TChildProps;
+export function withEditUserInfo<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  EditUserInfoMutation,
+  EditUserInfoMutationVariables,
+  EditUserInfoProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, EditUserInfoMutation, EditUserInfoMutationVariables, EditUserInfoProps<TChildProps>>(EditUserInfoDocument, {
+      alias: 'editUserInfo',
+      ...operationOptions
+    });
+};
+export type EditUserInfoMutationResult = ApolloReactCommon.MutationResult<EditUserInfoMutation>;
+export type EditUserInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<EditUserInfoMutation, EditUserInfoMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
