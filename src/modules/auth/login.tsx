@@ -25,7 +25,7 @@ import {
   LoginComponent,
   MeQuery
 } from "../../components/generated/apollo-graphql";
-import { meQuery } from "../../graphql/user/queries/Me";
+import { ME_QUERY } from "../../graphql/user/queries/Me";
 import { SignUpLink } from "../../components/sign-up-link";
 import { CheckBox } from "../../components/fields/checkbox";
 
@@ -135,7 +135,7 @@ export default ({ referer }: LoginModuleProps) => {
                           }
 
                           cache.writeQuery<MeQuery>({
-                            query: meQuery,
+                            query: ME_QUERY,
                             data: {
                               __typename: "Query",
                               me: data.login
