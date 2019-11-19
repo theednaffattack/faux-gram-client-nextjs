@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 
 import { Header } from "../../src/components/Header";
+import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
 
 type Props = {
   pathname: string;
@@ -14,13 +15,16 @@ const Comment: NextPage<Props> = ({ pathname, pid, query }) => {
   // const { id, comment } = router.query;
 
   return (
-    <>
-      <Header />
-      <h1>Post: {JSON.stringify({ pid })}</h1>
-      <h1>Post: {JSON.stringify({ pathname })}</h1>
-      <h1>Post: {JSON.stringify({ query })}</h1>
-      {/* <h1>Comment: {comment}</h1> */}
-    </>
+    <HelloWorldComponent>
+      {() => (
+        <>
+          <Header />
+          <h1>Post: {JSON.stringify({ pid })}</h1>
+          <h1>Post: {JSON.stringify({ pathname })}</h1>
+          <h1>Post: {JSON.stringify({ query })}</h1>
+        </>
+      )}
+    </HelloWorldComponent>
   );
 };
 

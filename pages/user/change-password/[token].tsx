@@ -2,6 +2,7 @@ import { NextPage } from "next";
 
 // import Layout from "../../../src/components/layout";
 import { IUserPageProps } from "../../../src/modules/auth/types";
+import { HelloWorldComponent } from "../../../src/components/generated/apollo-graphql";
 
 const dummyVar = "";
 
@@ -13,11 +14,15 @@ const ChangePassword: NextPage<IUserPageProps> = ({
   token
 }) => {
   return (
-    <>
-      <h1>Post: {JSON.stringify({ token })}</h1>
-      <h1>Post: {JSON.stringify({ pathname })}</h1>
-      <h1>Post: {JSON.stringify({ query })}</h1>
-    </>
+    <HelloWorldComponent>
+      {() => (
+        <>
+          <h1>Post: {JSON.stringify({ token })}</h1>
+          <h1>Post: {JSON.stringify({ pathname })}</h1>
+          <h1>Post: {JSON.stringify({ query })}</h1>
+        </>
+      )}
+    </HelloWorldComponent>
   );
 };
 
