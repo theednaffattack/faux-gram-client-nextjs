@@ -1,7 +1,7 @@
 import React from "react";
 import { createPortal } from "react-dom";
 
-import { Flex } from "../../components/styled-rebass";
+import { Card, Flex } from "../../components/styled-rebass";
 
 interface ModalProps {}
 
@@ -22,9 +22,16 @@ const Modal: React.FunctionComponent<ModalProps> = ({ children }) => {
   return createPortal(
     <div style={styles}>
       <Flex pt="115px" width={1} justifyContent="center" border="crimson">
-        <Flex flexDirection="column" width={[1, 1, "960px"]} border="lime">
+        <Card
+          width={[1, 1, "960px"]}
+          bg="white"
+          p={3}
+          sx={{
+            borderRadius: "17px"
+          }}
+        >
           {children}
-        </Flex>
+        </Card>
       </Flex>
     </div>,
     modalRoot
