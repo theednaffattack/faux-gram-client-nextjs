@@ -12,8 +12,10 @@ import {
   SignS3MutationResult,
   SignedS3SubPayload,
   AddProfilePictureMutationResult,
-  MeQueryResult
+  MeQueryResult,
+  MeQuery
 } from "../../components/generated/apollo-graphql";
+import { ME_QUERY } from "../../graphql/user/queries/Me";
 
 interface ProfileDropzoneContainerAddProfileMutationProps {
   mutateAddProfilePicture: AddProfilePictureMutationFn;
@@ -132,6 +134,39 @@ export default class DropZoneContainer extends Component<
               user: submissionData.user,
               image: successfullyUploadedFiles
             }
+          },
+          update: (cache, { data }) => {
+            if (!data || !data.addProfilePicture) {
+              return;
+            }
+            let fromCache = cache.readQuery<MeQuery>({
+              query: ME_QUERY
+            });
+
+            let id = (fromCache && fromCache.me && fromCache.me.id) || "";
+            let name = (fromCache && fromCache.me && fromCache.me.name) || "";
+            let email = (fromCache && fromCache.me && fromCache.me.email) || "";
+            let firstName =
+              (fromCache && fromCache.me && fromCache.me.firstName) || "";
+            let lastName =
+              (fromCache && fromCache.me && fromCache.me.lastName) || "";
+
+            cache.writeQuery<MeQuery>({
+              query: ME_QUERY,
+              data: {
+                me: {
+                  __typename: "User",
+                  id,
+                  name,
+                  firstName,
+                  lastName,
+                  email,
+                  profileImgUrl:
+                    data.addProfilePicture &&
+                    data.addProfilePicture.profileImgUrl
+                }
+              }
+            });
           }
 
           // {
@@ -377,7 +412,8 @@ export default class DropZoneContainer extends Component<
     const {
       dataAddProfilePicture,
       errorAddProfilePicture,
-      loadingAddProfilePicture
+      loadingAddProfilePicture,
+      dataMe
     } = this.props;
     return (
       <SignS3Component>
@@ -388,7 +424,7 @@ export default class DropZoneContainer extends Component<
           if (errorAddProfilePicture)
             return (
               <div>
-                Error creating post!{" "}
+                Error adding profile picture!{" "}
                 <pre>{JSON.stringify(errorAddProfilePicture, null, 2)}</pre>
               </div>
             );
@@ -402,6 +438,7 @@ export default class DropZoneContainer extends Component<
           return (
             <Flex justifyContent="center">
               <UploadProfilePictureForm
+                dataMe={dataMe}
                 files={this.state.files}
                 handlePost={this.handlePost}
                 userId={getUserId}
