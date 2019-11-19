@@ -7,21 +7,6 @@ interface FileUploadProps {}
 // It's not clear to me how to trigger updates to the UI
 const useForceUpdate = () => useState()[1];
 
-const updatePreview = (
-  event: any,
-  onFilesAdded: any,
-  setFieldValue: any,
-  values: any
-) => {
-  if (event && event.currentTarget && event.currentTarget.files) {
-    let seeSomeFiles = onFilesAdded(event);
-
-    setFieldValue("images", values.images.concat(seeSomeFiles));
-  } else {
-    return;
-  }
-};
-
 const FileUpload: React.FunctionComponent<FileUploadProps> = () => {
   const fileInput = useRef<HTMLInputElement>(null);
   const forceUpdate = useForceUpdate();
