@@ -93,7 +93,7 @@ function create(
       )
     : httpLink;
 
-  const errorLink = onError(({ graphQLErrors }) => {
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
     // console.log({
     //   operation,
     //   response,
@@ -116,6 +116,9 @@ function create(
           );
         }
       });
+    if (networkError) {
+      console.log(`[Network Error]: ${networkError}`);
+    }
   });
 
   const authLink = setContext((_, { headers }) => {
