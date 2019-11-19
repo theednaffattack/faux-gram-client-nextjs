@@ -1,8 +1,7 @@
 import { FieldProps } from "formik";
 import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import styled from "styled-components";
-
-import { Text } from "../../components/styled-rebass";
+import { Text, Flex } from "../../components/styled-rebass";
 
 type InputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -23,7 +22,7 @@ export const InputField = ({
   const errorMessage = touched[field.name] && errors[field.name];
   const { type } = props;
   return (
-    <>
+    <Flex flexDirection="column">
       <Text fontFamily="main">
         <label htmlFor={field.name}>{props.label}</label>
       </Text>
@@ -36,6 +35,6 @@ export const InputField = ({
       />
 
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-    </>
+    </Flex>
   );
 };
