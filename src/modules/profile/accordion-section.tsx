@@ -47,7 +47,7 @@ const AccordionSection: React.FunctionComponent<AccordionSectionProps> = ({
         variant="outline"
         onClick={() => setExpanded(!isOpen)}
       >
-        edit profile
+        expand
       </Button>
     </>
   );
@@ -55,9 +55,7 @@ const AccordionSection: React.FunctionComponent<AccordionSectionProps> = ({
 
 interface IAccordionContainerProps {}
 
-const AccordionContainer: React.FunctionComponent<
-  IAccordionContainerProps
-> = () => {
+const AccordionContainer: React.FunctionComponent<IAccordionContainerProps> = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   return <AccordionSection expanded={expanded} setExpanded={setExpanded} />;
