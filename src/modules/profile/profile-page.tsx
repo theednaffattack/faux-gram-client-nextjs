@@ -23,6 +23,8 @@ import ToggleContent from "../modal/toggle-content";
 import Modal from "../modal/modal";
 import NewUserInfoEdit from "./new-user-info-edit";
 
+interface ProfilePageProps {}
+
 export const SeeMyImages = (data: any) => (
   <Flex
     flexDirection="row"
@@ -58,7 +60,7 @@ export const SeeMyImages = (data: any) => (
   </Flex>
 );
 
-const ProfilePage = () => (
+const ProfilePage: React.FunctionComponent<ProfilePageProps> = () => (
   <MeComponent>
     {({ data: dataMe, error: errorMe, loading: loadingMe }) => {
       if (errorMe) {
