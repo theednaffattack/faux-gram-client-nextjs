@@ -6,7 +6,7 @@ import { MenuItem } from "./menu-item";
 import { PageListProps } from "../types/types";
 
 const pages: PageListProps[] = [
-  { href: "/about", as: "/about", label: "about" },
+  { href: "/hello", as: "/hello", label: "hello" },
   { href: "/login", as: "/login", label: "login" },
   { href: "/logout", as: "/logout", label: "logout" },
   { href: "/feed/global", as: "/feed/global", label: "global feed" },
