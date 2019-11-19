@@ -9,8 +9,8 @@ import { MyContext } from "../../types/types";
 const Feed: NextPage<IPageProps> = ({ pathname, query }) => {
   return (
     <HelloWorldComponent>
-      {data => {
-        return <FeedPage data={data} pathname={pathname} query={query} />;
+      {() => {
+        return <FeedPage pathname={pathname} query={query} />;
       }}
     </HelloWorldComponent>
   );
