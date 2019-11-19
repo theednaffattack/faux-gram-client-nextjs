@@ -54,7 +54,6 @@ const Accordion: React.FunctionComponent<AccordionProps> = ({
           >
             <MeComponent>
               {({ data: dataMe, error: errorMe, loading: loadingMe }) => {
-                console.log("INSPECT ME DATA", dataMe);
                 return (
                   <SignS3Component>
                     {(
@@ -129,4 +128,4 @@ export const FullAccordion = () => {
   );
 };
 
-const accordionIds = ["upload"];
+const accordionIds = ["upload_1", "upload_2"];
