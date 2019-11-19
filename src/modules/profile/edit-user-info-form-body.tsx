@@ -2,17 +2,15 @@ import React from "react";
 import { Field } from "formik";
 
 import { InputField } from "./input-field";
-import { Button, Flex } from "../../components/styled-rebass";
 
 interface FormValues {
   email: string;
   firstName: string;
   lastName: string;
-  password: string;
 }
 
 interface EditUserInfoFormBodyProps {
-  handleSubmit: any;
+  handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
   values: FormValues;
 }
 
@@ -43,32 +41,13 @@ const EditUserInfoFormBody: React.FunctionComponent<EditUserInfoFormBodyProps> =
         component={InputField}
         value={values.email}
       />
-      <Field
+      {/* <Field
         label="password"
         name="password"
         type="password"
         component={InputField}
         value={values.password}
-      />
-
-      <Flex justifyContent="center">
-        <Button
-          bg="blue"
-          type="submit"
-          // onClick={handleSubmit}
-          label="Sign up"
-        >
-          Save Changes
-        </Button>
-
-        <Button
-          type="button"
-          bg="red"
-          onClick={() => console.log("CANCELED!!!")}
-        >
-          cancel
-        </Button>
-      </Flex>
+      /> */}
     </form>
   );
 };
