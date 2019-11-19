@@ -38,9 +38,9 @@ export default class FollowButton extends React.Component<
         }
       },
       update: (cache, { data, errors }) => {
-        if (errors)
+        if (errors) {
           console.error("Follow Error!", JSON.stringify(errors, null, 2));
-
+        }
         // server returns false if "me" is already
         // following the specified user, so we return to disallow
         // it quickly. Another check for this happens below
