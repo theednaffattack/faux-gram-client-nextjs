@@ -2,7 +2,7 @@ import {
   FollowUserComponent,
   MeComponent,
   User
-} from "src/components/generated/apollo-graphql";
+} from "../../../src/components/generated/apollo-graphql";
 
 import React from "react";
 import FollowButton from "./follow-button-container";

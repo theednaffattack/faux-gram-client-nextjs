@@ -6,7 +6,7 @@ import {
   User,
   UnFollowUserMutationFn,
   UnFollowUserMutationResult
-} from "src/components/generated/apollo-graphql";
+} from "../../../src/components/generated/apollo-graphql";
 import { SubscribeToMoreOptions } from "apollo-boost";
 
 export interface CardData {
