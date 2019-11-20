@@ -4,7 +4,7 @@ import { ParsedUrlQuery } from "querystring";
 import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
 import FeedPage from "../../src/modules/feed/feed-page";
 import { MyContext } from "../../types/types";
-import Layout, { getLayout } from "../../src/modules/site-layout/layout";
+import { getLayout } from "../../src/modules/site-layout/layout";
 
 interface IFeed {
   ({ pathname, query }: MyContext): JSX.Element;
@@ -24,13 +24,11 @@ interface IFeed {
 
 const Feed: IFeed = ({ pathname, query }) => {
   return (
-    <Layout title="My Feed">
-      <HelloWorldComponent>
-        {() => {
-          return <FeedPage pathname={pathname} query={query} />;
-        }}
-      </HelloWorldComponent>
-    </Layout>
+    <HelloWorldComponent>
+      {() => {
+        return <FeedPage pathname={pathname} query={query} />;
+      }}
+    </HelloWorldComponent>
   );
 };
 
