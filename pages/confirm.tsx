@@ -5,10 +5,13 @@ import {
   ConfirmUserMutationVariables
 } from "../src/components/generated/apollo-graphql";
 import { CONFIRM_USER } from "../src/graphql/user/mutations/confirmUser";
+import { getLayout } from "../src/modules/site-layout/layout";
 import redirect from "../src/lib/redirect";
 import { MyContext } from "../types/types";
 
 export default class Confirm extends React.PureComponent {
+  static title = "Confirm";
+  static getLayout = getLayout;
   static async getInitialProps({
     query: { token },
     apolloClient,

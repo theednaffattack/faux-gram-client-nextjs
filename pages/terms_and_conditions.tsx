@@ -5,6 +5,7 @@ import { maxWidth, MaxWidthProps } from "styled-system";
 
 import { Flex } from "../src/components/styled-rebass";
 import { SignUpLink } from "../src/components/sign-up-link";
+import { getLayout } from "../src/modules/site-layout/layout";
 
 type TCardProps = CardProps & MaxWidthProps;
 
@@ -12,7 +13,15 @@ const Card: React.FC<TCardProps> = styled(CardBase)`
   ${maxWidth}
 `;
 
-export default () => {
+interface ITermsAndConditions {
+  (): JSX.Element;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const TermsAndConditions: ITermsAndConditions = () => {
   return (
     <Flex minHeight="100vh">
       <Flex width={[1]} minHeight="100vh">
@@ -46,3 +55,8 @@ export default () => {
     </Flex>
   );
 };
+
+TermsAndConditions.getLayout = getLayout;
+TermsAndConditions.title = "Terms & Conditions";
+
+export default TermsAndConditions;

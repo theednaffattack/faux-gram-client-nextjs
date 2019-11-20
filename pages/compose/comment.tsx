@@ -3,35 +3,36 @@ import React from "react";
 import { Button } from "../../src/components/styled-rebass";
 import Modal from "../../src/modules/modal/modal";
 import ToggleContent from "../../src/modules/modal/toggle-content";
+import { getLayout } from "../../src/modules/site-layout/layout";
 
-interface Props {
-  hello?: "hello";
+interface ICreateComment {
+  // ({ hello }: { hello?: string }): JSX.Element;
+  (): JSX.Element;
+  getLayout: (page: any) => JSX.Element;
+  title: string;
 }
 
-const CreateComment: React.FunctionComponent<Props> = () => {
+const CreateComment: ICreateComment = () => {
   return (
-    <div
-      sx={{
-        position: "relative"
-      }}
-    >
-      <ToggleContent
-        toggle={(show: any) => (
-          <Button type="button" onClick={show}>
-            Open
+    <ToggleContent
+      toggle={(show: any) => (
+        <Button type="button" onClick={show}>
+          Open
+        </Button>
+      )}
+      content={(hide: any) => (
+        <Modal>
+          There is no spoon...
+          <Button type="button" onClick={hide}>
+            Close
           </Button>
-        )}
-        content={(hide: any) => (
-          <Modal>
-            There is no spoon...
-            <Button type="button" onClick={hide}>
-              Close
-            </Button>
-          </Modal>
-        )}
-      />
-    </div>
+        </Modal>
+      )}
+    />
   );
 };
+
+CreateComment.getLayout = getLayout;
+CreateComment.title = "Comment";
 
 export default CreateComment;

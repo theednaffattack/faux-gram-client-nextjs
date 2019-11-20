@@ -1,12 +1,28 @@
 import React from "react";
-import { NextPage } from "next";
 
 import { MyContext } from "../../types/types";
-import { IPageProps } from "../../src/page-types/types";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
 import GlobalFeed from "../../src/components/global-feed";
+import { getLayout } from "../../src/modules/site-layout/layout";
+import { ParsedUrlQuery } from "querystring";
 
-const Feed: NextPage<IPageProps> = () => {
+interface IFeed {
+  (): JSX.Element;
+
+  getInitialProps: ({
+    pathname,
+    query
+  }: MyContext) => Promise<{
+    pathname: string;
+    query: ParsedUrlQuery;
+  }>;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const Feed: IFeed = () => {
   return (
     <MeComponent>
       {({ data, error, loading }) => {
@@ -18,10 +34,11 @@ const Feed: NextPage<IPageProps> = () => {
   );
 };
 
-Feed.getInitialProps = async ({ pathname, query }: MyContext) => {
-  const { id } = query;
-
-  return { pathname, query, id };
+Feed.getInitialProps = async ({ pathname, query }) => {
+  return { pathname, query };
 };
+
+Feed.getLayout = getLayout;
+Feed.title = "Global Feed";
 
 export default Feed;

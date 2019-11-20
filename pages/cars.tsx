@@ -1,5 +1,9 @@
-import CarsOverview from '../src/modules/cars/Overview'
+import CarsOverview from "../src/modules/cars/Overview";
+import { getLayout } from "../src/modules/site-layout/layout";
 
-const CarsPage = () => <CarsOverview />
+const CarsPage = () => <CarsOverview />;
 
-export default CarsPage
+CarsPage.getLayout = getLayout;
+CarsPage.title = "Car Stuff";
+
+export default CarsPage;

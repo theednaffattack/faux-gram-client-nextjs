@@ -1,11 +1,21 @@
 import React from "react";
+
 import { isBrowser } from "../src/lib/isBrowser";
+import Layout, { getLayout } from "../src/modules/site-layout/layout";
+
+interface IStorage {
+  (): JSX.Element;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
 
 let initialState = isBrowser
   ? window.localStorage.getItem("myValueInLocalStorage")
   : "";
 
-const Storage = () => {
+const Storage: IStorage = () => {
   // const [value, setValue] = React.useState(
   //   window.localStorage.getItem("myValueInLocalStorage") || ""
   // );
@@ -15,11 +25,15 @@ const Storage = () => {
   }, [value]);
   const onChange = (event: any) => setValue(event.target.value);
   return (
-    <div>
+    <Layout title="Local Storage Logout">
       <h1>Hello React with Local Storage!</h1>
       <input value={value || ""} type="text" onChange={onChange} />
       <p>{value}</p>
-    </div>
+    </Layout>
   );
 };
+
+Storage.getLayout = getLayout;
+Storage.title = "Storage";
+
 export default Storage;

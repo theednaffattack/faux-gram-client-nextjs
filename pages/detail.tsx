@@ -1,7 +1,7 @@
 import React from "react";
-import Layout from "../src/components/layout";
-// import { User } from "../src/interfaces";
+
 import { findData } from "../src/utils/sample-api";
+import { getLayout } from "../src/modules/site-layout/layout";
 import ListDetail from "../src/components/ListDetail";
 import { MyContext } from "../types/types";
 
@@ -12,6 +12,8 @@ type Props = {
 };
 
 class InitialPropsDetail extends React.Component<Props> {
+  static title = "Detail";
+  static getLayout = getLayout;
   static getInitialProps = async ({ query, referer }: MyContext) => {
     console.log({ referer });
     try {
@@ -28,11 +30,9 @@ class InitialPropsDetail extends React.Component<Props> {
 
     if (errors) {
       return (
-        <Layout title={`Error | Next.js + TypeScript Example`}>
-          <p>
-            <span style={{ color: "red" }}>Error:</span> {errors}
-          </p>
-        </Layout>
+        <p>
+          <span style={{ color: "red" }}>Error:</span> {errors}
+        </p>
       );
     }
 

@@ -1,13 +1,30 @@
-import { NextPage } from "next";
 import Router from "next/router";
 
 import GetMessagesByThreadIdPage from "../../src/components/messages/get-messages-by-thread-id-page";
-import { IMessagesPageProps } from "../../src/page-types/types";
+import { IExtendedPageProps } from "../../src/page-types/types";
 import { MyContext } from "../../types/types";
 import { MeComponent } from "../../src/components/generated/apollo-graphql";
 import { isBrowser } from "../../src/lib/isBrowser";
+import { getLayout } from "../../src/modules/site-layout/layout";
+import { ParsedUrlQuery } from "querystring";
 
-const MessagesById: NextPage<IMessagesPageProps> = ({ id }) => {
+interface IMessagesById {
+  ({ pathname, query, id }: IExtendedPageProps): JSX.Element;
+
+  getInitialProps: ({
+    pathname,
+    query
+  }: MyContext) => Promise<{
+    pathname: string;
+    query: ParsedUrlQuery;
+  }>;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const MessagesById: IMessagesById = ({ id }) => {
   let preppedId: string;
   if (id && id.constructor === Array) {
     preppedId = id[0];
@@ -64,5 +81,8 @@ MessagesById.getInitialProps = async ({ pathname, query }: MyContext) => {
 
   return { pathname, query, id };
 };
+
+MessagesById.getLayout = getLayout;
+MessagesById.title = "My Feed";
 
 export default MessagesById;

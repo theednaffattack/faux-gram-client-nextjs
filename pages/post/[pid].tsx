@@ -1,25 +1,34 @@
-import { NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 
 import { Header } from "../../src/components/Header";
 import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
+import { getLayout } from "src/modules/site-layout/layout";
+import { IExtendedPageProps } from "src/page-types/types";
+import { MyContext } from "types/types";
 
-type Props = {
-  pathname: string;
-  query: ParsedUrlQuery;
-  pid?: string | string[];
-};
+interface IPostById {
+  ({ pathname, id, query }: IExtendedPageProps): JSX.Element;
 
-const Comment: NextPage<Props> = ({ pathname, pid, query }) => {
-  // const router = useRouter();
-  // const { id, comment } = router.query;
+  getInitialProps: ({
+    pathname,
+    query
+  }: MyContext) => Promise<{
+    pathname: string;
+    query: ParsedUrlQuery;
+  }>;
 
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const PostById: IPostById = ({ pathname, id, query }) => {
   return (
     <HelloWorldComponent>
       {() => (
         <>
           <Header />
-          <h1>Post: {JSON.stringify({ pid })}</h1>
+          <h1>Post: {JSON.stringify({ id })}</h1>
           <h1>Post: {JSON.stringify({ pathname })}</h1>
           <h1>Post: {JSON.stringify({ query })}</h1>
         </>
@@ -28,16 +37,14 @@ const Comment: NextPage<Props> = ({ pathname, pid, query }) => {
   );
 };
 
-Comment.getInitialProps = async ({ pathname, query }) => {
+PostById.getInitialProps = async ({ pathname, query }) => {
   // pid = 'hello-nextjs'
-  const { pid } = query;
+  const { id } = query;
 
-  // const postContent = await fetch(
-  //   `https://api.example.com/post/${encodeURIComponent(pid)}`
-  // ).then(r => r.text())
-
-  // return { postContent }
-  return { pathname, query, pid };
+  return { pathname, query, id };
 };
 
-export default Comment;
+PostById.getLayout = getLayout;
+PostById.title = "Individual post";
+
+export default PostById;

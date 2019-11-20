@@ -23,8 +23,6 @@ Logout.getInitialProps = async (ctx: MyContext) => {
 
   let now = new Date();
 
-  console.log("Before logout?");
-
   // To trigger the event listener we save some random data into the `logout` key
   isBrowser ? window.localStorage.setItem("logout", now.toISOString()) : null; // new
 

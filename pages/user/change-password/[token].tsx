@@ -1,18 +1,19 @@
-import { NextPage } from "next";
-
-// import Layout from "../../../src/components/layout";
 import { IUserPageProps } from "../../../src/modules/auth/types";
 import { HelloWorldComponent } from "../../../src/components/generated/apollo-graphql";
+import { getLayout } from "../../../src/modules/site-layout/layout";
+import { MyContext } from "../../../types/types";
 
-const dummyVar = "";
+interface IChangePassword {
+  ({ pathname, query, token }: IUserPageProps): JSX.Element;
 
-console.log(dummyVar);
+  getInitialProps: ({ pathname, query }: MyContext) => Promise<IUserPageProps>;
 
-const ChangePassword: NextPage<IUserPageProps> = ({
-  pathname,
-  query,
-  token
-}) => {
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const ChangePassword: IChangePassword = ({ pathname, query, token }) => {
   return (
     <HelloWorldComponent>
       {() => (
@@ -29,9 +30,10 @@ const ChangePassword: NextPage<IUserPageProps> = ({
 ChangePassword.getInitialProps = async ({ pathname, query }) => {
   const { token } = query;
 
-  console.log({ pathname, query, token });
-
   return { pathname, query, token };
 };
+
+ChangePassword.getLayout = getLayout;
+ChangePassword.title = "Change password";
 
 export default ChangePassword;

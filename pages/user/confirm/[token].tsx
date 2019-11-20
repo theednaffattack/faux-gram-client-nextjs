@@ -1,20 +1,24 @@
 import React from "react";
 import Router from "next/router";
 
-// import Layout from "../../../src/components/Layout";
-// import { IUserPageProps } from "../../../src/modules/auth/types";
 import { ConfirmUserComponent } from "../../../src/components/generated/apollo-graphql";
-import { NextPage } from "next";
-import { TBProps } from "pages/b";
+import { getLayout } from "../../../src/modules/site-layout/layout";
+import { IUserPageProps } from "../../../src/modules/auth/types";
+import { MyContext } from "../../../types/types";
 
-interface IConfirmProps extends TBProps {
-  token: string | string[];
+interface IConfirm {
+  ({ pathname, query, token }: IUserPageProps): JSX.Element;
+
+  getInitialProps: ({ pathname, query }: MyContext) => Promise<IUserPageProps>;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
 }
 
-// @ts-ignore
-const Confirm: NextPage<IConfirmProps> = ({ pathname, query, token }) => {
+const Confirm: IConfirm = ({ token }) => {
   let preppedToken: string;
-  if (token.constructor === Array) {
+  if (token && token.constructor === Array) {
     preppedToken = token[0];
   }
   if (typeof token === "string") {
@@ -43,38 +47,7 @@ Confirm.getInitialProps = async ({ pathname, query }) => {
   return { pathname, query, token };
 };
 
+Confirm.getLayout = getLayout;
+Confirm.title = "Change password";
+
 export default Confirm;
-
-// interface IConfirmPageProps extends IUserPageProps {
-//   type?: any;
-//   props?: any;
-//   key?: any;
-// }
-
-// interface IConfirmProps {
-//   token: string;
-// }
-
-// class Confirm extends React.PureComponent<IConfirmProps, object> {
-//   render() {
-//     let { token } = this.props;
-//     if (token) {
-//       return (
-//         <ConfirmUserComponent>
-//           {confirmUser => {
-//             confirmUser({
-//               variables: { token }
-//             })
-//               .catch(error => console.error({ error }))
-//               // @ts-ignore
-//               .then(data => {
-//                 Router.push("/welcome");
-//               });
-//             return <div>hello</div>;
-//           }}
-//         </ConfirmUserComponent>
-//       );
-//     }
-//     return <div>A Real error, this should be unreachable</div>;
-//   }
-// }

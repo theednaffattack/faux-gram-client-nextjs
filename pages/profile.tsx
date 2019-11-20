@@ -1,16 +1,27 @@
-// import Profile from "../src/modules/profile/profile-page";
 import { HelloWorldComponent } from "../src/components/generated/apollo-graphql";
+import ProfilePage from "../src/modules/profile/profile-page";
+import { getLayout } from "src/modules/site-layout/layout";
 
-const ProfilePage = () => {
+interface IProfile {
+  (): JSX.Element;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const Profile: IProfile = () => {
   return (
     <HelloWorldComponent>
-      {({ data }) => {
-        console.log(data);
-        return <div>{JSON.stringify(data)}</div>;
-        // return <Profile data={data} />;
+      {() => {
+        return <ProfilePage />;
       }}
     </HelloWorldComponent>
   );
 };
 
-export default ProfilePage;
+Profile.title = "Profile";
+
+Profile.getLayout = getLayout;
+
+export default Profile;

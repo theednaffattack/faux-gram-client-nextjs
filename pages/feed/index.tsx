@@ -1,25 +1,44 @@
 import React from "react";
-import { NextPage } from "next";
+import { ParsedUrlQuery } from "querystring";
 
 import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
-import { IPageProps } from "../../src/page-types/types";
 import FeedPage from "../../src/modules/feed/feed-page";
 import { MyContext } from "../../types/types";
+import Layout, { getLayout } from "../../src/modules/site-layout/layout";
 
-const Feed: NextPage<IPageProps> = ({ pathname, query }) => {
+interface IFeed {
+  ({ pathname, query }: MyContext): JSX.Element;
+
+  getInitialProps: ({
+    pathname,
+    query
+  }: MyContext) => Promise<{
+    pathname: string;
+    query: ParsedUrlQuery;
+  }>;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const Feed: IFeed = ({ pathname, query }) => {
   return (
-    <HelloWorldComponent>
-      {() => {
-        return <FeedPage pathname={pathname} query={query} />;
-      }}
-    </HelloWorldComponent>
+    <Layout title="My Feed">
+      <HelloWorldComponent>
+        {() => {
+          return <FeedPage pathname={pathname} query={query} />;
+        }}
+      </HelloWorldComponent>
+    </Layout>
   );
 };
 
-Feed.getInitialProps = async ({ pathname, query }: MyContext) => {
-  const { id } = query;
-
-  return { pathname, query, id };
+Feed.getInitialProps = async ({ pathname, query }) => {
+  return { pathname, query };
 };
+
+Feed.getLayout = getLayout;
+Feed.title = "My Feed";
 
 export default Feed;

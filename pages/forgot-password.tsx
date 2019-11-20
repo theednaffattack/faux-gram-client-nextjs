@@ -1,10 +1,20 @@
 import { Field, Formik } from "formik";
 import React from "react";
-import { InputField } from "../src/components/fields/input-field";
-import { ForgotPasswordComponent } from "../src/components/generated/apollo-graphql";
 import Router from "next/router";
 
-const ForgotPassword = () => {
+import { InputField } from "../src/components/fields/input-field";
+import { ForgotPasswordComponent } from "../src/components/generated/apollo-graphql";
+import { getLayout } from "../src/modules/site-layout/layout";
+
+interface IForgotPassword {
+  (): JSX.Element;
+
+  getLayout: (page: any) => JSX.Element;
+
+  title: string;
+}
+
+const ForgotPassword: IForgotPassword = () => {
   return (
     <ForgotPasswordComponent>
       {forgotPassword => (
@@ -61,5 +71,8 @@ const ForgotPassword = () => {
     </ForgotPasswordComponent>
   );
 };
+
+ForgotPassword.getLayout = getLayout;
+ForgotPassword.title = "Forgot password";
 
 export default ForgotPassword;
