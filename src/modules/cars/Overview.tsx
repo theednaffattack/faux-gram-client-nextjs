@@ -1,7 +1,6 @@
 import React from "react";
 
 import * as T from "./types";
-import Layout from "../../components/layout";
 
 export interface CarsOverviewProps {
   cars?: T.CarList;
@@ -22,6 +21,8 @@ export default class CarsOverview extends React.Component<
       selectedCar: null
     };
   }
+
+  static title = "Cars";
 
   handleSelectCar = (car: T.Car): void => {
     this.setState({ selectedCar: car });
@@ -65,13 +66,13 @@ export default class CarsOverview extends React.Component<
       <div>no car</div>
     );
     return (
-      <Layout>
+      <>
         <h1>Cars Overview</h1>
 
         <div className="Cars__List">{this.renderCarsList(this.props.cars)}</div>
 
         {selectedCarComp}
-      </Layout>
+      </>
     );
   }
 }
