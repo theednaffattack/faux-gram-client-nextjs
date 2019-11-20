@@ -1,6 +1,6 @@
 import Welcome from "../src/components/welcome";
 import { HelloWorldComponent } from "../src/components/generated/apollo-graphql";
-import { getLayout } from "src/modules/site-layout/layout";
+import { getLayout } from "../src/modules/site-layout/layout";
 
 interface IWelcome {
   (): JSX.Element;

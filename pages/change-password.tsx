@@ -7,7 +7,7 @@ import {
   ChangePasswordComponent,
   HelloWorldComponent
 } from "../src/components/generated/apollo-graphql";
-import { getLayout } from "src/modules/site-layout/layout";
+import { getLayout } from "../src/modules/site-layout/layout";
 
 interface IChangePassword {
   (): JSX.Element;

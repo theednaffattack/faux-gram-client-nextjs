@@ -2,8 +2,8 @@ import { ParsedUrlQuery } from "querystring";
 
 import { Header } from "../../src/components/Header";
 import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
-import { getLayout } from "src/modules/site-layout/layout";
-import { IExtendedPageProps } from "src/page-types/types";
+import { getLayout } from "../../src/modules/site-layout/layout";
+import { IExtendedPageProps } from "../../src/page-types/types";
 import { MyContext } from "types/types";
 
 interface IPostById {
