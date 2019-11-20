@@ -1,8 +1,9 @@
 import React, { ChangeEvent } from "react";
 import Router from "next/router";
 
+import { getLayout } from "../../modules/site-layout/layout";
+
 import * as T from "./types";
-import Layout from "../../components/layout";
 
 export interface LoginProps {}
 
@@ -23,6 +24,9 @@ export default class Login extends React.Component<LoginProps, LoginState> {
       }
     };
   }
+
+  static getLayout = getLayout;
+  static title = "Other login";
 
   handleCredentialsChange = (e: ChangeEvent<HTMLInputElement>) => {
     let { credentials } = this.state;
@@ -45,7 +49,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     const { credentials } = this.state;
 
     return (
-      <Layout>
+      <>
         <h1>Login</h1>
         <form>
           <input
@@ -66,7 +70,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
             {this.state.isLoginLoading ? "Logging in..." : "Log in"}
           </button>
         </form>
-      </Layout>
+      </>
     );
   }
 }
