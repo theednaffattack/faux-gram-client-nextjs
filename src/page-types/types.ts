@@ -5,6 +5,6 @@ export interface IPageProps {
   query?: ParsedUrlQuery;
 }
 
-export interface IMessagesPageProps extends IPageProps {
+export interface IExtendedPageProps extends IPageProps {
   id?: string | string[];
 }
