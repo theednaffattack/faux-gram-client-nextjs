@@ -74,12 +74,10 @@ export default (App: any) => {
       }
 
       if (!isBrowser) {
-        console.log("step 1 - getDataFromTree running");
 
         // Run all graphql queries in the component tree
         // and extract the resulting data
         try {
-          console.log("step 1a - Inside try/catch");
 
           // Run all GraphQL queries
           await getDataFromTree(
@@ -90,16 +88,13 @@ export default (App: any) => {
               apolloClient={apollo}
             />
           );
-          console.log("getDataFromTree completing?");
+          
         } catch (error) {
-          console.log("step 2b - catch block");
-          console.log("BLOCKED IN withApollo");
 
           // Prevent Apollo Client GraphQL errors from crashing SSR.
           // Handle them in components via the data.error prop:
           // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
           if (error.message.includes("Not authenticated")) {
-            console.log("step 3 - Auth error sensed?");
             redirect(ctx.ctx, "/login", referer);
           } else {
             console.error("Error while running `getDataFromTree`", error);
