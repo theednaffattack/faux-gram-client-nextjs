@@ -198,4 +198,8 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
   }
 }
 
+export const getLayout = (page: any) => {
+  return <Layout title={page.props.title}>{page}</Layout>;
+};
+
 export default Layout;
