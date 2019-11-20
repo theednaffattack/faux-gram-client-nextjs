@@ -60,7 +60,7 @@ export const theme = {
   variants: {
     card: {
       p: 2,
-      bg: "background",
+      bg: "white",
       boxShadow: "card",
       borderRadius: 2
     },
