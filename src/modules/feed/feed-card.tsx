@@ -460,7 +460,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
       py={2}
       ml={2}
       my={2}
-      width={1 / 2}
+      width={[1, 1, 1, 1 / 2]}
       sx={{
         p: 1,
         borderRadius: 18,
