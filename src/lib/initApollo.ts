@@ -21,7 +21,8 @@ const nodeEnv = process.env.NODE_ENV;
 
 const envIsDev = nodeEnv !== "production";
 
-const myIpAddress = "192.168.1.24"; // internalIp.v4.sync();
+// const myIpAddress = "192.168.1.24"; // internalIp.v4.sync();
+const myIpAddress = "localhost"; // internalIp.v4.sync();
 
 const port = process.env.GRAPHQL_PORT;
 
@@ -31,9 +32,9 @@ const prodDomain: string = `fauxgramapi.eddienaff.dev`;
 
 const domain: string = envIsDev ? myLanInfo : prodDomain;
 
-const prefix: string = envIsDev ? "http://" : "https://";
+const prefix: string = "https://";
 
-const wsPrefix: string = envIsDev ? "ws://" : "wss://";
+const wsPrefix: string = "wss://";
 
 const prodGraphqlUrl: string = `${prefix}${domain}/graphql`;
 
