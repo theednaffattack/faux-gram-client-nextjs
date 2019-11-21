@@ -1,7 +1,10 @@
-import { createServer } from "http";
 import { parse, UrlWithParsedQuery } from "url";
 import next from "next";
-import internalIp from "internal-ip";
+import fs from "fs";
+import path from "path";
+import { createServer } from "https";
+// import { createServer } from "http";
+// import internalIp from "internal-ip";
 
 const nodeEnv = process.env.NODE_ENV;
 
@@ -12,18 +15,24 @@ const prodPort = parseInt(process.env.PORT || "3333", 10);
 
 const port = dev ? devPort : prodPort;
 
-const localHostIpAddress = internalIp.v4.sync();
+// const localHostIpAddress = internalIp.v4.sync();
+const localHostIpAddress = "localhost";
 
 const productionDomain = `fauxgram.eddienaff.dev`;
 
 const domain = dev ? localHostIpAddress : productionDomain;
 
-const prefix = dev ? "http://" : "https://";
+const prefix = "https://";
+
+const certOptions = {
+  key: fs.readFileSync(path.resolve("private/server.key")),
+  cert: fs.readFileSync(path.resolve("private/server.crt"))
+};
 
 const app = next({ dev });
 const handle = app.getRequestHandler();
 app.prepare().then(() => {
-  createServer((req, res) => {
+  createServer(certOptions, (req, res) => {
     const parsedUrl: UrlWithParsedQuery = parse(req.url!, true);
     const { pathname, query } = parsedUrl;
 
