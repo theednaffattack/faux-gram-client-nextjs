@@ -8,6 +8,10 @@ node_modules/
 # production server output
 dist
 
+# server key and certificate directory for
+# local dev
+private/
+
 # annoying or secret hidden files / directories
 .DS_Store
 .DS_Store/
