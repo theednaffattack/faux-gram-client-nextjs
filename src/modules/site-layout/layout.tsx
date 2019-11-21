@@ -2,8 +2,8 @@ import React from "react";
 import Head from "next/head";
 
 import { AbFlex, Flex } from "../../components/styled-rebass";
-import LayoutFooter from "./layout-footer";
-import { SidebarNavigation } from "./sidebar-navigation";
+import FooterNavigation from "./footer-navigation";
+import Header from "./header";
 
 interface ILayoutProps {
   title?: string;
@@ -13,6 +13,8 @@ export interface ILayoutState {
   sidebarStatus: "open" | "closed";
   showMessagingAddressBook: boolean;
 }
+
+export const breakWidths = [1, 1, 1, "960px"];
 
 class Layout extends React.Component<ILayoutProps, ILayoutState> {
   sidebarContainerRef: React.RefObject<HTMLDivElement>;
@@ -139,9 +141,11 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         id="layout"
         m={[0]}
         flexDirection="column"
-        width={1}
+        width={breakWidths}
         alignItems="center"
-        flex="1 1 auto"
+        // flex="1 1 auto"
+        // bg="blue"
+        // border="2px pink dashed"
         ref={this.sidebarContainerRef}
       >
         <Head>
@@ -153,46 +157,16 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
           />
           <meta httpEquiv="Content-Language" content="en" />
         </Head>
-        {/* <LayoutHeader
-        // handleCreateNewMessageThread={this.handleCreateNewMessageThread}
-        // toggleSidebarOpenOrClosed={this.toggleSidebarOpenOrClosed}
-        // handleCancelNewMessageThread={this.handleCancelNewMessageThread}
-        // showMessagingAddressBook={this.state.showMessagingAddressBook}
-        /> */}
-        {/* <HeaderDropdown
-          handleCreateNewMessageThread={this.handleCreateNewMessageThread}
-          toggleSidebarOpenOrClosed={this.toggleSidebarOpenOrClosed}
-          handleCancelNewMessageThread={this.handleCancelNewMessageThread}
-          showMessagingAddressBook={this.state.showMessagingAddressBook}
-        /> */}
-        {/* <Flex
-          width={[1, 1, 1, "960px"]}
-          border="crimson"
-          style={{ position: "relative" }}
-        >
-          <SidebarNavigation sidebarStatus={this.state.sidebarStatus} />
-        </Flex> */}
         <Flex
           flex="1 1 auto"
-          width={[1, 1, 1, "960px"]}
+          width={breakWidths}
           flexDirection="column"
           style={{ position: "relative" }}
         >
-          <Flex
-            width={[1, 1, 1, "960px"]}
-            minHeight="70px"
-            style={{
-              position: "static",
-              background: "linear-gradient(5deg, #745fb5, #9066b8)"
-            }}
-            bg="#7386d5"
-          >
-            <SidebarNavigation />
-          </Flex>
-
+          <Header />
           {children}
         </Flex>
-        <LayoutFooter />
+        <FooterNavigation />
       </AbFlex>
     );
   }

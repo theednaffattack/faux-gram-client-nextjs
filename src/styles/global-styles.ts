@@ -15,5 +15,5 @@ body {
   box-sizing: inherit;
 }
 
-#__next { min-height: 100vh; display: flex }
+#__next { width: 100vw; height: 100%; min-height: 100vh; display: flex; justify-content: center; }
 `;
