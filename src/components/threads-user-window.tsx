@@ -67,19 +67,19 @@ const Row = ({ index, data, style }: IRowProps) => {
         {data.itemData[index] &&
           data.itemData[index].node &&
           data.itemData[index].node.invitees &&
-          data.itemData[index].node.invitees.map(
-            (person: any, itemIndex: number) => (
-              <UserProfileImage
-                key={`${itemIndex}-${person.typename}`}
-                isMe={true}
-                flexInstruction="column"
-                user={person}
-                buttonThing={false}
-                color="blue"
-                handleRemoveInviteeToThread={data.handleRemoveInviteeToThread}
-              />
-            )
-          )}
+          data.itemData[
+            index
+          ].node.invitees.map((person: any, itemIndex: number) => (
+            <UserProfileImage
+              key={`${itemIndex}-${person.typename}`}
+              isMe={true}
+              flexInstruction="column"
+              user={person}
+              buttonThing={false}
+              color="blue"
+              handleRemoveInviteeToThread={data.handleRemoveInviteeToThread}
+            />
+          ))}
       </Flex>
       <Flex
         bg="transparent"
