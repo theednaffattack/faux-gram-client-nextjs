@@ -1,9 +1,11 @@
 import React from "react";
 
 import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
-import CameraPage from "../../src/modules/feed/camera";
 import { MyContext } from "../../types/types";
 import { getLayout } from "../../src/modules/site-layout/layout";
+// import CameraContainer from "../../src/modules/feed/camera_v1/video-container";
+import CameraModule from "../../src/modules/feed/camera";
+// import CameraComponent from "../../src/modules/feed/camera/camera";
 
 interface ICamera {
   ({ pathname, query }: MyContext): JSX.Element;
@@ -17,7 +19,7 @@ const Camera: ICamera = () => {
   return (
     <HelloWorldComponent>
       {() => {
-        return <CameraPage />;
+        return <CameraModule />;
       }}
     </HelloWorldComponent>
   );
