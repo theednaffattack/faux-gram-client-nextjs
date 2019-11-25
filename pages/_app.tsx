@@ -11,7 +11,7 @@ import { GlobalStyles } from "../src/styles/global-styles";
 class MyApp extends App<any> {
   render() {
     // @ts-ignore
-    const { Component, pageProps, apolloClient, router } = this.props;
+    const { Component, pageProps, apolloClient } = this.props;
     const getLayout = Component.getLayout || ((page: any) => page);
     const title = Component.title || "Fake test title";
     return (
