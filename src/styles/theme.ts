@@ -55,7 +55,8 @@ export const theme = {
   borders: {
     crimson: "2px crimson dashed",
     lime: "2px limegreen dashed",
-    purp: "2px rebeccapurple dashed"
+    purp: "2px rebeccapurple dashed",
+    primary: "1px #ccc solid"
   },
   variants: {
     card: {
