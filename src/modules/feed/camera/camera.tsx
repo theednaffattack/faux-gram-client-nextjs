@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import Measure, { ContentRect } from "react-measure";
+// import { useCallbackRef } from "use-callback-ref";
+
 import { useUserMedia } from "./hooks/use-user-media";
 import { useCardRatio } from "./hooks/use-card-ratio";
 import { useOffsets } from "./hooks/use-offsets";
@@ -24,8 +26,8 @@ const CAPTURE_OPTIONS: MediaStreamConstraints = {
 };
 
 const Camera = ({ onCapture, onClear }: any) => {
-  const canvasRef = useRef<any>(null);
-  const videoRef = useRef<any>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const [container, setContainer] = useState({ width: 0, height: 0 });
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -34,9 +36,25 @@ const Camera = ({ onCapture, onClear }: any) => {
 
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   const [aspectRatio, calculateRatio] = useCardRatio(1.586);
-  const offsets = useOffsets(
-    videoRef.current && videoRef.current.videoWidth,
-    videoRef.current && videoRef.current.videoHeight,
+
+  let videoWidth: number;
+  let videoHeight: number;
+
+  if (videoRef.current && videoRef.current.videoWidth) {
+    videoWidth = videoRef.current.videoWidth;
+  } else {
+    videoWidth = 500;
+  }
+
+  if (videoRef.current && videoRef.current.videoHeight) {
+    videoHeight = videoRef.current.videoHeight;
+  } else {
+    videoHeight = 500;
+  }
+
+  let offsets = useOffsets(
+    videoWidth,
+    videoHeight,
     container.width,
     container.height
   );
@@ -69,36 +87,62 @@ const Camera = ({ onCapture, onClear }: any) => {
   }
 
   function handleCanPlay() {
-    calculateRatio(videoRef.current.videoHeight, videoRef.current.videoWidth);
+    calculateRatio(videoHeight, videoWidth);
     setIsVideoPlaying(true);
-    videoRef.current.play();
+    videoRef.current && videoRef.current.play();
   }
 
+  /** See MDN REference:
+   * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage */
+  interface CanvasContextProp extends CanvasRenderingContext2D {}
+
   function handleCapture() {
-    const context = canvasRef.current.getContext("2d");
+    let get2dContext = canvasRef.current && canvasRef.current.getContext("2d");
+    /** Canvas element context */
+    let context: CanvasContextProp;
+    if (canvasRef && canvasRef.current && get2dContext && videoRef.current) {
+      context = get2dContext;
 
-    context.drawImage(
-      videoRef.current,
-      offsets.x,
-      offsets.y,
-      container.width,
-      container.height,
-      0,
-      0,
-      container.width,
-      container.height
-    );
+      context.drawImage(
+        videoRef.current,
+        offsets.x,
+        offsets.y,
+        container.width,
+        container.height,
+        0,
+        0,
+        container.width,
+        container.height
+      );
 
-    canvasRef.current.toBlob((blob: Blob) => onCapture(blob), "image/jpeg", 1);
-    setIsCanvasEmpty(false);
-    setIsFlashing(true);
+      canvasRef.current.toBlob((blob: any) => onCapture(blob), "image/png", 1);
+      setIsCanvasEmpty(false);
+      setIsFlashing(true);
+    }
   }
 
   function handleClear() {
-    const context = canvasRef.current.getContext("2d");
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    setIsCanvasEmpty(true);
-    onClear();
+    let get2dContext = canvasRef.current && canvasRef.current.getContext("2d");
+    /** Canvas element context */
+    let context: CanvasContextProp;
+    if (canvasRef && canvasRef.current && get2dContext && videoRef.current) {
+      context = get2dContext;
+
+      context.clearRect(0, 0, videoWidth, videoHeight);
+      setIsCanvasEmpty(true);
+      onClear();
+    } else {
+      let errorObj = {
+        canvasRefError:
+          !canvasRef.current &&
+          "No canvas ref is set (cannot access the canvas DOM node).",
+        contextError: !get2dContext && "Cannot retrieve the canvas context",
+        videoRefError:
+          !videoRef.current &&
+          "No video ref is set (cannot access the video DOM node)"
+      };
+      throw Error(`${JSON.stringify(errorObj)}`);
+    }
   }
 
   if (!mediaStream) {
@@ -111,8 +155,8 @@ const Camera = ({ onCapture, onClear }: any) => {
         <Wrapper>
           <Container
             ref={measureRef}
-            maxHeight={videoRef.current && videoRef.current.videoHeight}
-            maxWidth={videoRef.current && videoRef.current.videoWidth}
+            maxHeight={videoHeight}
+            maxWidth={videoWidth}
             style={{
               height: `${container.height}px`
             }}
