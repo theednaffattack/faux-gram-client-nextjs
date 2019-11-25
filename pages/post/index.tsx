@@ -1,8 +1,8 @@
 import React from "react";
 
-import PostPage from "../../src/modules/post/post-page";
 import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
 import { getLayout } from "../../src/modules/site-layout/layout";
+import CameraModule from "../../src/modules/feed/camera";
 
 interface IPost {
   (): JSX.Element;
@@ -13,7 +13,7 @@ interface IPost {
 }
 
 const Post: IPost = () => {
-  return <HelloWorldComponent>{() => <PostPage />}</HelloWorldComponent>;
+  return <HelloWorldComponent>{() => <CameraModule />}</HelloWorldComponent>;
 };
 
 Post.getLayout = getLayout;
