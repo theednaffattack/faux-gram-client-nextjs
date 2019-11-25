@@ -32,7 +32,7 @@ function isEquivalent(a: any, b: any) {
 
   // If number of properties is different,
   // objects are not equivalent
-  if (aProps.length != bProps.length) {
+  if (aProps.length !== bProps.length) {
     return false;
   }
 
