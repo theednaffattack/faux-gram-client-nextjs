@@ -18,6 +18,11 @@
     "heroku-postbuild": "npm run build",
     "gen:gql": "graphql-codegen --config codegen.yml"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "dependencies": {
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
@@ -71,6 +76,8 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "@graphql-codegen/cli": "1.8.0",
     "@graphql-codegen/fragment-matcher": "1.8.0",
     "@graphql-codegen/introspection": "1.8.0",
@@ -106,14 +113,20 @@
     "graphql-codegen-typescript-client": "^0.18.2",
     "graphql-codegen-typescript-common": "^0.18.2",
     "graphql-codegen-typescript-react-apollo": "^0.18.2",
+    "husky": "^3.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.0",
     "react-addons-test-utils": "^15.6.2",
     "react-lorem-ipsum": "^1.4.3",
     "react-test-renderer": "^16.10.1",
     "rebass-types-temp": "https://github.com/theednaffattack/rebass-types-temp",
+    "standard-version": "^7.0.1",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5",
     "util": "^0.12.1"
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
