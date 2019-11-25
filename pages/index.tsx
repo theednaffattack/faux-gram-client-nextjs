@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
 
 import { getLayout } from "../src/modules/site-layout/layout";
+import { Flex, Heading } from "../src/components/styled-rebass";
 
 interface IIndexPage {
   (): JSX.Element;
@@ -13,14 +13,11 @@ interface IIndexPage {
 
 const IndexPage: IIndexPage = () => {
   return (
-    <>
-      <h1>Hello Next.js 👋</h1>
-      <p>
-        <Link href="/about" as="/about">
-          <a>About</a>
-        </Link>
-      </p>
-    </>
+    <Flex flex="1 1 auto" alignItems="center" justifyContent="center">
+      <Heading fontFamily="main" as="h1">
+        Welcome to FauxGram!
+      </Heading>
+    </Flex>
   );
 };
 
