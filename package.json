@@ -7,6 +7,7 @@
   "scripts": {
     "test": "jest",
     "start": "next start -p $PORT",
+    "lint": "eslint ./**/*.tsx ./**/**/*.tsx ./**/**/**/*.tsx",
     "analyze": "BUNDLE_ANALYZE=both next build",
     "analyze:server": "BUNDLE_ANALYZE=server next build",
     "analyze:browser": "BUNDLE_ANALYZE=browser next build",
