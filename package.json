@@ -2,7 +2,7 @@
   "name": "faux-gram-client-nextjs",
   "version": "1.0.0",
   "engines": {
-    "node": "11.x"
+    "node": "11.10.x"
   },
   "scripts": {
     "test": "jest",
@@ -16,7 +16,9 @@
     "build": "next build && tsc --project tsconfig.server.json",
     "og-start": "cross-env NODE_ENV=production node dist/index.js",
     "heroku-postbuild": "npm run build",
-    "gen:gql": "graphql-codegen --config codegen.yml"
+    "gen:gql": "graphql-codegen --config codegen.yml",
+    "gen:jsonts": "make_types  -i ./src/modules/icon/generated-material-icon-types.ts ./src/modules/icon/material-paths.json MaterialIcons",
+    "release": "standard-version"
   },
   "husky": {
     "hooks": {
@@ -71,6 +73,7 @@
     "styled-system": "^5.1.2",
     "subscriptions-transport-ws": "^0.9.16",
     "theme-ui": "^0.2.43",
+    "use-callback-ref": "^1.2.1",
     "uuid": "^3.3.3",
     "webpack": "^4.41.2",
     "yup": "^0.27.0"
@@ -90,8 +93,8 @@
     "@types/dotenv": "^6.1.1",
     "@types/dotenv-webpack": "^1.7.0",
     "@types/emoji-mart": "^2.11.0",
+    "@types/gsap": "^1.20.2",
     "@types/jest": "^24.0.18",
-    "@types/lodash": "^4.14.144",
     "@types/lorem-ipsum": "^1.0.2",
     "@types/node": "^12.0.12",
     "@types/react": "^16.8.17",
@@ -104,17 +107,29 @@
     "@types/theme-ui": "^0.2.3",
     "@types/uuid": "^3.4.5",
     "@types/yup": "^0.26.24",
+    "@typescript-eslint/eslint-plugin": "2.x",
+    "@typescript-eslint/parser": "2.x",
     "babel-core": "^6.26.3",
+    "babel-eslint": "10.x",
     "babel-jest": "^24.9.0",
     "babel-plugin-styled-components": "^1.10.6",
     "cross-env": "^5.2.0",
+    "cz-conventional-changelog": "^3.0.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": "6.x",
+    "eslint-config-react-app": "^5.0.2",
+    "eslint-plugin-flowtype": "3.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "1.x",
     "graphql-codegen-typescript-client": "^0.18.2",
     "graphql-codegen-typescript-common": "^0.18.2",
     "graphql-codegen-typescript-react-apollo": "^0.18.2",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
+    "maketypes": "^1.1.2",
     "nodemon": "^1.19.0",
     "react-addons-test-utils": "^15.6.2",
     "react-lorem-ipsum": "^1.4.3",
@@ -124,6 +139,7 @@
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5",
     "util": "^0.12.1"
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
