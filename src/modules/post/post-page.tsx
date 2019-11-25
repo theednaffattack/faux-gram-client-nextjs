@@ -2,11 +2,14 @@ import React from "react";
 
 import { MeComponent } from "../../components/generated/apollo-graphql";
 import { Flex, Heading, Text } from "../../components/styled-rebass";
-import CreatePostMutation from "../../components/file-list-mutation";
+import CreatePostMutation from "./create-post-mutation";
+// import CreatePostMutation from "../../components/file-list-mutation";
 
-interface IPostPageProps {}
+interface IPostPageProps {
+  cardImage: Blob | undefined;
+}
 
-const PostPage: React.FC<IPostPageProps> = () => (
+const PostPage: React.FC<IPostPageProps> = ({ cardImage }) => (
   <MeComponent>
     {({ data: dataMe, loading: loadingMe, error: errorMe }) => {
       if (!dataMe || !dataMe.me) {
@@ -36,7 +39,13 @@ const PostPage: React.FC<IPostPageProps> = () => (
         );
       }
 
-      return <CreatePostMutation me={dataMe.me.id} />;
+      return (
+        <CreatePostMutation
+          cardImage={cardImage ? cardImage : undefined}
+          me={dataMe.me.id}
+        />
+      );
+      // return <CreatePostMutation me={dataMe.me.id} />;
     }}
   </MeComponent>
 );

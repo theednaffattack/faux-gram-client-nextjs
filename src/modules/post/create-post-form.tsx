@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
-import { TextFormField } from "./tex-form-field";
+import { TextFormField } from "./text-form-field";
 
 interface CreatePostFormProps {
   onSubmit: () => void;
