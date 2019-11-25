@@ -18,7 +18,7 @@ const HelloWorld: IHelloWorld = () => {
     console.log(count);
   }, [count]);
 
-  setCount(20);
+  // setCount(20);
   return (
     <Flex
       minHeight="50vh"
