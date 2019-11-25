@@ -10,6 +10,7 @@ import { Image } from "./image";
 import { openSpring, closeSpring } from "./animations";
 import { useScrollConstraints } from "./utils/use-scroll-constraints";
 import { useWheelScroll } from "./utils/use-wheel-scroll";
+import Router from "next/router";
 
 type TIsSelected = { isSelected: boolean };
 
@@ -41,7 +42,7 @@ export const FollowerCard = memo(
     const constraints = useScrollConstraints(cardRef, isSelected);
 
     function checkSwipeToDismiss() {
-      y.get() > dismissDistance; //  && history.push("/");
+      y.get() > dismissDistance && Router.push("/", "/");
     }
 
     function checkZIndex(latest: any) {
