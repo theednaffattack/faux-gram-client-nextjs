@@ -60,6 +60,7 @@
     "lorem-ipsum": "^2.0.3",
     "next": "latest",
     "next-routes": "^1.4.2",
+    "nope-validator": "^0.9.0",
     "react": "^16.8.4",
     "react-apollo": "^3.1.1",
     "react-dom": "^16.11.0",

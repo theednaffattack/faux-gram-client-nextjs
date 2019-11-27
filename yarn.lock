@@ -9189,6 +9189,11 @@ nodemon@^1.19.0:
     undefsafe "^2.0.2"
     update-notifier "^2.5.0"
 
+nope-validator@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/nope-validator/-/nope-validator-0.9.0.tgz#3c11ec7a16b80b89a9718d36187b6ff6e7ff8436"
+  integrity sha512-aNJV70bcZMPdaBVRal5mRDiQ8s679f2GaDdUdDbOELewo/hUmywWs82msF6v+JGfbPVgRM2PW6ZgEzZ0y0A4Bw==
+
 nopt@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-4.0.1.tgz#d0d4685afd5415193c8c7505602d0d17cd64474d"
