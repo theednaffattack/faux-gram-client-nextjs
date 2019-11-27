@@ -4,27 +4,27 @@ import { AbFlex, Flex, Heading } from "../../components/styled-rebass";
 import { MeComponent } from "../../components/generated/apollo-graphql";
 import { FollowingPostsWrapper } from "./following-posts-container";
 import { IPageProps } from "../../page-types/types";
-import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
+// import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 
 interface IFeedPageProps extends IPageProps {}
 
 export default class FeedPage extends React.Component<IFeedPageProps, object> {
-  listRef: React.RefObject<HTMLDivElement>;
-  constructor(props: IFeedPageProps) {
-    super(props);
+  // listRef: React.RefObject<HTMLDivElement>;
+  // constructor(props: IFeedPageProps) {
+  //   super(props);
 
-    this.listRef = React.createRef();
-  }
+  //   this.listRef = React.createRef();
+  // }
 
-  componentDidMount() {
-    if (this.listRef && this.listRef.current) {
-      disableBodyScroll(this.listRef.current);
-    }
-  }
+  // componentDidMount() {
+  //   if (this.listRef && this.listRef.current) {
+  //     disableBodyScroll(this.listRef.current);
+  //   }
+  // }
 
-  componentWillUnmount() {
-    clearAllBodyScrollLocks();
-  }
+  // componentWillUnmount() {
+  //   clearAllBodyScrollLocks();
+  // }
   render() {
     let { pathname, query } = this.props;
     return (
@@ -51,22 +51,30 @@ export default class FeedPage extends React.Component<IFeedPageProps, object> {
                 <AbFlex
                   // flex="1 1 auto"
                   id="absolute-scroll-list"
-                  ref={this.listRef}
+                  // ref={this.listRef}
                   top={0}
                   bottom={0}
                   right={0}
                   left={0}
-                  overflow="auto"
+                  // overflow="auto"
                   position="absolute"
                   flexDirection="column"
                   alignItems="center"
                   // alignItems="stretch"v
                   width={1}
-                  style={{
-                    WebkitOverflowScrolling: "touch"
-                  }}
+                  // style={{
+                  //   WebkitOverflowScrolling: "touch"
+                  // }}
                 >
-                  <FollowingPostsWrapper pathname={pathname} query={query} />
+                  <FollowingPostsWrapper
+                    // theref={this.listRef}
+                    pathname={pathname}
+                    query={query}
+                  />
+
+                  <Flex border="crimson" style={{ minHeight: "63px" }}>
+                    what is going on?..
+                  </Flex>
                 </AbFlex>
               </Flex>
             );

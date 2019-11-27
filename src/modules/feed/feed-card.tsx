@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import Link from "next/link";
 import { Field, Formik } from "formik";
@@ -31,7 +32,6 @@ import { CommentCounter } from "./comments-counter";
 import { LikesCounter } from "./likes-counter";
 import UserProfileImage from "../../components/user-avatar";
 import { TextareaField } from "../../../src/modules/form-fields/textarea";
-import Badge from "./badge";
 
 export type TImage = {
   id: string;
@@ -42,6 +42,10 @@ export type TImage = {
 interface FakeOnClickProps {
   fakeHandlerName: string;
 }
+
+let cardWidths = [0.97, 0.95, 0.95, 1 / 2];
+
+// let cardWidths = [1, 1, 1, 1 / 2];
 
 const fakeOnClick = ({ fakeHandlerName }: FakeOnClickProps) => {
   console.log(`${fakeHandlerName} firing!!!🚀`);
@@ -460,7 +464,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
       py={2}
       ml={2}
       my={2}
-      width={[1, 1, 1, 1 / 2]}
+      width={cardWidths}
       sx={{
         p: 1,
         borderRadius: 18,
@@ -475,7 +479,6 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
             color="blue"
             user={userInfo}
           />
-          <Badge bg="pink">following</Badge>
         </Flex>
         <Box
           ml="auto"
@@ -496,14 +499,14 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
       </Flex>
       <Flex justifyContent="center">
         {images && images.length > 0 ? (
-          <Image width={["300px", "400px"]} src={images[0].uri} />
+          <Image width={["400px", "400px"]} src={images[0].uri} />
         ) : null}
       </Flex>
-      <Box px={2}>
+      <Box py={3} px={2}>
         <Heading as="h3">{title}</Heading>
         <Text fontSize={0}>{description}</Text>
       </Box>
-      <Flex alignItems="center">
+      <Flex alignItems="center" mr={2}>
         <Flex flexDirection="column" alignItems="center">
           <LikesCounter initialLikesCount={initialLikesCount} postId={id} />
 
@@ -529,16 +532,15 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
                 >
                   <Icon
                     name="heart"
-                    fill={currentlyLiked ? "crimson" : "yellow"}
-                    size="3em"
+                    fill={currentlyLiked ? "crimson" : "#ccc"}
+                    size="2.5em"
                   />
                 </Button>
               );
             }}
           </CreateOrUpdateLikesComponent>
         </Flex>
-
-        <Flex flexDirection="column" alignItems="center">
+        <Flex ml={2} flexDirection="column" alignItems="center">
           <CommentCounter
             initialCommentsCount={initialCommentsCount}
             postId={id}
@@ -551,10 +553,12 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
             disabled={renderTextarea ? true : false}
             onClick={() => fakeOnClick({ fakeHandlerName: "Chat Click Event" })}
           >
-            <Icon name="chat" fill="fuchsia" size="3em" />
+            <Icon name="chat" fill="#ccc" size="2.5em" />
           </Button>
         </Flex>
-        <UnFollowUserButtonGqlWrapper postUserId={postUserId as string} />
+        <Box ml="auto">
+          <UnFollowUserButtonGqlWrapper postUserId={postUserId as string} />
+        </Box>{" "}
       </Flex>
       {renderTextarea ? <RenderCommentField postId={id} /> : null}
       {renderTextarea && comments && comments.length > 0 ? (
