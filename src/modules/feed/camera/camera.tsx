@@ -2,18 +2,11 @@ import React, { useState, useRef } from "react";
 import Measure, { ContentRect } from "react-measure";
 // import { useCallbackRef } from "use-callback-ref";
 
+import { Button } from "../../../components/styled-rebass";
 import { useUserMedia } from "./hooks/use-user-media";
 import { useCardRatio } from "./hooks/use-card-ratio";
 import { useOffsets } from "./hooks/use-offsets";
-import {
-  Video,
-  Canvas,
-  Wrapper,
-  Container,
-  Flash,
-  Overlay,
-  Button
-} from "./styles";
+import { Video, Canvas, Wrapper, Container, Flash, Overlay } from "./styles";
 
 export interface SizeRect {
   readonly width: number;
@@ -189,7 +182,10 @@ const Camera = ({ onCapture, onClear }: any) => {
           </Container>
 
           {isVideoPlaying && (
-            <Button onClick={isCanvasEmpty ? handleCapture : handleClear}>
+            <Button
+              mt={3}
+              onClick={isCanvasEmpty ? handleCapture : handleClear}
+            >
               {isCanvasEmpty ? "Take a picture" : "Take another picture"}
             </Button>
           )}
