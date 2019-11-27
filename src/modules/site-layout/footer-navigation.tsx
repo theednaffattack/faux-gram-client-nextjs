@@ -20,6 +20,7 @@ interface MaterialIconProps {
 }
 
 interface NavItemProps {
+  as: string;
   to: string;
   iconName: MaterialIconProps["name"];
 }
@@ -44,11 +45,11 @@ let navFontSize = ".6rem";
 let iconSize = "2rem";
 
 let newRoutes = {
-  home: "/feed",
-  global: "/global",
-  post: "/post",
-  messages: "/messages",
-  profile: "/profile"
+  home: { to: "/feed", as: "/feed" },
+  global: { to: "/feed/global", as: "/feed/global" },
+  post: { to: "/post", as: "/post" },
+  messages: { to: "/messages", as: "/messages" },
+  profile: { to: "/profile", as: "/profile" }
 };
 
 let Anchor = styled.a`
@@ -66,7 +67,8 @@ let Anchor = styled.a`
 let NavItem: React.FunctionComponent<NavItemProps> = ({
   children,
   iconName,
-  to
+  to,
+  as
 }) => {
   let initialStateColor = "rebeccapurple";
   const [color, setColor] = useState<string>(initialStateColor);
@@ -80,7 +82,7 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
       justifyContent="center"
       py={rowPY}
     >
-      <Link href={to} as="/hello">
+      <Link href={to} as={as}>
         <Anchor>
           <Icon
             fill={color}
@@ -91,7 +93,7 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
         </Anchor>
       </Link>
 
-      <Link href={to} as="/hello">
+      <Link href={to} as={as}>
         <Anchor
           onMouseEnter={() => setColor("crimson")}
           onMouseLeave={() => setColor("rebeccapurple")}
@@ -123,19 +125,31 @@ const FooterNavigation: React.FunctionComponent<Props> = () => {
       position="fixed"
       bottom={0}
     >
-      <NavItem to={newRoutes.home} iconName="home">
+      <NavItem to={newRoutes.home.to} as={newRoutes.home.as} iconName="home">
         Home
       </NavItem>
-      <NavItem to={newRoutes.global} iconName="search">
+      <NavItem
+        to={newRoutes.global.to}
+        as={newRoutes.global.as}
+        iconName="search"
+      >
         Global
       </NavItem>
-      <NavItem to={newRoutes.post} iconName="camera">
+      <NavItem to={newRoutes.post.to} as={newRoutes.post.as} iconName="camera">
         Post
       </NavItem>
-      <NavItem to={newRoutes.messages} iconName="announcement">
+      <NavItem
+        to={newRoutes.messages.to}
+        as={newRoutes.messages.as}
+        iconName="announcement"
+      >
         Notifications
       </NavItem>
-      <NavItem to={newRoutes.profile} iconName="account_circle">
+      <NavItem
+        to={newRoutes.profile.to}
+        as={newRoutes.profile.as}
+        iconName="account_circle"
+      >
         Profile
       </NavItem>
     </AbFlex>
