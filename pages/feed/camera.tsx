@@ -1,6 +1,9 @@
 import React from "react";
 
-import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
+import {
+  // HelloWorldComponent,
+  MeComponent
+} from "../../src/components/generated/apollo-graphql";
 import { MyContext } from "../../types/types";
 import { getLayout } from "../../src/modules/site-layout/layout";
 // import CameraContainer from "../../src/modules/feed/camera_v1/video-container";
@@ -17,11 +20,14 @@ interface ICamera {
 
 const Camera: ICamera = () => {
   return (
-    <HelloWorldComponent>
-      {() => {
-        return <CameraModule />;
+    <MeComponent>
+      {({ data, error, loading }) => {
+        console.log({ data, error, loading });
+        return (
+          <CameraModule me={data && data.me && data.me ? data.me.id : ""} />
+        );
       }}
-    </HelloWorldComponent>
+    </MeComponent>
   );
 };
 

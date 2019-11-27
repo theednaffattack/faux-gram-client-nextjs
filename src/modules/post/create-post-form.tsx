@@ -3,46 +3,7 @@ import { Formik, Field, Form } from "formik";
 
 import { TextFormField } from "./text-form-field";
 import { SelectFormField } from "./select-form-field";
-import {
-  CreatePostProps,
-  SignS3MutationVariables,
-  SignedS3SubPayload
-} from "src/components/generated/apollo-graphql";
-import { MutationFunction } from "react-apollo";
-import { ApolloError } from "apollo-boost";
-
-type SignS3Mutation = MutationFunction<
-  {
-    __typename?: "Mutation" | undefined;
-  } & {
-    signS3: {
-      __typename?: "SignedS3Payload" | undefined;
-    } & {
-      signatures: ({
-        __typename?: "SignedS3SubPayload" | undefined;
-      } & Pick<SignedS3SubPayload, "url" | "signedRequest">)[];
-    };
-  },
-  SignS3MutationVariables
->;
-
-type DataS3 =
-  | ({
-      __typename?: "Mutation" | undefined;
-    } & {
-      signS3: {
-        __typename?: "SignedS3Payload" | undefined;
-      } & {
-        signatures: ({
-          __typename?: "SignedS3SubPayload" | undefined;
-        } & Pick<SignedS3SubPayload, "url" | "signedRequest">)[];
-      };
-    })
-  | undefined;
-
-type ErrorS3 = ApolloError | undefined;
-
-type LoadingS3 = boolean;
+import { CreatePostProps } from "src/components/generated/apollo-graphql";
 
 interface CreatePostFormProps {
   onSubmit: CreatePostProps["mutate"];
