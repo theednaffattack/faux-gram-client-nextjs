@@ -25,13 +25,13 @@ export const SelectFormField: React.FunctionComponent<FieldProps &
         {field.name}
       </Label>
 
-      <div className="custom-select" style={{ width: "200px" }}>
+      <div className="custom-select-container" style={{ width: "200px" }}>
         <select {...field} {...props}>
           {options.map((option, index) => {
-            //
+            console.log("view option values", { option });
             return (
               <option key={`${index}-${option.label}`} value={option.value}>
-                <MenuItem>{option.label}</MenuItem>
+                {option.label}
               </option>
             );
           })}
@@ -49,8 +49,6 @@ const FormHelperText = styled.p<FormHelperTextProps>`
   ${space}
   ${typography}
 `;
-
-const MenuItem = styled.div``;
 
 const Input = styled.input`
   font: inherit;

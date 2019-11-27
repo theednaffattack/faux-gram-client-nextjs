@@ -1,54 +1,80 @@
 import React from "react";
 import { FieldProps, getIn } from "formik";
+import { typography, TypographyProps } from "styled-system";
 // import Yup from "yup";
 import styled from "styled-components";
 
-export const TextFormField: React.FunctionComponent<FieldProps> = ({
-  field,
-  form,
-  ...props
-}) => {
+interface TextFormFieldProps {
+  hidden: boolean;
+  label: string;
+}
+
+export const TextFormField: React.FunctionComponent<FieldProps &
+  TextFormFieldProps> = ({ field, form, ...props }) => {
   const errorText =
     getIn(form.touched, field.name) && getIn(form.errors, field.name);
+
   return (
     <>
       {errorText ? <div>{JSON.stringify(errorText, null, 2)}</div> : ""}
-      <Label
-        htmlFor="standard-basic"
-        id="standard-basic-label"
-        className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
-      >
-        {field.name}
-      </Label>
+      {props.hidden === true ? (
+        ""
+      ) : (
+        <LabelWrapper>
+          <Label htmlFor={field.name} id="standard-basic-label">
+            {props.label}
+          </Label>
+        </LabelWrapper>
+      )}
       <Input
         aria-invalid="false"
-        id="standard-basic"
-        type="text"
-        className="MuiInputBase-input MuiInput-input"
+        type={props.hidden ? "hidden" : "text"}
         {...field}
         {...props}
+        fontSize={3}
+        fontFamily="main"
       />
     </>
   );
 };
 
-const Input = styled.input`
+const LabelWrapper = styled.div`
+  display: flex;
+  margin-top: 12px;
+  /* border: 2px limegreen dashed; */
+`;
+
+const Input = styled.input<TypographyProps>`
   font: inherit;
   color: currentColor;
   width: 100%;
-  border: 0;
+  /* border: 0; */
   height: 1.1875em;
   margin: 0;
+  margin-bottom: 12px;
   display: block;
   padding: 6px 0 7px;
   min-width: 0;
+  ${typography}
   background: none;
   box-sizing: content-box;
   animation-name: MuiInputBase-keyframes-auto-fill-cancel;
   -webkit-tap-highlight-color: transparent;
 
-  &:focus {
+  :focus {
     outline-offset: -2px;
+    border-bottom: 2px orange solid;
+    /* border-bottom: 2.5px lawngreen solid; */
+  }
+
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
+  /* :focus {
+    border-bottom: 2.5px lawngreen solid;
+    // box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+  } */
+  ::placeholder {
+    color: palevioletred;
   }
 
   -webkit-writing-mode: horizontal-tb !important;
@@ -67,8 +93,6 @@ const Input = styled.input`
   -webkit-rtl-ordering: logical;
   cursor: text;
   margin: 0em;
-  font: 400 11px system-ui;
-  padding: 1px;
   border-width: 2px;
   border-style: inset;
   border-color: initial;
@@ -82,13 +106,13 @@ const Label = styled.label`
   color: rgba(0, 0, 0, 0.54);
   padding: 0;
   font-size: 1rem;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
+  /* font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400; */
   line-height: 1;
   letter-spacing: 0.00938em;
 
   ${Input}:focus & {
-    fill: rebeccapurple;
+    color: rebeccapurple;
   }
   cursor: default;
 `;

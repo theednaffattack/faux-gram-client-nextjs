@@ -1,8 +1,9 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { FieldProps, getIn } from "formik";
 import styled from "styled-components";
 import { space, typography, SpaceProps, TypographyProps } from "styled-system";
 
+import { Text } from "../../components/styled-rebass";
 // import Yup from "yup";
 
 interface SliderFormFieldCustomProps {
@@ -10,7 +11,7 @@ interface SliderFormFieldCustomProps {
   // options: Array<{ label: string; value: string }>;
 }
 
-export const SelectFormField: React.FunctionComponent<FieldProps &
+export const SliderFormField: React.FunctionComponent<FieldProps &
   SliderFormFieldCustomProps> = ({ field, form, label, ...props }) => {
   const errorText =
     getIn(form.touched, field.name) && getIn(form.errors, field.name);
@@ -22,27 +23,20 @@ export const SelectFormField: React.FunctionComponent<FieldProps &
       </Label>
 
       <div className="slide-container">
-        <input
-          type="range"
-          min="1"
-          max="100"
-          value="50"
-          className="slider"
-          {...field}
-          {...props}
-        />
+        <Text>{field.value}</Text>
+
         <Slider
           type="range"
-          value="50"
           className="slider"
           marks
           step={10}
           min={10}
           max={100}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            console.log({ event });
-            // form.setFieldValue(field.name, event.)
-          }}
+          // onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          //   console.log({ event: event.target.value });
+          //   form.setFieldValue(field.name, event.target.value);
+          // }}
+          {...field}
           {...props}
         />
       </div>
@@ -86,6 +80,7 @@ const Slider = styled.input<SliderProps>`
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
   -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
   transition: opacity 0.2s;
+  border-radius: 15px;
 
   &:hover {
     opacity: 1;
@@ -93,16 +88,20 @@ const Slider = styled.input<SliderProps>`
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 15px;
-    height: 15px;
-    border: 1px solid black;
+    width: 25px;
+    height: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
     cursor: pointer;
   }
 
   &::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    border: 1px solid black;
+    width: 35px;
+    height: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
     cursor: pointer;
   }
 `;
