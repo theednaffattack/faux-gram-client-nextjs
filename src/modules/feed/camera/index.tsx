@@ -1,12 +1,16 @@
 import React, { Fragment, useState } from "react";
 
 import Camera from "./camera";
-import Post from "../../post/post-page";
-import { Root, Footer } from "./styles";
+// import Post from "../../post/post-page";
+import { Root } from "./styles";
 import { Button, Flex } from "../../../components/styled-rebass";
-import { CreatePostForm } from "../../../modules/post/create-post-form";
+// import CreatePostMutation from "../../../modules/post/create-post-mutation";
+import { User } from "../../../components/generated/apollo-graphql";
+import PostPage from "../../../modules/post/post-page";
 
-interface CameraModuleProps {}
+interface CameraModuleProps {
+  me: User["id"] | undefined;
+}
 
 const CameraModule: React.FunctionComponent<CameraModuleProps> = () => {
   let initialCameraState = false;
@@ -21,13 +25,20 @@ const CameraModule: React.FunctionComponent<CameraModuleProps> = () => {
     <Fragment>
       <Root>
         <Flex>
-          <Post cardImage={cardImage ? cardImage : undefined} />
+          {/* <Post cardImage={cardImage ? cardImage : undefined} /> */}
 
-          <Button type="button" onClick={() => setIsCameraOpen(!isCameraOpen)}>
+          <Button
+            type="button"
+            bg={isCameraOpen ? "crimson" : "blue"}
+            onClick={() => {
+              setIsCameraOpen(!isCameraOpen);
+
+              if (isCameraOpen === true) {
+                setCardImage(undefined);
+              }
+            }}
+          >
             {isCameraOpen ? "close camera" : "open camera"}
-          </Button>
-          <Button bg="orange" disabled={cardImage ? true : false}>
-            upload image
           </Button>
         </Flex>
         {isCameraOpen && (
@@ -36,18 +47,11 @@ const CameraModule: React.FunctionComponent<CameraModuleProps> = () => {
             onClear={() => setCardImage(undefined)}
           />
         )}
-        <CreatePostForm
-          onSubmit={() => console.log("on submit! text fields form")}
-        />
 
-        {/* {cardImage && (
-          <div>
-            <h2>Preview</h2>
-            <Preview src={cardImage && URL.createObjectURL(cardImage)} />
-          </div>
-        )} */}
+        {/* {cardImage && <CreatePostMutation cardImage={cardImage} me="" />} */}
+        {cardImage && <PostPage cardImage={cardImage} />}
 
-        <Footer>
+        {/* <Footer>
           <button onClick={() => setIsCameraOpen(true)}>Open Camera</button>
           <button
             onClick={() => {
@@ -57,7 +61,7 @@ const CameraModule: React.FunctionComponent<CameraModuleProps> = () => {
           >
             Close Camera
           </button>
-        </Footer>
+        </Footer> */}
       </Root>
     </Fragment>
   );
