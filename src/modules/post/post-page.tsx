@@ -1,6 +1,9 @@
 import React from "react";
 
-import { MeComponent } from "../../components/generated/apollo-graphql";
+import {
+  MeComponent,
+  CreatePostComponent
+} from "../../components/generated/apollo-graphql";
 import { Flex, Heading, Text } from "../../components/styled-rebass";
 import CreatePostMutation from "./create-post-mutation";
 // import CreatePostMutation from "../../components/file-list-mutation";
@@ -40,10 +43,36 @@ const PostPage: React.FC<IPostPageProps> = ({ cardImage }) => (
       }
 
       return (
-        <CreatePostMutation
-          cardImage={cardImage ? cardImage : undefined}
-          me={dataMe.me.id}
-        />
+        <MeComponent>
+          {({ data: dataMe }) => (
+            <CreatePostComponent>
+              {(
+                createPost,
+                // @ts-ignore
+                {
+                  data: dataCreatePost,
+                  error: errorCreatePost,
+                  loading: loadingCreatePost
+                }
+              ) => {
+                if (dataMe && dataMe.me) {
+                  return (
+                    <CreatePostMutation
+                      cardImage={cardImage ? cardImage : undefined}
+                      me={dataMe.me.id}
+                      createPost={createPost}
+                      dataCreatePost={dataCreatePost}
+                      errorCreatePost={errorCreatePost}
+                      loadingCreatePost={loadingCreatePost}
+                    />
+                  );
+                } else {
+                  return <div>undisclosed error</div>;
+                }
+              }}
+            </CreatePostComponent>
+          )}
+        </MeComponent>
       );
       // return <CreatePostMutation me={dataMe.me.id} />;
     }}
