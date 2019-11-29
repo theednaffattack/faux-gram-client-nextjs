@@ -47,11 +47,10 @@ const LabelWrapper = styled.div`
 `;
 
 const Input = styled.input<TypographyProps>`
-  font: inherit;
   color: #000;
   width: 100%;
   /* border: 0; */
-  height: 1.1875em;
+  /* height: 1.1875em; */
   margin: 0;
   margin-bottom: 12px;
   display: block;
@@ -59,7 +58,9 @@ const Input = styled.input<TypographyProps>`
   min-width: 0;
   ${typography}
   background: none;
-  box-sizing: content-box;
+  /* box-sizing: content-box; */
+  box-sizing: border-box;
+
   animation-name: MuiInputBase-keyframes-auto-fill-cancel;
   -webkit-tap-highlight-color: transparent;
 
