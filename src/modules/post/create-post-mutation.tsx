@@ -162,7 +162,7 @@ const CreatePostMutation = ({
                 }
               }}
             >
-              {({ errors }) => {
+              {({ errors, handleSubmit }) => {
                 console.log("VIEW ERRORS", { errors, loadingCreatePost });
                 return (
                   <Form>
@@ -182,7 +182,8 @@ const CreatePostMutation = ({
                       component={TextFormField}
                     />
                     <Button
-                      type="submit"
+                      type="button"
+                      onClick={() => handleSubmit()}
                       // disabled={loadingCreatePost}
                       bg={loadingCreatePost ? "#ccc" : "blue"}
                       mt={3}
