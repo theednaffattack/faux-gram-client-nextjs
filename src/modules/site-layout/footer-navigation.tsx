@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AbFlex, Flex, Text } from "../../../src/components/styled-rebass";
 import Icon from "../../../src/modules/icon/m-icon";
 import { breakWidths } from "./layout";
-import styled from "styled-components";
+// import styled from "styled-components";
 import { MaterialIcons } from "../icon/generated-material-icon-types";
 
 interface Props {}
@@ -52,17 +52,17 @@ let newRoutes = {
   profile: { to: "/profile", as: "/profile" }
 };
 
-let Anchor = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
+// let Anchor = styled.a`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   text-decoration: none;
+//   cursor: pointer;
 
-  &:hover {
-    color: crimson;
-  }
-`;
+//   &:hover {
+//     color: crimson;
+//   }
+// `;
 
 let NavItem: React.FunctionComponent<NavItemProps> = ({
   children,
@@ -83,18 +83,18 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
       py={rowPY}
     >
       <Link href={to} as={as}>
-        <Anchor>
+        <a>
           <Icon
             fill={color}
             size={iconSize}
             name={iconName}
             setColor={setColor}
           />
-        </Anchor>
+        </a>
       </Link>
 
       <Link href={to} as={as}>
-        <Anchor
+        <a
           onMouseEnter={() => setColor("crimson")}
           onMouseLeave={() => setColor("rebeccapurple")}
         >
@@ -107,7 +107,7 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
           >
             {children}
           </Text>
-        </Anchor>
+        </a>
       </Link>
     </Flex>
   );
