@@ -3,7 +3,7 @@ import { Formik, Field, Form } from "formik";
 
 import { TextFormField } from "./text-form-field";
 import { SelectFormField } from "./select-form-field";
-import { CreatePostProps } from "src/components/generated/apollo-graphql";
+import { CreatePostProps } from "../../components/generated/apollo-graphql";
 
 interface CreatePostFormProps {
   onSubmit: CreatePostProps["mutate"];

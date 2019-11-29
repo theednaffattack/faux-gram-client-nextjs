@@ -1,4 +1,18 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { css, keyframes, StyledComponent } from "styled-components";
+import {
+  space,
+  borders,
+  flex,
+  SpaceProps,
+  FlexProps,
+  BordersProps,
+  FlexDirectionProps,
+  AlignItemsProps,
+  WidthProps,
+  width,
+  JustifyContentProps,
+  justifyContent
+} from "styled-system";
 
 const flashAnimation = keyframes`
   from {
@@ -10,22 +24,41 @@ const flashAnimation = keyframes`
   }
 `;
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  width: 100%;
+interface WrapperProps
+  extends SpaceProps,
+    BordersProps,
+    FlexProps,
+    FlexDirectionProps,
+    AlignItemsProps,
+    JustifyContentProps,
+    WidthProps {}
+
+export const Wrapper: StyledComponent<
+  "div",
+  any,
+  WrapperProps,
+  never
+> = styled.div`
+${space}
+${borders}
+${flex}
+${width}
+${justifyContent}
 `;
 
-interface ContainerProps {
-  maxWidth: number;
+interface ContainerProps extends WidthProps {
+  maxWidth?: number;
   maxHeight: number;
 }
 
 export const Container = styled.div<ContainerProps>`
+  background-color: #fff;
+  /* border: 2px pink solid; */
   position: relative;
-  width: 100%;
-  max-width: ${({ maxWidth }: any) => maxWidth && `${maxWidth}px`};
+  display: flex;
+  flex-direction: column;
+  ${width}
+  /* max-width: ${({ maxWidth }: any) => maxWidth && `${maxWidth}px`}; */
   max-height: ${({ maxHeight }: any) => maxHeight && `${maxHeight}px`};
   overflow: hidden;
 `;
@@ -49,13 +82,14 @@ export const Video = styled.video`
 
 export const Overlay = styled.div`
   position: absolute;
-  top: 20px;
+  /* top: 20px;
   right: 20px;
   bottom: 20px;
-  left: 20px;
-  box-shadow: 0px 0px 20px 56px rgba(0, 0, 0, 0.6);
-  border: 1px solid #ffffff;
-  border-radius: 10px;
+  left: 20px; */
+  background-color: rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0px 0px 20px 56px rgba(0, 0, 0, 0.6);
+  border: 1px solid #ffffff; */
+  border-radius: 25px;
 `;
 
 interface FlashProps {
@@ -116,13 +150,14 @@ export const Button = styled.button`
 
 export const Root = styled.main`
   display: flex;
+  flex-direction: column;
   flex-flow: column;
+  flex: 1 1 auto;
   align-items: center;
   text-align: center;
   overflow-x: hidden;
-  overflow-y: auto;
-  padding: 50px 0 100px;
-  border: "2px pink dashed";
+  /* overflow-y: auto; */
+  /* padding: 50px 0 100px; */
 `;
 
 export const Preview = styled.img`

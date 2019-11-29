@@ -7,10 +7,11 @@ import styled from "styled-components";
 interface TextFormFieldProps {
   hidden: boolean;
   label: string;
+  loadingCreatePost?: boolean;
 }
 
 export const TextFormField: React.FunctionComponent<FieldProps &
-  TextFormFieldProps> = ({ field, form, ...props }) => {
+  TextFormFieldProps> = ({ field, form, loadingCreatePost, ...props }) => {
   const errorText =
     getIn(form.touched, field.name) && getIn(form.errors, field.name);
 
@@ -29,6 +30,7 @@ export const TextFormField: React.FunctionComponent<FieldProps &
       <Input
         aria-invalid="false"
         type={props.hidden ? "hidden" : "text"}
+        disabled={loadingCreatePost}
         {...field}
         {...props}
         fontSize={3}

@@ -5,10 +5,11 @@ import { Formik, Form, Field } from "formik";
 import Nope from "nope-validator";
 
 import {
-  CreatePostComponent,
-  SignS3Component
+  SignS3Component,
+  CreatePostMutationResult,
+  CreatePostMutationFn
 } from "../../components/generated/apollo-graphql";
-import { Button, AbFlex } from "../../components/styled-rebass";
+import { Button, Flex } from "../../components/styled-rebass";
 import { TextFormField } from "./text-form-field";
 
 // const UserSchema = Nope.object().shape({
@@ -40,9 +41,20 @@ const PostSchema = Nope.object().shape({
 interface IFileListMutation {
   me: string;
   cardImage: Blob | undefined;
+  createPost: CreatePostMutationFn;
+  dataCreatePost: CreatePostMutationResult["data"];
+  errorCreatePost: CreatePostMutationResult["error"];
+  loadingCreatePost: CreatePostMutationResult["loading"];
 }
 
-const CreatePostMutation = ({ cardImage, me }: IFileListMutation) => {
+const CreatePostMutation = ({
+  cardImage,
+  createPost,
+  dataCreatePost,
+  errorCreatePost,
+  loadingCreatePost,
+  me
+}: IFileListMutation) => {
   const makeBlobUrlsFromReference = async (myFile: any) => {
     return await fetch(myFile)
       .then(r => r.blob())
@@ -78,6 +90,10 @@ const CreatePostMutation = ({ cardImage, me }: IFileListMutation) => {
     return s3ReturnInfo;
   };
 
+  console.log("INSIDE create-post-mutation.tsx", {
+    dataCreatePost,
+    errorCreatePost
+  });
   return (
     <SignS3Component>
       {(
@@ -86,125 +102,96 @@ const CreatePostMutation = ({ cardImage, me }: IFileListMutation) => {
         { data: dataSignS3, error: errorSignS3, loading: loadingSignS3 }
       ) => {
         return (
-          <CreatePostComponent>
-            {(
-              createPost,
-              // @ts-ignore
-              {
-                data: dataCreatePost,
-                error: errorCreatePost,
-                loading: loadingCreatePost
-              }
-            ) => {
-              console.log({ dataCreatePost, errorCreatePost });
-              return (
-                <div
-                  style={{
-                    display: "flex",
-                    padding: "16px",
-                    flexDirection: "column",
-                    border: "1px #ccc solid",
-                    marginTop: "8px",
-                    width: "640px",
-                    position: "relative"
-                  }}
-                >
-                  {loadingCreatePost ? (
-                    <AbFlex
-                      position="absolute"
-                      top={0}
-                      left={0}
-                      right={0}
-                      bottom={0}
-                      bg="rgba(255,255,255,0.7)"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      WEIRD
-                    </AbFlex>
-                  ) : (
-                    ""
-                  )}
-                  {loadingSignS3 ? "contacting S3" : ""}
-
-                  <Formik
-                    validationSchema={PostSchema}
-                    initialValues={{
-                      text: "",
-                      title: "",
-                      user: me
-                    }}
-                    onSubmit={async ({ user, text, title }) => {
-                      let getVariables = await makeBlobUrlsFromReference(
-                        cardImage
-                      );
-
-                      let s3SignatureResponse = await signS3({
-                        variables: {
-                          files: [
-                            {
-                              filename: getVariables.name,
-                              filetype: getVariables.name
-                            }
-                          ]
-                        }
-                      });
-
-                      if (s3SignatureResponse && s3SignatureResponse.data) {
-                        let getUrl = await uploadToS3({
-                          file: cardImage,
-                          signedRequest:
-                            s3SignatureResponse.data.signS3.signatures[0]
-                              .signedRequest
-                        });
-
-                        let newPost = await createPost({
-                          variables: {
-                            data: {
-                              images: [
-                                s3SignatureResponse.data.signS3.signatures[0]
-                                  .url
-                              ],
-                              text,
-                              title,
-                              user
-                            }
-                          }
-                        });
-
-                        console.log("AFTER ALL POSTS", {
-                          getUrl,
-                          newPost
-                        });
-                      }
-                    }}
-                  >
-                    {({ errors }) => {
-                      console.log("VIEW ERRORS", { errors });
-                      return (
-                        <Form>
-                          <Field name="user" hidden component={TextFormField} />
-                          <Field
-                            name="text"
-                            label="Text"
-                            placeholder="Propel ships"
-                            component={TextFormField}
-                          />
-                          <Field
-                            name="title"
-                            label="Title"
-                            placeholder="Fuel trucks"
-                            component={TextFormField}
-                          />
-                          <Button mt={3}>Sign S3 Upload to S3</Button>
-                        </Form>
-                      );
-                    }}
-                  </Formik>
-                </div>
-              );
+          <Flex
+            border="1px #ccc solid"
+            width={1}
+            mt={3}
+            p={3}
+            flexDirection="column"
+            style={{
+              position: "relative"
             }}
-          </CreatePostComponent>
+          >
+            <Formik
+              validationSchema={PostSchema}
+              initialValues={{
+                text: "",
+                title: "",
+                user: me
+              }}
+              onSubmit={async ({ user, text, title }) => {
+                let getVariables = await makeBlobUrlsFromReference(cardImage);
+
+                let s3SignatureResponse = await signS3({
+                  variables: {
+                    files: [
+                      {
+                        filename: getVariables.name,
+                        filetype: getVariables.name
+                      }
+                    ]
+                  }
+                });
+
+                if (s3SignatureResponse && s3SignatureResponse.data) {
+                  let getUrl = await uploadToS3({
+                    file: cardImage,
+                    signedRequest:
+                      s3SignatureResponse.data.signS3.signatures[0]
+                        .signedRequest
+                  });
+
+                  let newPost = await createPost({
+                    variables: {
+                      data: {
+                        images: [
+                          s3SignatureResponse.data.signS3.signatures[0].url
+                        ],
+                        text,
+                        title,
+                        user
+                      }
+                    }
+                  });
+
+                  console.log("AFTER ALL POSTS", {
+                    getUrl,
+                    newPost
+                  });
+                }
+              }}
+            >
+              {({ errors }) => {
+                console.log("VIEW ERRORS", { errors, loadingCreatePost });
+                return (
+                  <Form>
+                    <Field name="user" hidden component={TextFormField} />
+                    <Field
+                      name="text"
+                      label="Text"
+                      loadingCreatePost={loadingCreatePost}
+                      placeholder="Propel ships"
+                      component={TextFormField}
+                    />
+                    <Field
+                      name="title"
+                      label="Title"
+                      loadingCreatePost={loadingCreatePost}
+                      placeholder="Fuel trucks"
+                      component={TextFormField}
+                    />
+                    <Button
+                      disabled={loadingCreatePost}
+                      bg={loadingCreatePost ? "#ccc" : "blue"}
+                      mt={3}
+                    >
+                      Sign S3 Upload to S3
+                    </Button>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </Flex>
         );
       }}
     </SignS3Component>

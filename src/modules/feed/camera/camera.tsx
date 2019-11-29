@@ -2,11 +2,17 @@ import React, { useState, useRef } from "react";
 import Measure, { ContentRect } from "react-measure";
 // import { useCallbackRef } from "use-callback-ref";
 
-import { Button } from "../../../components/styled-rebass";
+import { Button, Flex } from "../../../components/styled-rebass";
 import { useUserMedia } from "./hooks/use-user-media";
 import { useCardRatio } from "./hooks/use-card-ratio";
 import { useOffsets } from "./hooks/use-offsets";
-import { Video, Canvas, Wrapper, Container, Flash, Overlay } from "./styles";
+import { Video, Canvas, Container, Flash, Overlay } from "./styles";
+import CreatePostMutation from "../../../modules/post/create-post-mutation";
+import {
+  CreatePostMutationFn,
+  CreatePostMutationResult,
+  User
+} from "../../../components/generated/apollo-graphql";
 
 export interface SizeRect {
   readonly width: number;
@@ -18,7 +24,29 @@ const CAPTURE_OPTIONS: MediaStreamConstraints = {
   video: { facingMode: "environment" }
 };
 
-const Camera = ({ onCapture, onClear }: any) => {
+interface OtherProps {
+  createPost: CreatePostMutationFn;
+  dataCreatePost: CreatePostMutationResult["data"];
+  errorCreatePost: CreatePostMutationResult["error"];
+  loadingCreatePost: CreatePostMutationResult["loading"];
+  isCameraOpen: boolean;
+  onCapture: any;
+  onClear: any;
+  cardImage: Blob | undefined;
+  me: User["id"];
+}
+
+const Camera: React.FunctionComponent<OtherProps> = ({
+  cardImage,
+  createPost,
+  dataCreatePost,
+  errorCreatePost,
+  loadingCreatePost,
+  // isCameraOpen,
+  me,
+  onCapture,
+  onClear
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -93,7 +121,10 @@ const Camera = ({ onCapture, onClear }: any) => {
     let get2dContext = canvasRef.current && canvasRef.current.getContext("2d");
     /** Canvas element context */
     let context: CanvasContextProp;
+    console.log("HANDLE CAPTURE", { canvasRef, videoRef, get2dContext });
+
     if (canvasRef && canvasRef.current && get2dContext && videoRef.current) {
+      console.log("IF STATEMENT");
       context = get2dContext;
 
       context.drawImage(
@@ -143,55 +174,98 @@ const Camera = ({ onCapture, onClear }: any) => {
   }
 
   return (
-    <Measure bounds onResize={handleResize}>
-      {({ measureRef }) => (
-        <Wrapper>
-          <Container
-            ref={measureRef}
-            maxHeight={videoHeight}
-            maxWidth={videoWidth}
-            style={{
-              height: `${container.height}px`
-            }}
-          >
-            <Video
-              ref={videoRef}
-              hidden={!isVideoPlaying}
-              onCanPlay={handleCanPlay}
-              autoPlay
-              playsInline
-              muted
+    <Flex
+      flexDirection="column"
+      alignItems="center"
+      // justifyContent="center"
+      width={1}
+      border="lime"
+      flex="1 1 auto"
+      style={{
+        height: "100%",
+        overflowY: "scroll"
+      }}
+    >
+      {container.height}
+      {container.width}
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        width={["640px"]}
+        flexDirection="column"
+        px={3}
+        border="crimson"
+        style={{ position: "relative" }}
+      >
+        <Measure bounds onResize={handleResize}>
+          {({ measureRef }) => (
+            <Container
+              ref={measureRef}
+              maxHeight={videoHeight}
+              // maxWidth={videoWidth}
+              width={1}
               style={{
-                top: `-${offsets.y}px`,
-                left: `-${offsets.x}px`
+                height: `${container.height}px`
               }}
-            />
-
-            <Overlay hidden={!isVideoPlaying} />
-
-            <Canvas
-              ref={canvasRef}
-              width={container.width}
-              height={container.height}
-            />
-
-            <Flash
-              flash={isFlashing}
-              onAnimationEnd={() => setIsFlashing(false)}
-            />
-          </Container>
-
-          {isVideoPlaying && (
-            <Button
-              mt={3}
-              onClick={isCanvasEmpty ? handleCapture : handleClear}
             >
-              {isCanvasEmpty ? "Take a picture" : "Take another picture"}
-            </Button>
+              <Video
+                ref={videoRef}
+                hidden={!isVideoPlaying}
+                onCanPlay={handleCanPlay}
+                autoPlay
+                playsInline
+                muted
+                style={{
+                  top: `-${offsets.y}px`,
+                  left: `-${offsets.x}px`
+                  // right: 0,
+                  // bottom: 0
+                }}
+              />
+
+              <Overlay hidden={!isVideoPlaying} />
+
+              <Canvas
+                ref={canvasRef}
+                width={container.width}
+                height={container.height}
+              />
+
+              <Flash
+                flash={isFlashing}
+                onAnimationEnd={() => setIsFlashing(false)}
+              />
+            </Container>
           )}
-        </Wrapper>
-      )}
-    </Measure>
+        </Measure>
+      </Flex>
+      <Flex flexDirection="column" px={3}>
+        {isVideoPlaying && (
+          <Button
+            mt={3}
+            type="button"
+            onClick={isCanvasEmpty ? handleCapture : handleClear}
+          >
+            {isCanvasEmpty ? "Take a picture" : "Take another picture"}
+          </Button>
+        )}
+
+        <Flex>
+          {me ? (
+            <CreatePostMutation
+              createPost={createPost}
+              dataCreatePost={dataCreatePost}
+              errorCreatePost={errorCreatePost}
+              loadingCreatePost={loadingCreatePost}
+              cardImage={cardImage}
+              me={me}
+            />
+          ) : (
+            ""
+          )}
+        </Flex>
+      </Flex>
+    </Flex>
   );
 };
 

@@ -1,32 +1,50 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 
 import Camera from "./camera";
-// import Post from "../../post/post-page";
+import FauxCamera from "./faux-camera";
 import { Root } from "./styles";
 import { Button, Flex } from "../../../components/styled-rebass";
-// import CreatePostMutation from "../../../modules/post/create-post-mutation";
-import { User } from "../../../components/generated/apollo-graphql";
-import PostPage from "../../../modules/post/post-page";
+import {
+  User,
+  CreatePostMutationFn,
+  CreatePostMutationResult
+} from "../../../components/generated/apollo-graphql";
+// import CardSkeleton from "../../../modules/post/card-skeleton";
+// import PostPage from "../../../modules/post/post-page";
 
 interface CameraModuleProps {
   me: User["id"] | undefined;
+  cardImage: Blob | undefined;
+  setCardImage: React.Dispatch<React.SetStateAction<Blob | undefined>>;
+  isCameraOpen: boolean;
+  setIsCameraOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  postCreated: boolean;
+  setPostCreated: React.Dispatch<React.SetStateAction<boolean>>;
+
+  createPost: CreatePostMutationFn;
+  dataCreatePost: CreatePostMutationResult["data"];
+  errorCreatePost: CreatePostMutationResult["error"];
+  loadingCreatePost: CreatePostMutationResult["loading"];
+  onCapture?: any | undefined;
+  onClear?: any | undefined;
 }
 
-const CameraModule: React.FunctionComponent<CameraModuleProps> = () => {
-  let initialCameraState = false;
-
-  const [isCameraOpen, setIsCameraOpen] = useState(initialCameraState);
-  const [cardImage, setCardImage] = useState<Blob>();
-
-  // let initialCaptureState = null;
-  // const [capture, setCapture] = useState(initialCaptureState);
-
+const CameraModule: React.FunctionComponent<CameraModuleProps> = ({
+  // children,
+  cardImage,
+  setCardImage,
+  isCameraOpen,
+  setIsCameraOpen,
+  createPost,
+  dataCreatePost,
+  errorCreatePost,
+  loadingCreatePost,
+  me
+}) => {
   return (
     <Fragment>
       <Root>
         <Flex>
-          {/* <Post cardImage={cardImage ? cardImage : undefined} /> */}
-
           <Button
             type="button"
             bg={isCameraOpen ? "crimson" : "blue"}
@@ -41,27 +59,32 @@ const CameraModule: React.FunctionComponent<CameraModuleProps> = () => {
             {isCameraOpen ? "close camera" : "open camera"}
           </Button>
         </Flex>
-        {isCameraOpen && (
+        {/* {!isCameraOpen ? <CardSkeleton /> : ""} */}
+        {isCameraOpen ? (
           <Camera
             onCapture={(blob: Blob) => setCardImage(blob)}
             onClear={() => setCardImage(undefined)}
+            cardImage={cardImage}
+            createPost={createPost}
+            dataCreatePost={dataCreatePost}
+            errorCreatePost={errorCreatePost}
+            loadingCreatePost={loadingCreatePost}
+            isCameraOpen={isCameraOpen}
+            me={me || ""}
+          />
+        ) : (
+          <FauxCamera
+            onCapture={(blob: Blob) => setCardImage(blob)}
+            onClear={() => setCardImage(undefined)}
+            cardImage={cardImage}
+            createPost={createPost}
+            dataCreatePost={dataCreatePost}
+            errorCreatePost={errorCreatePost}
+            loadingCreatePost={loadingCreatePost}
+            isCameraOpen={isCameraOpen}
+            me={me || ""}
           />
         )}
-
-        {/* {cardImage && <CreatePostMutation cardImage={cardImage} me="" />} */}
-        {cardImage && <PostPage cardImage={cardImage} />}
-
-        {/* <Footer>
-          <button onClick={() => setIsCameraOpen(true)}>Open Camera</button>
-          <button
-            onClick={() => {
-              setIsCameraOpen(false);
-              setCardImage(undefined);
-            }}
-          >
-            Close Camera
-          </button>
-        </Footer> */}
       </Root>
     </Fragment>
   );
