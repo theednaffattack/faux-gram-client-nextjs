@@ -44,12 +44,6 @@ const Post: IPost = () => {
                   loading: loadingCreatePost
                 }
               ) => {
-                console.log("IS LOADING TRUE?", {
-                  createPost,
-                  dataCreatePost,
-                  errorCreatePost,
-                  loadingCreatePost
-                });
                 if (loadingCreatePost) {
                   return <CardSkeleton cardImage={cardImage} />;
                 }
@@ -70,7 +64,7 @@ const Post: IPost = () => {
                     loadingCreatePost={loadingCreatePost}
                     me={data && data.me && data.me.id ? data.me.id : undefined}
                   >
-                    {cardImage && data.me ? (
+                    {isCameraOpen && data.me ? (
                       <CreatePostMutation
                         createPost={createPost}
                         dataCreatePost={dataCreatePost}

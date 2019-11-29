@@ -42,7 +42,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
   dataCreatePost,
   errorCreatePost,
   loadingCreatePost,
-  // isCameraOpen,
+  isCameraOpen,
   me,
   onCapture,
   onClear
@@ -186,12 +186,10 @@ const Camera: React.FunctionComponent<OtherProps> = ({
         overflowY: "scroll"
       }}
     >
-      {container.height}
-      {container.width}
       <Flex
         alignItems="center"
         justifyContent="center"
-        width={["640px"]}
+        width={1}
         flexDirection="column"
         px={3}
         border="crimson"
@@ -251,7 +249,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
         )}
 
         <Flex>
-          {me ? (
+          {me && isCameraOpen ? (
             <CreatePostMutation
               createPost={createPost}
               dataCreatePost={dataCreatePost}
@@ -264,6 +262,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
             ""
           )}
         </Flex>
+        <div style={{ height: "83px" }}></div>
       </Flex>
     </Flex>
   );

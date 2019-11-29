@@ -43,7 +43,7 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
   dataCreatePost,
   errorCreatePost,
   loadingCreatePost,
-  // isCameraOpen,
+  isCameraOpen,
   me
   // onCapture,
   // onClear
@@ -188,15 +188,13 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
         overflowY: "scroll"
       }}
     >
-      {container.height}
-      {container.width}
       <Flex
         alignItems="center"
         justifyContent="center"
-        width={["640px"]}
+        width={1}
         flexDirection="column"
         px={3}
-        border="crimson"
+        border="purp"
         style={{ position: "relative" }}
       >
         <Measure bounds onResize={handleResize}>
@@ -212,7 +210,7 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
             >
               <svg>
                 <rect
-                  width={`${container.height}px`}
+                  width={`${container.width}px`}
                   style={{ fill: "black" }}
                 ></rect>
               </svg>
@@ -224,17 +222,18 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
           )}
         </Measure>
       </Flex>
-      <Flex flexDirection="column" px={3}>
-        <Button
-          mt={3}
-          type="button"
-          onClick={() => console.log("button click")}
-        >
-          Take a picture
-        </Button>
 
-        <Flex>
-          {me ? (
+      {isCameraOpen && me ? (
+        <Flex flexDirection="column" px={3}>
+          <Button
+            mt={3}
+            type="button"
+            onClick={() => console.log("button click")}
+          >
+            Take a picture
+          </Button>
+
+          <Flex>
             <CreatePostMutation
               createPost={createPost}
               dataCreatePost={dataCreatePost}
@@ -243,11 +242,11 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
               cardImage={cardImage}
               me={me}
             />
-          ) : (
-            ""
-          )}
+          </Flex>
         </Flex>
-      </Flex>
+      ) : (
+        ""
+      )}
     </Flex>
   );
 };

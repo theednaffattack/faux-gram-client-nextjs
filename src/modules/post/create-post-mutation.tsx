@@ -40,6 +40,7 @@ const PostSchema = Nope.object().shape({
 
 interface IFileListMutation {
   me: string;
+
   cardImage: Blob | undefined;
   createPost: CreatePostMutationFn;
   dataCreatePost: CreatePostMutationResult["data"];
