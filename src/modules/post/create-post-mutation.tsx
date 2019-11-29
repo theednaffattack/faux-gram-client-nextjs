@@ -182,7 +182,7 @@ const CreatePostMutation = ({
                       component={TextFormField}
                     />
                     <Button
-                      disabled={loadingCreatePost}
+                      // disabled={loadingCreatePost}
                       bg={loadingCreatePost ? "#ccc" : "blue"}
                       mt={3}
                     >

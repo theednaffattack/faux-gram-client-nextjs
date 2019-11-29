@@ -48,7 +48,7 @@ const LabelWrapper = styled.div`
 
 const Input = styled.input<TypographyProps>`
   font: inherit;
-  color: currentColor;
+  color: #000;
   width: 100%;
   /* border: 0; */
   height: 1.1875em;
