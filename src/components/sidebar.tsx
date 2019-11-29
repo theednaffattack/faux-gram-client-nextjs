@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
@@ -35,5 +36,5 @@ export const SidebarMotion = () => (
 );
 
 export const SidebarMotionList = () => {
-  <SidebarLi animate={{ scale: 2 }} transition={{ druation: 0.5 }} />;
+  return <SidebarLi animate={{ scale: 2 }} transition={{ druation: 0.5 }} />;
 };
