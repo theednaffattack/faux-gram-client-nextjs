@@ -1,7 +1,7 @@
 import React from "react";
 import Axios from "axios";
 import { Formik, Form, Field } from "formik";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 // import Nope from "nope-validator";
 
 import {
@@ -32,12 +32,12 @@ import { isBrowser } from "../../lib/isBrowser";
 //   title: Nope.string()
 // });
 
-// const PostSchema = Yup.object({
-//   text: Yup.string()
-//     .required()
-//     .min(2),
-//   title: Yup.string()
-// });
+const PostSchema = Yup.object({
+  text: Yup.string()
+    .required()
+    .min(2),
+  title: Yup.string()
+});
 
 interface IFileListMutation {
   me: string;
@@ -115,7 +115,7 @@ const CreatePostMutation = ({
             }}
           >
             <Formik
-              // validationSchema={PostSchema}
+              validationSchema={PostSchema}
               initialValues={{
                 text: "",
                 title: "",
