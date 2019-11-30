@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Measure, { ContentRect } from "react-measure";
 // import { useCallbackRef } from "use-callback-ref";
 
@@ -13,6 +13,7 @@ import {
   CreatePostMutationResult,
   User
 } from "../../../components/generated/apollo-graphql";
+import { disableBodyScroll } from "body-scroll-lock";
 
 export interface SizeRect {
   readonly width: number;
@@ -49,6 +50,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const listContainerRef = useRef<HTMLDivElement>(null);
 
   const [container, setContainer] = useState({ width: 0, height: 0 });
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -58,19 +60,20 @@ const Camera: React.FunctionComponent<OtherProps> = ({
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   const [aspectRatio, calculateRatio] = useCardRatio(1.586);
 
-  let videoWidth: number;
-  let videoHeight: number;
+  let videoWidth: number = 0;
+  let videoHeight: number = 0;
+
+  useEffect(() => {
+    if (listContainerRef && listContainerRef.current)
+      disableBodyScroll(listContainerRef.current);
+  }, []);
 
   if (videoRef.current && videoRef.current.videoWidth) {
     videoWidth = videoRef.current.videoWidth;
-  } else {
-    videoWidth = 500;
   }
 
   if (videoRef.current && videoRef.current.videoHeight) {
     videoHeight = videoRef.current.videoHeight;
-  } else {
-    videoHeight = 500;
   }
 
   let offsets = useOffsets(
@@ -121,10 +124,8 @@ const Camera: React.FunctionComponent<OtherProps> = ({
     let get2dContext = canvasRef.current && canvasRef.current.getContext("2d");
     /** Canvas element context */
     let context: CanvasContextProp;
-    console.log("HANDLE CAPTURE", { canvasRef, videoRef, get2dContext });
 
     if (canvasRef && canvasRef.current && get2dContext && videoRef.current) {
-      console.log("IF STATEMENT");
       context = get2dContext;
 
       context.drawImage(
@@ -179,91 +180,124 @@ const Camera: React.FunctionComponent<OtherProps> = ({
       alignItems="center"
       // justifyContent="center"
       width={1}
-      border="lime"
+      border="purp"
       flex="1 1 auto"
+      ref={listContainerRef}
       style={{
-        height: "100%",
-        overflowY: "scroll"
+        // height: "100%",
+        overflowY: "scroll",
+        WebkitOverflowScrolling: "touch"
       }}
     >
-      <Flex
-        alignItems="center"
-        justifyContent="center"
-        width={1}
-        flexDirection="column"
-        px={3}
-        border="crimson"
-        style={{ position: "relative" }}
-      >
-        <Measure bounds onResize={handleResize}>
-          {({ measureRef }) => (
-            <Container
-              ref={measureRef}
-              maxHeight={videoHeight}
-              // maxWidth={videoWidth}
-              width={1}
+      <Measure bounds onResize={handleResize}>
+        {({ measureRef }) => (
+          <Flex
+            flexDirection="column"
+            alignItems="center"
+            // justifyContent="center"
+            width={1}
+            border="lime"
+            flex="1 1 auto"
+            ref={measureRef} // {listContainerRef}
+            // style={{
+            //   // height: "100%",
+            //   // overflowY: "scroll",
+            //   // WebkitOverflowScrolling: "touch"
+            // }}
+          >
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              width={videoWidth}
+              flexDirection="column"
+              px={3}
+              border="crimson"
               style={{
-                height: `${container.height}px`
+                position: "relative",
+                // overflowY: "scroll",
+                maxHeight: container.height,
+                overflow: "hidden"
               }}
             >
-              <Video
-                ref={videoRef}
-                hidden={!isVideoPlaying}
-                onCanPlay={handleCanPlay}
-                autoPlay
-                playsInline
-                muted
+              <Container
+                ref={measureRef}
+                maxHeight={videoHeight}
+                // maxHeight={container.height}
+                // maxWidth={container.width}
+                width={1}
                 style={{
-                  top: `-${offsets.y}px`,
-                  left: `-${offsets.x}px`
-                  // right: 0,
-                  // bottom: 0
+                  // height: `${container.height}px`
+                  height: `${videoHeight}px`
                 }}
-              />
+              >
+                <Video
+                  ref={videoRef}
+                  hidden={!isVideoPlaying}
+                  onCanPlay={handleCanPlay}
+                  autoPlay
+                  playsInline
+                  muted
+                  style={{
+                    top: `-${offsets.y}px`,
+                    left: `-${offsets.x}px`
+                    // right: 0,
+                    // bottom: 0
+                  }}
+                />
 
-              <Overlay hidden={!isVideoPlaying} />
+                <Overlay hidden={!isVideoPlaying} />
 
-              <Canvas
-                ref={canvasRef}
-                width={container.width}
-                height={container.height}
-              />
+                <Canvas
+                  ref={canvasRef}
+                  width={container.width}
+                  height={videoHeight}
+                />
 
-              <Flash
-                flash={isFlashing}
-                onAnimationEnd={() => setIsFlashing(false)}
-              />
-            </Container>
-          )}
-        </Measure>
-      </Flex>
-      <Flex flexDirection="column" px={3}>
-        {isVideoPlaying && (
-          <Button
-            mt={3}
-            type="button"
-            onClick={isCanvasEmpty ? handleCapture : handleClear}
-          >
-            {isCanvasEmpty ? "Take a picture" : "Take another picture"}
-          </Button>
+                <Flash
+                  flash={isFlashing}
+                  onAnimationEnd={() => setIsFlashing(false)}
+                />
+              </Container>
+            </Flex>
+
+            <Flex flexDirection="column" px={3}>
+              {isVideoPlaying && (
+                <Button
+                  mt={3}
+                  type="button"
+                  onClick={isCanvasEmpty ? handleCapture : handleClear}
+                >
+                  {isCanvasEmpty ? "Take a picture" : "Take another picture"}
+                </Button>
+              )}
+
+              <Flex>
+                {me && isCameraOpen ? (
+                  <CreatePostMutation
+                    createPost={createPost}
+                    dataCreatePost={dataCreatePost}
+                    errorCreatePost={errorCreatePost}
+                    loadingCreatePost={loadingCreatePost}
+                    cardImage={cardImage}
+                    me={me}
+                  />
+                ) : (
+                  ""
+                )}
+              </Flex>
+              <div style={{ height: "83px" }}></div>
+            </Flex>
+          </Flex>
         )}
-
-        <Flex>
-          {me && isCameraOpen ? (
-            <CreatePostMutation
-              createPost={createPost}
-              dataCreatePost={dataCreatePost}
-              errorCreatePost={errorCreatePost}
-              loadingCreatePost={loadingCreatePost}
-              cardImage={cardImage}
-              me={me}
-            />
-          ) : (
-            ""
-          )}
-        </Flex>
-        <div style={{ height: "83px" }}></div>
-      </Flex>
+      </Measure>
+      <div
+        style={{
+          border: "2px pink dashed",
+          height: "67px"
+        }}
+      >
+        Hello
+      </div>
     </Flex>
   );
 };
