@@ -162,7 +162,7 @@ const CreatePostMutation = ({
                 }
               }}
             >
-              {({ errors, handleSubmit }) => {
+              {({ errors, submitForm }) => {
                 console.log("VIEW ERRORS", { errors, loadingCreatePost });
                 return (
                   <Form>
@@ -183,7 +183,7 @@ const CreatePostMutation = ({
                     />
                     <Button
                       type="button"
-                      onClick={() => handleSubmit()}
+                      onClick={() => submitForm()}
                       // disabled={loadingCreatePost}
                       bg={loadingCreatePost ? "#ccc" : "blue"}
                       mt={3}
