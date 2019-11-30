@@ -123,7 +123,7 @@ const CreatePostMutation = ({
               }}
               onSubmit={async ({ user, text, title }) => {
                 let getVariables = await makeBlobUrlsFromReference(cardImage);
-
+                alert(JSON.stringify(getVariables, null, 2));
                 let s3SignatureResponse = await signS3({
                   variables: {
                     files: [
