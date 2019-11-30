@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import FeedCard from "./feed-card";
 import { Flex } from "../../components/styled-rebass";
@@ -141,7 +141,7 @@ class FollowingPostsContainer extends React.Component<
             images = images || [{ id: "no-image", uri: "http://no-image.com" }];
             let description = text || "no description";
             return (
-              <>
+              <Fragment key={index}>
                 <hr
                   style={{
                     borderTop: "1px dashed rgba(0,0,0,0.05)",
@@ -165,7 +165,7 @@ class FollowingPostsContainer extends React.Component<
                   images={images}
                   description={description}
                 />
-              </>
+              </Fragment>
             );
           })}
       </Flex>
