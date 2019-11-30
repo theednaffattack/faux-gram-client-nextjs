@@ -1,3 +1,5 @@
+import React from "react";
+
 import { HelloWorldComponent } from "../src/components/generated/apollo-graphql";
 import ProfilePage from "../src/modules/profile/profile-page";
 import { getLayout } from "../src/modules/site-layout/layout";

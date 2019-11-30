@@ -1,3 +1,5 @@
+import React from "react";
+
 import Login from "../src/modules/auth/login";
 import { MyContext } from "../types/types";
 import { getLayout } from "../src/modules/site-layout/layout";
