@@ -7,8 +7,11 @@ import Icon from "../../../src/modules/icon/m-icon";
 import { breakWidths } from "./layout";
 // import styled from "styled-components";
 import { MaterialIcons } from "../icon/generated-material-icon-types";
+import { MyContext } from "types/types";
 
-interface Props {}
+interface Props {
+  pathname?: string;
+}
 
 type Name = keyof MaterialIcons;
 
@@ -23,6 +26,7 @@ interface NavItemProps {
   as: string;
   to: string;
   iconName: MaterialIconProps["name"];
+  pathname?: MyContext["pathname"];
 }
 
 // interface RouteType {
@@ -67,6 +71,7 @@ let newRoutes = {
 let NavItem: React.FunctionComponent<NavItemProps> = ({
   children,
   iconName,
+  pathname,
   to,
   as
 }) => {
@@ -85,7 +90,7 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
       <Link href={to} as={as}>
         <a>
           <Icon
-            fill={color}
+            fill={as === pathname ? "crimson" : color}
             size={iconSize}
             name={iconName}
             setColor={setColor}
@@ -97,13 +102,19 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
         <a
           onMouseEnter={() => setColor("crimson")}
           onMouseLeave={() => setColor("rebeccapurple")}
+          style={{
+            color: as === pathname ? "crimson" : "rebeccapurple",
+            textDecoration: "none"
+          }}
         >
           <Text
             pt={1}
             alignSelf="center"
             fontSize={navFontSize}
             letterSpacing={navLetterSpacing}
-            color={color === "crimson" ? color : "text"}
+            color={
+              color === "crimson" ? color : as === pathname ? "crimson" : "text"
+            }
           >
             {children}
           </Text>
@@ -113,7 +124,7 @@ let NavItem: React.FunctionComponent<NavItemProps> = ({
   );
 };
 
-const FooterNavigation: React.FunctionComponent<Props> = () => {
+const FooterNavigation: React.FunctionComponent<Props> = ({ pathname }) => {
   return (
     <AbFlex
       // alignSelf="center"
@@ -125,20 +136,32 @@ const FooterNavigation: React.FunctionComponent<Props> = () => {
       position="fixed"
       bottom={0}
     >
-      <NavItem to={newRoutes.home.to} as={newRoutes.home.as} iconName="home">
+      <NavItem
+        pathname={pathname}
+        to={newRoutes.home.to}
+        as={newRoutes.home.as}
+        iconName="home"
+      >
         Home
       </NavItem>
       <NavItem
+        pathname={pathname}
         to={newRoutes.global.to}
         as={newRoutes.global.as}
         iconName="search"
       >
         Global
       </NavItem>
-      <NavItem to={newRoutes.post.to} as={newRoutes.post.as} iconName="camera">
+      <NavItem
+        pathname={pathname}
+        to={newRoutes.post.to}
+        as={newRoutes.post.as}
+        iconName="camera"
+      >
         Post
       </NavItem>
       <NavItem
+        pathname={pathname}
         to={newRoutes.messages.to}
         as={newRoutes.messages.as}
         iconName="announcement"
@@ -146,6 +169,7 @@ const FooterNavigation: React.FunctionComponent<Props> = () => {
         Notifications
       </NavItem>
       <NavItem
+        pathname={pathname}
         to={newRoutes.profile.to}
         as={newRoutes.profile.as}
         iconName="account_circle"

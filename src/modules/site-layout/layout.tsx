@@ -4,9 +4,11 @@ import Head from "next/head";
 import { AbFlex, Flex } from "../../components/styled-rebass";
 import FooterNavigation from "./footer-navigation";
 import Header from "./header";
+// import { MyContext } from "types/types";
 
 interface ILayoutProps {
   title?: string;
+  pathname?: any;
 }
 
 export interface ILayoutState {
@@ -42,6 +44,15 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
 
     this.sidebarContainerRef = React.createRef();
   }
+
+  // static getInitialProps = async ({ pathname, referer }: MyContext) => {
+  //   console.log("STATIC GETINITIALPROPS IN LAYOUT", { pathname, referer });
+  //   try {
+  //     return { pathname, referer };
+  //   } catch (err) {
+  //     return { errors: err.message };
+  //   }
+  // };
 
   handleCloseSideBar() {
     this.setState({
@@ -123,8 +134,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
   }
 
   render() {
-    const { children, title } = this.props;
-
+    const { children, pathname, title } = this.props;
     // const children = React.Children.map(this.props.children, (child: any) => {
     //   let newElement = React.cloneElement(child, {
     //     showMessagingAddressBook: this.state.showMessagingAddressBook,
@@ -166,14 +176,18 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
           <Header />
           {children}
         </Flex>
-        <FooterNavigation />
+        <FooterNavigation pathname={pathname} />
       </AbFlex>
     );
   }
 }
 
 export const getLayout = (page: any) => {
-  return <Layout title={page.props.title}>{page}</Layout>;
+  return (
+    <Layout pathname={page.props.pathname} title={page.props.title}>
+      {page}
+    </Layout>
+  );
 };
 
 export default Layout;

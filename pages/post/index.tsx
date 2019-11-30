@@ -9,10 +9,15 @@ import CameraModule from "../../src/modules/feed/camera";
 // import PostPage from "../../src/modules/post/post-page";
 import CreatePostMutation from "../../src/modules/post/create-post-mutation";
 import CardSkeleton from "../../src/modules/post/card-skeleton";
+import { MyContext } from "../../types/types";
 // import { Card } from "../../src/components/styled-rebass";
 
 interface IPost {
   (): JSX.Element;
+
+  getInitialProps: ({
+    pathname
+  }: MyContext) => Promise<{ pathname: MyContext["pathname"] }>;
 
   getLayout: (page: any) => JSX.Element;
 
@@ -88,6 +93,10 @@ const Post: IPost = () => {
       }}
     </MeComponent>
   );
+};
+
+Post.getInitialProps = async ({ pathname }: MyContext) => {
+  return { pathname };
 };
 
 Post.getLayout = getLayout;
