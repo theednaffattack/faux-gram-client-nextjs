@@ -2,7 +2,7 @@ import React from "react";
 import Axios from "axios";
 import { Formik, Form, Field } from "formik";
 // import * as Yup from "yup";
-import Nope from "nope-validator";
+// import Nope from "nope-validator";
 
 import {
   SignS3Component,
@@ -25,12 +25,12 @@ import { isBrowser } from "../../lib/isBrowser";
 //     .requried()
 // });
 
-const PostSchema = Nope.object().shape({
-  text: Nope.string()
-    .required()
-    .min(2),
-  title: Nope.string()
-});
+// const PostSchema = Nope.object().shape({
+//   text: Nope.string()
+//     .required()
+//     .min(2),
+//   title: Nope.string()
+// });
 
 // const PostSchema = Yup.object({
 //   text: Yup.string()
@@ -115,7 +115,7 @@ const CreatePostMutation = ({
             }}
           >
             <Formik
-              validationSchema={PostSchema}
+              // validationSchema={PostSchema}
               initialValues={{
                 text: "",
                 title: "",
