@@ -31,7 +31,7 @@ export default (App: any) => {
     static async getInitialProps(ctx: any) {
       let referer: MyContext["referer"];
       if (!isBrowser) {
-        // on thew server we get request headers so attach
+        // on the server we get request headers so attach
         // the referer to apollo context
         referer =
           ctx && ctx.ctx && ctx.ctx.req && ctx.ctx.req.headers
@@ -41,7 +41,7 @@ export default (App: any) => {
       } else {
         // since we're only using referer for `/login` redirects
         // we can set it to login. A better solution is needed
-        referer = "/login";
+        referer = "/unknown";
       }
       const {
         Component,
@@ -74,11 +74,9 @@ export default (App: any) => {
       }
 
       if (!isBrowser) {
-
         // Run all graphql queries in the component tree
         // and extract the resulting data
         try {
-
           // Run all GraphQL queries
           await getDataFromTree(
             <App
@@ -88,9 +86,7 @@ export default (App: any) => {
               apolloClient={apollo}
             />
           );
-          
         } catch (error) {
-
           // Prevent Apollo Client GraphQL errors from crashing SSR.
           // Handle them in components via the data.error prop:
           // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
