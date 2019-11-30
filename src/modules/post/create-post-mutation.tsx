@@ -11,6 +11,7 @@ import {
 } from "../../components/generated/apollo-graphql";
 import { Button, Flex } from "../../components/styled-rebass";
 import { TextFormField } from "./text-form-field";
+import { isBrowser } from "../../lib/isBrowser";
 
 // const UserSchema = Nope.object().shape({
 //   name: Nope.string()
@@ -154,6 +155,19 @@ const CreatePostMutation = ({
                       }
                     }
                   });
+
+                  if (isBrowser) {
+                    alert(
+                      `createPost!\n${JSON.stringify(
+                        {
+                          trudell:
+                            s3SignatureResponse.data.signS3.signatures[0].url
+                        },
+                        null,
+                        2
+                      )}`
+                    );
+                  }
 
                   console.log("AFTER ALL POSTS", {
                     getUrl,
