@@ -87,9 +87,6 @@ class FileListBase extends Component<IFileListProps, FileListState> {
         resolve(previewImages.result);
       };
 
-      log("HANDLE PREVIEW files");
-      log(files);
-
       const fileNames = [...self.state.files];
 
       for (var i = 0; i < files.length; i++) {
