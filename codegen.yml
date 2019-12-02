@@ -1,11 +1,12 @@
 overwrite: true
-schema: "http://192.168.1.24:4000/graphql"
-documents: "src/graphql/**/*.ts"
+schema: "https://fauxgramapi.eddienaff.dev/graphql"
+# schema: "https://localhost:4000/graphql"
+documents: "./src/graphql/**/*.ts"
 generates:
   ./src/components/generated/fragmentTypes.ts:
     plugins:
       - "fragment-matcher"
-  src/components/generated/apollo-graphql.tsx:
+  ./src/components/generated/apollo-graphql.tsx:
     config:
       # withMutationFn: true
       noNamespaces: true
