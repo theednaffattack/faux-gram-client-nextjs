@@ -7,6 +7,10 @@ export const GLOBAL_POSTS = gql`
       title
       text
       created_at
+      currently_liked
+      likes_count
+      comments_count
+      isCtxUserIdAFollowerOfPostUser
       images {
         id
         uri

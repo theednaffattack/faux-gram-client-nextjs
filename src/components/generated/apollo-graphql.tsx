@@ -506,7 +506,7 @@ export type Subscription = {
    __typename?: 'Subscription',
   followingPosts: PostSubType,
   newMessage: MessageSubType,
-  globalPosts?: Maybe<Post>,
+  globalPosts?: Maybe<FollowingPostReturnType>,
   followingPostsSub: HandlePostPayload,
   messageThreads: AddMessagePayload,
   getMessagesByThreadId: AddMessagePayload,
@@ -1210,8 +1210,8 @@ export type GlobalPostsSubscriptionVariables = {};
 export type GlobalPostsSubscription = (
   { __typename?: 'Subscription' }
   & { globalPosts: Maybe<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'created_at'>
+    { __typename?: 'FollowingPostReturnType' }
+    & Pick<FollowingPostReturnType, 'id' | 'title' | 'text' | 'created_at' | 'currently_liked' | 'likes_count' | 'comments_count' | 'isCtxUserIdAFollowerOfPostUser'>
     & { images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
@@ -2100,11 +2100,11 @@ export const GetGlobalPostsDocument = gql`
     currently_liked
     likes_count
     comments_count
+    isCtxUserIdAFollowerOfPostUser
     images {
       id
       uri
     }
-    isCtxUserIdAFollowerOfPostUser
     user {
       id
       firstName
@@ -2429,6 +2429,10 @@ export const GlobalPostsDocument = gql`
     title
     text
     created_at
+    currently_liked
+    likes_count
+    comments_count
+    isCtxUserIdAFollowerOfPostUser
     images {
       id
       uri

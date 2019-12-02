@@ -10,11 +10,11 @@ export const GET_GLOBAL_POSTS = gql`
       currently_liked
       likes_count
       comments_count
+      isCtxUserIdAFollowerOfPostUser
       images {
         id
         uri
       }
-      isCtxUserIdAFollowerOfPostUser
       user {
         id
         firstName
