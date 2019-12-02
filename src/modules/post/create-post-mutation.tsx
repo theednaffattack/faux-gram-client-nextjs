@@ -1,6 +1,8 @@
 import React from "react";
 import Axios from "axios";
 import { Formik, Form, Field } from "formik";
+// import * as Yup from "yup";
+import Nope from "nope-validator";
 import uuid from "uuid/v4";
 
 import {
@@ -8,34 +10,15 @@ import {
   CreatePostMutationResult,
   CreatePostMutationFn
 } from "../../components/generated/apollo-graphql";
-import { Button, Flex } from "../../components/styled-rebass";
+import { Button, Flex, Text } from "../../components/styled-rebass";
 import { TextFormField } from "./text-form-field";
-import { isBrowser } from "../../lib/isBrowser";
 
-// const UserSchema = Nope.object().shape({
-//   name: Nope.string()
-//     .min(5, "Please provide a longer name")
-//     .max(255, "Name is too long!"),
-//   email: Nope.string()
-//     .email()
-//     .required(),
-//   confirmEmail: Nope.string()
-//     .oneOf([Nope.ref("email")])
-//     .requried()
-// });
-
-// const PostSchema = Nope.object().shape({
-//   text: Nope.string()
-//     .required()
-//     .min(2),
-//   title: Nope.string()
-// });
-
-const PostSchema = Yup.object({
-  text: Yup.string()
-    .required()
-    .min(2),
-  title: Yup.string()
+const PostSchema = Nope.object().shape({
+  text: Nope.string()
+    .required("Description is required")
+    .min(2, "The description must be at least two characters"),
+  title: Nope.string(),
+  user: Nope.string()
 });
 
 interface IFileListMutation {
@@ -75,12 +58,7 @@ const CreatePostMutation = ({
         "Content-Type": "image/png"
       }
     };
-    console.log("look at theFile", file);
-
-    // const theFile = await this.makeBlobUrlsFromReference(file)
     let theFile = file;
-
-    console.log("look at theFile", theFile);
 
     let s3ReturnInfo = await Axios.put(
       signedRequest,
@@ -88,15 +66,9 @@ const CreatePostMutation = ({
       options
     ).catch(error => console.error({ error }));
 
-    console.log("s3ReturnInfo".toUpperCase(), s3ReturnInfo);
-
     return s3ReturnInfo;
   };
 
-  console.log("INSIDE create-post-mutation.tsx", {
-    dataCreatePost,
-    errorCreatePost
-  });
   return (
     <SignS3Component>
       {(
@@ -115,23 +87,45 @@ const CreatePostMutation = ({
               position: "relative"
             }}
           >
+            <Text>{dataCreatePost ? "post created" : ""}</Text>
+            <Text>{errorCreatePost ? "error creating post" : ""}</Text>
             <Formik
-              validationSchema={PostSchema}
+              // validationSchema={PostSchema}
+
+              validate={values => {
+                type myErrorObj = {
+                  [key: string]: string;
+                };
+                let validationErrors: myErrorObj = {};
+                let nopeValidationErrors = PostSchema.validate(values);
+
+                if (nopeValidationErrors) {
+                  // if nope validation returns `ShapeErrors` push...
+                  // each error onto the error object...
+                  // if it's undefined there were no errors
+                  let errorValues = Object.entries(nopeValidationErrors);
+                  errorValues.forEach(fieldError => {
+                    validationErrors[fieldError[0]] = fieldError[1];
+                  });
+                }
+
+                // if there are object keys for `errors` return the errors object
+                if (Object.keys(validationErrors).length > 0) {
+                  return validationErrors;
+                }
+
+                if (Object.keys(validationErrors).length === 0) {
+                  return {};
+                }
+              }}
               initialValues={{
                 text: "",
                 title: "",
                 user: me
               }}
-              onSubmit={async ({ user, text, title }) => {
-                alert(
-                  `submitting!\n${JSON.stringify(
-                    { user, text, title },
-                    null,
-                    2
-                  )}`
-                );
+              onSubmit={async ({ user, text, title }, { resetForm }) => {
                 let getVariables = await makeBlobUrlsFromReference(cardImage);
-                alert(JSON.stringify(getVariables, null, 2));
+
                 let s3SignatureResponse = await signS3({
                   variables: {
                     files: [
@@ -144,14 +138,16 @@ const CreatePostMutation = ({
                 });
 
                 if (s3SignatureResponse && s3SignatureResponse.data) {
-                  let getUrl = await uploadToS3({
+                  await uploadToS3({
                     file: cardImage,
                     signedRequest:
                       s3SignatureResponse.data.signS3.signatures[0]
                         .signedRequest
                   });
 
-                  let newPost = await createPost({
+                  resetForm();
+
+                  await createPost({
                     variables: {
                       data: {
                         images: [
@@ -163,29 +159,10 @@ const CreatePostMutation = ({
                       }
                     }
                   });
-
-                  if (isBrowser) {
-                    alert(
-                      `createPost!\n${JSON.stringify(
-                        {
-                          trudell:
-                            s3SignatureResponse.data.signS3.signatures[0].url
-                        },
-                        null,
-                        2
-                      )}`
-                    );
-                  }
-
-                  console.log("AFTER ALL POSTS", {
-                    getUrl,
-                    newPost
-                  });
                 }
               }}
             >
-              {({ errors, submitForm }) => {
-                console.log("VIEW ERRORS", { errors, loadingCreatePost });
+              {() => {
                 return (
                   <Form>
                     <Field name="user" hidden component={TextFormField} />
@@ -204,8 +181,8 @@ const CreatePostMutation = ({
                       component={TextFormField}
                     />
                     <Button
-                      type="button"
-                      onClick={() => submitForm()}
+                      type="submit"
+                      // onClick={() => submitForm()}
                       // disabled={loadingCreatePost}
                       bg={loadingCreatePost ? "#ccc" : "blue"}
                       mt={3}
