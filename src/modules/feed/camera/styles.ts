@@ -57,6 +57,7 @@ export const Container = styled.div<ContainerProps>`
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   ${width}
   /* max-width: ${({ maxWidth }: any) => maxWidth && `${maxWidth}px`}; */
   max-height: ${({ maxHeight }: any) => maxHeight && `${maxHeight}px`};
