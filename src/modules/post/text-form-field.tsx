@@ -4,6 +4,8 @@ import { typography, TypographyProps } from "styled-system";
 // import Yup from "yup";
 import styled from "styled-components";
 
+import { Text } from "../../components/styled-rebass";
+
 interface TextFormFieldProps {
   hidden: boolean;
   label: string;
@@ -17,7 +19,6 @@ export const TextFormField: React.FunctionComponent<FieldProps &
 
   return (
     <>
-      {errorText ? <div>{JSON.stringify(errorText, null, 2)}</div> : ""}
       {props.hidden === true ? (
         ""
       ) : (
@@ -36,6 +37,7 @@ export const TextFormField: React.FunctionComponent<FieldProps &
         fontSize={3}
         fontFamily="main"
       />
+      <Text color="crimosn"> {errorText ? errorText : ""}</Text>
     </>
   );
 };
@@ -72,10 +74,7 @@ const Input = styled.input<TypographyProps>`
 
   box-sizing: border-box;
   transition: all 0.3s ease-in-out;
-  /* :focus {
-    border-bottom: 2.5px lawngreen solid;
-    // box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
-  } */
+
   ::placeholder {
     color: palevioletred;
   }
