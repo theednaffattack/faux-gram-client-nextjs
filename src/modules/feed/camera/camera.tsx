@@ -182,11 +182,12 @@ const Camera: React.FunctionComponent<OtherProps> = ({
       alignItems="center"
       // justifyContent="center"
       width={1}
+      border="purp"
       flex="1 1 auto"
       ref={listContainerRef}
       style={{
         // height: "100%",
-        overflowY: "auto",
+        overflowY: "scroll",
         WebkitOverflowScrolling: "touch"
       }}
     >
@@ -208,7 +209,8 @@ const Camera: React.FunctionComponent<OtherProps> = ({
             <Flex
               alignItems="center"
               justifyContent="center"
-              width={videoWidth}
+              border="lime"
+              width={1}
               flexDirection="column"
               px={3}
               style={{
@@ -223,10 +225,11 @@ const Camera: React.FunctionComponent<OtherProps> = ({
                 maxHeight={videoHeight}
                 // maxHeight={container.height}
                 // maxWidth={container.width}
-                width={1}
+                width={`${videoWidth}px`}
                 style={{
                   // height: `${container.height}px`
-                  height: `${videoHeight}px`
+                  height: `${videoHeight}px`,
+                  border: "2px pink dashed"
                 }}
               >
                 <Video
@@ -259,7 +262,14 @@ const Camera: React.FunctionComponent<OtherProps> = ({
               </Container>
             </Flex>
 
-            <Flex flexDirection="column" px={3}>
+            <Flex
+              alignItems="center"
+              width={[1, 1, 1, `${videoWidth}px`]}
+              border="purp"
+              flexDirection="column"
+              px={3}
+              pt={3}
+            >
               {isVideoPlaying && (
                 <Button
                   mt={3}
@@ -290,7 +300,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
                 </Button>
               )}
 
-              <Flex>
+              <Flex width={[1, 1, 1, `${videoWidth}px`]}>
                 {me && isCameraOpen ? (
                   <CreatePostMutation
                     createPost={createPost}
