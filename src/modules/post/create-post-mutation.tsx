@@ -1,8 +1,7 @@
 import React from "react";
 import Axios from "axios";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-// import Nope from "nope-validator";
+import uuid from "uuid/v4";
 
 import {
   SignS3Component,
@@ -61,11 +60,13 @@ const CreatePostMutation = ({
     return await fetch(myFile)
       .then(r => r.blob())
       .then(blobFile => {
-        const getFileName = "tempName";
+        const getFileName = uuid();
 
-        return new File([blobFile], getFileName, {
-          type: blobFile.type
+        let createNewFile = new File([blobFile], getFileName, {
+          type: "image/png" // blobFile.type
         });
+
+        return createNewFile;
       });
   };
   const uploadToS3 = async ({ file, signedRequest }: any) => {
