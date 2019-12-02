@@ -41,18 +41,13 @@ const CreatePostMutation = ({
   loadingCreatePost,
   me
 }: IFileListMutation) => {
-  const makeBlobUrlsFromReference = async (myFile: any) => {
-    return await fetch(myFile)
-      .then(r => r.blob())
-      .then(blobFile => {
-        const getFileName = uuid();
+  const blobToFile: any = (theBlob: Blob, filename: string) => {
+    let theFile = new File([theBlob], filename, {
+      type: "image/png",
+      endings: "native"
+    });
 
-        let createNewFile = new File([blobFile], getFileName, {
-          type: "image/png" // blobFile.type
-        });
-
-        return createNewFile;
-      });
+    return theFile;
   };
   const uploadToS3 = async ({ file, signedRequest }: any) => {
     const options = {
@@ -126,7 +121,7 @@ const CreatePostMutation = ({
                 user: me
               }}
               onSubmit={async ({ user, text, title }, { resetForm }) => {
-                let getVariables = await makeBlobUrlsFromReference(cardImage);
+                let getVariables = await blobToFile(cardImage, uuid());
 
                 let s3SignatureResponse = await signS3({
                   variables: {
@@ -207,6 +202,7 @@ const CreatePostMutation = ({
                         }}
                       />
                     </Button>
+                    {loadingCreatePost ? loadingCreatePost.toString() : ""}
                   </Form>
                 );
               }}
