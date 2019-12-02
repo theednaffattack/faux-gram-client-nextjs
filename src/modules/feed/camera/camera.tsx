@@ -14,6 +14,7 @@ import {
   User
 } from "../../../components/generated/apollo-graphql";
 import { disableBodyScroll } from "body-scroll-lock";
+import LayoutFootSpacer from "./layout-foot-spacer";
 
 export interface SizeRect {
   readonly width: number;
@@ -180,12 +181,11 @@ const Camera: React.FunctionComponent<OtherProps> = ({
       alignItems="center"
       // justifyContent="center"
       width={1}
-      border="purp"
       flex="1 1 auto"
       ref={listContainerRef}
       style={{
         // height: "100%",
-        overflowY: "scroll",
+        overflowY: "auto",
         WebkitOverflowScrolling: "touch"
       }}
     >
@@ -196,7 +196,6 @@ const Camera: React.FunctionComponent<OtherProps> = ({
             alignItems="center"
             // justifyContent="center"
             width={1}
-            border="lime"
             flex="1 1 auto"
             ref={measureRef} // {listContainerRef}
             // style={{
@@ -211,7 +210,6 @@ const Camera: React.FunctionComponent<OtherProps> = ({
               width={videoWidth}
               flexDirection="column"
               px={3}
-              border="crimson"
               style={{
                 position: "relative",
                 // overflowY: "scroll",
@@ -290,14 +288,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
           </Flex>
         )}
       </Measure>
-      <div
-        style={{
-          border: "2px pink dashed",
-          height: "67px"
-        }}
-      >
-        Hello
-      </div>
+      <LayoutFootSpacer />
     </Flex>
   );
 };
