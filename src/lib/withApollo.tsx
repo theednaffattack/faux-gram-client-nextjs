@@ -157,8 +157,6 @@ export default (App: any) => {
         });
 
         Router.push("/login");
-
-        // redirect(ctx,"logout")
       }
     }
 
