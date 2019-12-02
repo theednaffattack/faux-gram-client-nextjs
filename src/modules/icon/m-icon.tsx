@@ -15,6 +15,7 @@ interface IIconProps {
   width?: string;
   height?: string;
   setColor?: React.Dispatch<React.SetStateAction<string>>;
+  style?: React.CSSProperties | undefined;
 }
 
 // const Link = styled.a`
