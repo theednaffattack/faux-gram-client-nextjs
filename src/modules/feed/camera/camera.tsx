@@ -15,6 +15,7 @@ import {
 } from "../../../components/generated/apollo-graphql";
 import { disableBodyScroll } from "body-scroll-lock";
 import LayoutFootSpacer from "./layout-foot-spacer";
+import Icon from "../../../modules/icon/m-icon";
 
 export interface SizeRect {
   readonly width: number;
@@ -262,10 +263,30 @@ const Camera: React.FunctionComponent<OtherProps> = ({
               {isVideoPlaying && (
                 <Button
                   mt={3}
+                  mb={3}
+                  ml={-2}
+                  bg="transparent"
                   type="button"
+                  width="3em"
                   onClick={isCanvasEmpty ? handleCapture : handleClear}
+                  style={{
+                    position: "relative"
+                  }}
                 >
-                  {isCanvasEmpty ? "Take a picture" : "Take another picture"}
+                  <Icon
+                    name="camera_enhance"
+                    fill={isCanvasEmpty ? "rebeccapurple" : "crimson"}
+                    size="3em"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      // height: "3em",
+                      // height: "90%",
+                      transform: "translate(-50%, -50%)",
+                      display: "block"
+                    }}
+                  />
                 </Button>
               )}
 

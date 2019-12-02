@@ -5,6 +5,8 @@ import { Formik, Form, Field } from "formik";
 import Nope from "nope-validator";
 import uuid from "uuid/v4";
 
+import Icon from "../../modules/icon/m-icon";
+
 import {
   SignS3Component,
   CreatePostMutationResult,
@@ -184,10 +186,26 @@ const CreatePostMutation = ({
                       type="submit"
                       // onClick={() => submitForm()}
                       // disabled={loadingCreatePost}
-                      bg={loadingCreatePost ? "#ccc" : "blue"}
+                      bg="transparent"
                       mt={3}
+                      style={{
+                        position: "relative"
+                      }}
                     >
-                      Sign S3 Upload to S3
+                      <Icon
+                        name="cloud_upload"
+                        fill="crimson"
+                        size="3em"
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          // height: "3em",
+                          // height: "90%",
+                          transform: "translate(-50%, -50%)",
+                          display: "block"
+                        }}
+                      />
                     </Button>
                   </Form>
                 );
