@@ -52,36 +52,40 @@ const Post: IPost = () => {
                 if (loadingCreatePost) {
                   return <CardSkeleton cardImage={cardImage} />;
                 }
-                return dataCreatePost ? (
-                  <div>some data</div>
-                ) : (
-                  // <Card bg="white" boxShadow="0 0 16px rgba(0, 0, 0, .25)">
-                  <CameraModule
-                    cardImage={cardImage}
-                    setCardImage={setCardImage}
-                    isCameraOpen={isCameraOpen}
-                    setIsCameraOpen={setIsCameraOpen}
-                    postCreated={postCreated}
-                    setPostCreated={setPostCreated}
-                    createPost={createPost}
-                    dataCreatePost={dataCreatePost}
-                    errorCreatePost={errorCreatePost}
-                    loadingCreatePost={loadingCreatePost}
-                    me={data && data.me && data.me.id ? data.me.id : undefined}
-                  >
-                    {isCameraOpen && data.me ? (
-                      <CreatePostMutation
-                        createPost={createPost}
-                        dataCreatePost={dataCreatePost}
-                        errorCreatePost={errorCreatePost}
-                        loadingCreatePost={loadingCreatePost}
-                        cardImage={cardImage}
-                        me={data.me.id}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </CameraModule>
+                return (
+                  <>
+                    {dataCreatePost ? "post created" : ""}
+                    {/* {loadingCreatePost.toString()} */}
+                    <CameraModule
+                      cardImage={cardImage}
+                      setCardImage={setCardImage}
+                      isCameraOpen={isCameraOpen}
+                      setIsCameraOpen={setIsCameraOpen}
+                      postCreated={postCreated}
+                      setPostCreated={setPostCreated}
+                      createPost={createPost}
+                      dataCreatePost={dataCreatePost}
+                      errorCreatePost={errorCreatePost}
+                      loadingCreatePost={loadingCreatePost}
+                      me={
+                        data && data.me && data.me.id ? data.me.id : undefined
+                      }
+                    >
+                      {isCameraOpen && data.me ? (
+                        <CreatePostMutation
+                          createPost={createPost}
+                          dataCreatePost={dataCreatePost}
+                          errorCreatePost={errorCreatePost}
+                          loadingCreatePost={loadingCreatePost}
+                          cardImage={cardImage}
+                          me={data.me.id}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </CameraModule>
+                  </>
+
                   // {/* </Card> */}
                 );
               }}
