@@ -24,9 +24,11 @@ Logout.getInitialProps = async (ctx: MyContext) => {
   let now = new Date();
 
   // To trigger the event listener we save some random data into the `logout` key
-  isBrowser ? window.localStorage.setItem("logout", now.toISOString()) : null; // new
+  if (isBrowser) {
+    window.localStorage.setItem("logout", now.toISOString()); // new
 
-  isBrowser ? logout() : null;
+    logout();
+  }
 
   redirect(ctx, "/login");
 
