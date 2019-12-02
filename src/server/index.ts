@@ -3,7 +3,7 @@ import next from "next";
 import fs from "fs";
 import path from "path";
 import { createServer } from "https";
-import http from "http";
+// import http from "http";
 // import internalIp from "internal-ip";
 
 const nodeEnv = process.env.NODE_ENV;
@@ -65,22 +65,22 @@ if (!dev) {
   });
 } else {
   app.prepare().then(() => {
-    http
-      .createServer((req, res) => {
-        const parsedUrl: UrlWithParsedQuery = parse(req.url!, true);
-        const { pathname, query } = parsedUrl;
+    // http
+    // .createServer((req, res) => {
+    createServer(certOptions, (req, res) => {
+      const parsedUrl: UrlWithParsedQuery = parse(req.url!, true);
+      const { pathname, query } = parsedUrl;
 
-        if (pathname === "/a") {
-          app.render(req, res, "/a", query);
-        } else if (pathname === "/b") {
-          app.render(req, res, "/b", query);
-        } else {
-          // handle(req, res, parsedUrl);
+      if (pathname === "/a") {
+        app.render(req, res, "/a", query);
+      } else if (pathname === "/b") {
+        app.render(req, res, "/b", query);
+      } else {
+        // handle(req, res, parsedUrl);
 
-          handle(req, res);
-        }
-      })
-      .listen(port);
+        handle(req, res);
+      }
+    }).listen(port);
 
     // tslint:disable-next-line:no-console
     console.log(
