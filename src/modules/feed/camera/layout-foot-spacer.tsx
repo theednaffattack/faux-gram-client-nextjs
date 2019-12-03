@@ -1,13 +1,20 @@
 import React from "react";
 
-interface LayoutFootSpacerProps {}
+interface LayoutFootSpacerProps {
+  setHeight?: string | undefined;
+  border?: string | undefined;
+}
 
-const LayoutFootSpacer: React.FunctionComponent<LayoutFootSpacerProps> = () => {
+const LayoutFootSpacer: React.FunctionComponent<LayoutFootSpacerProps> = ({
+  setHeight = "67px",
+  border
+}) => {
   return (
     <div
       style={{
         width: "25px",
-        height: "67px"
+        height: setHeight,
+        border
       }}
     ></div>
   );
