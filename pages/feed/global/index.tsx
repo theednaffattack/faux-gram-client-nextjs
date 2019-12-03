@@ -1,9 +1,9 @@
 import React from "react";
 
-import { MyContext } from "../../types/types";
-import { MeComponent } from "../../src/components/generated/apollo-graphql";
-import GlobalFeed from "../../src/components/global-feed";
-import { getLayout } from "../../src/modules/site-layout/layout";
+import { MyContext } from "../../../types/types";
+import { MeComponent } from "../../../src/components/generated/apollo-graphql";
+import GlobalFeed from "../../../src/components/global-feed";
+import { getLayout } from "../../../src/modules/site-layout/layout";
 import { ParsedUrlQuery } from "querystring";
 
 interface IFeed {
