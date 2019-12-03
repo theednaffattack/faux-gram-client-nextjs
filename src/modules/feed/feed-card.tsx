@@ -26,12 +26,15 @@ import {
   GetMyFollowingPostByIdDocument,
   LikeReturnType,
   MyFollowingPostsQuery,
-  MyFollowingPostsDocument
+  MyFollowingPostsDocument,
+  FollowUserMutationFn,
+  FollowUserMutationResult
 } from "../../../src/components/generated/apollo-graphql";
 import { CommentCounter } from "./comments-counter";
 import { LikesCounter } from "./likes-counter";
 import UserProfileImage from "../../components/user-avatar";
 import { TextareaField } from "../../../src/modules/form-fields/textarea";
+import { useRouter } from "next/router";
 
 export type TImage = {
   id: string;
@@ -73,11 +76,6 @@ type MutationUpdateFunc =
  * @param description string;
  */
 export interface ISingleFeedCardProps extends IPageProps {
-  /**
-   * ISingleFeedCardProps
-   * @param image string;
-   */
-
   /** Array of Post comments */
   comments: CommentType[] | null;
   /** The ID of the user who created the Post */
@@ -102,6 +100,14 @@ export interface ISingleFeedCardProps extends IPageProps {
 
   /** Has the user already liked this Post */
   currentlyLiked: boolean;
+
+  /** Is the logged in user a follower of the user who created this post */
+  isCtxUserIdAFollowerOfPostUser?: boolean | undefined;
+
+  followUser?: FollowUserMutationFn;
+  errorFollowUser?: FollowUserMutationResult["error"];
+  loadingFollowUser?: FollowUserMutationResult["loading"];
+  me?: User;
 }
 
 interface CommentFieldProps {
@@ -284,6 +290,8 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
   const isThisADynamicRoute =
     pathname && pathname[pathname.length - 1] === "]" ? true : false;
 
+  let router = useRouter();
+
   const myFolloiwngPostsUpdateFunction: MutationUpdateFunc = (
     cache,
     { data }
@@ -458,6 +466,19 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
     return fromCache;
   };
 
+  let getReferer =
+    router.query && router.query.referer
+      ? typeof router.query.referer === "string"
+        ? router.query.referer
+        : router.query.referer[0]
+      : "";
+
+  let buildLink = router.query.referer
+    ? getReferer
+    : isThisADynamicRoute === true
+    ? "/feed"
+    : `/feed/${id}`;
+
   return (
     <Card
       px={3}
@@ -486,7 +507,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
             alignSelf: "center"
           }}
         >
-          <Link href={isThisADynamicRoute === true ? "/feed" : `/feed/${id}`}>
+          <Link href={buildLink}>
             <a>
               <Icon
                 name={isThisADynamicRoute ? "close" : "expand"}
