@@ -10,6 +10,7 @@ import {
 import { FOLLOWING_POSTS } from "../../graphql/user/subscriptions/FollowingPosts";
 import { IPageProps } from "../../page-types/types";
 import { disableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
+import LayoutFootSpacer from "./camera/layout-foot-spacer";
 
 export interface IFollowingPostsWrapperProps extends IPageProps {}
 
@@ -109,66 +110,72 @@ class FollowingPostsContainer extends React.Component<
   render() {
     const { pathname, query, myFollowingPosts } = this.props;
     return (
-      <Flex
-        flexDirection="column"
-        alignItems="center"
-        width={1}
-        style={{
-          overflowY: "auto",
-          WebkitOverflowScrolling: "touch"
-        }}
-        ref={this.listRef}
-      >
-        {myFollowingPosts &&
-          myFollowingPosts.map((post, index) => {
-            let {
-              text,
-              id,
-              title,
-              images,
-              user,
-              comments,
-              currently_liked,
-              comments_count,
-              likes_count
-            } = post;
+      <>
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+          width={1}
+          style={{
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch"
+          }}
+          ref={this.listRef}
+        >
+          {myFollowingPosts &&
+            myFollowingPosts.map((post, index) => {
+              let {
+                text,
+                id,
+                title,
+                images,
+                user,
+                comments,
+                currently_liked,
+                comments_count,
+                likes_count
+              } = post;
 
-            // perform checks for TypeScript
-            // maybe these should be type guards
-            id = id || "no id";
-            title = title || "no title";
-            let useUser = user && user.id ? user.id : "no user";
-            images = images || [{ id: "no-image", uri: "http://no-image.com" }];
-            let description = text || "no description";
-            return (
-              <Fragment key={index}>
-                <hr
-                  style={{
-                    borderTop: "1px dashed rgba(0,0,0,0.05)",
-                    width: "100%",
-                    marginTop: "16px",
-                    marginBottom: "16px"
-                  }}
-                />
-                <FeedCard
-                  currentlyLiked={currently_liked}
-                  comments={comments}
-                  initialLikesCount={likes_count}
-                  initialCommentsCount={comments_count}
-                  pathname={pathname}
-                  postUserId={useUser as string}
-                  userInfo={user}
-                  query={query}
-                  id={id}
-                  key={index}
-                  title={title}
-                  images={images}
-                  description={description}
-                />
-              </Fragment>
-            );
-          })}
-      </Flex>
+              // perform checks for TypeScript
+              // maybe these should be type guards
+              id = id || "no id";
+              title = title || "no title";
+              let useUser = user && user.id ? user.id : "no user";
+              images = images || [
+                { id: "no-image", uri: "http://no-image.com" }
+              ];
+              let description = text || "no description";
+              return (
+                <Fragment key={index}>
+                  <hr
+                    style={{
+                      borderTop: "1px dashed rgba(0,0,0,0.05)",
+                      width: "100%",
+                      marginTop: "16px",
+                      marginBottom: "16px"
+                    }}
+                  />
+                  <FeedCard
+                    currentlyLiked={currently_liked}
+                    comments={comments}
+                    initialLikesCount={likes_count}
+                    initialCommentsCount={comments_count}
+                    pathname={pathname}
+                    postUserId={useUser as string}
+                    userInfo={user}
+                    query={query}
+                    id={id}
+                    key={index}
+                    title={title}
+                    images={images}
+                    description={description}
+                  />
+                </Fragment>
+              );
+            })}
+        </Flex>
+
+        <LayoutFootSpacer setHeight="700px" border="2px pink dashed" />
+      </>
     );
   }
 }
