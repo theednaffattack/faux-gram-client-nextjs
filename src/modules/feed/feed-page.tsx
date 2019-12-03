@@ -4,8 +4,6 @@ import { AbFlex, Flex, Heading } from "../../components/styled-rebass";
 import { MeComponent } from "../../components/generated/apollo-graphql";
 import { FollowingPostsWrapper } from "./following-posts-container";
 import { IPageProps } from "../../page-types/types";
-// import LayoutFootSpacer from "./camera/layout-foot-spacer";
-// import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 
 interface IFeedPageProps extends IPageProps {}
 
