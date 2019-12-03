@@ -1,140 +1,132 @@
 import React from "react";
-import posed, { PoseGroup } from "react-pose";
+import { PoseGroup } from "react-pose";
 
+// import {
+//   // Box,
+//   Card,
+//   // Flex,
+//   // Heading,
+//   // Icon,
+//   // Text,
+//   // FlexUserProfileWrap
+// } from "./styled-rebass";
+
+// import FollowButton from "./follow-button";
+import FeedCard from "../modules/feed/global-feed-card";
 import {
-  Box,
-  Card,
-  Flex,
-  Heading,
-  Icon,
-  Text,
-  FlexUserProfileWrap
-} from "./styled-rebass";
+  GetGlobalPostsQueryResult,
+  FollowUserMutationFn,
+  // User,
+  // GlobalPostsSubscription,
+  // GlobalPostsComponentProps,
+  // GetGlobalPostsComponentProps,
+  FollowUserMutationResult,
+  MeQueryResult
+} from "./generated/apollo-graphql";
 
-import FollowButton from "./follow-button";
+// const staggerDuration = 100;
 
-const staggerDuration = 100;
+// interface IIndex {
+//   index: number;
+// }
 
-interface IIndex {
-  index: number;
-}
-
-const PosedCard = posed(Card)({
-  enter: { opacity: 1, delay: ({ index }: IIndex) => index * staggerDuration },
-  exit: { opacity: 0, delay: ({ index }: IIndex) => index * staggerDuration },
-  invisible: { opacity: 0 }
-});
+// const PosedCard = posed(Card)({
+//   enter: { opacity: 1, delay: ({ index }: IIndex) => index * staggerDuration },
+//   exit: { opacity: 0, delay: ({ index }: IIndex) => index * staggerDuration },
+//   invisible: { opacity: 0 }
+// });
 
 interface IDisplayPostsProps {
-  data: any;
-  followUser: any;
-  me: any;
-  errorGlblPosts: any;
-  loadingFollowUser?: any;
+  data: GetGlobalPostsQueryResult["data"];
+  followUser: FollowUserMutationFn;
+  me: MeQueryResult["data"];
+  errorGlblPosts: GetGlobalPostsQueryResult["error"];
+  loadingFollowUser?: GetGlobalPostsQueryResult["loading"];
   subscribeGlblPosts?: any;
-  dataFollowUser?: any;
-  errorFollowUser?: any;
+  dataFollowUser?: FollowUserMutationResult["data"];
+  errorFollowUser?: FollowUserMutationResult["error"];
 }
 
 export const DisplayCards = ({
   data,
-  errorFollowUser,
   followUser,
+  errorFollowUser,
   loadingFollowUser,
   me,
   errorGlblPosts
-}: IDisplayPostsProps) => (
-  <PoseGroup
-    delta={1}
-    preEnterPose="invisible"
-    enterPose="enter"
-    exitPose="exit"
-    animateOnMount={true}
-  >
-    {data.getGlobalPosts.map((post: any, index: number) => {
-      if (errorFollowUser) {
-        return <Flex>Error!</Flex>;
-      }
-      if (loadingFollowUser) {
-        return <Flex>loading...</Flex>;
-      } else {
-        return (
-          <PosedCard
-            key={`${index} - ${post.__typename}`}
-            bg="white"
-            my={[3, 3, 3]}
-            mx={[3, 3, 3]}
-            sx={{
-              borderRadius: "15px",
-              boxShadow: "0 0 16px rgba(0, 0, 0, .25)"
-            }}
-            width={[1, "350px", "350px"]}
-            boxShadow="0 0 16px rgba(0, 0, 0, .25)"
-            display="flex"
-            style={{ overflow: "hidden" }}
-          >
-            <Flex width={[1, 1, 1]} flexDirection="column">
-              <Box
-                width={[1, 1, 1]}
-                style={{
-                  minHeight: "250px",
-                  maxHeight: "250px",
-                  overflow: "hidden", // `url(${Background})`
-                  backgroundImage:
-                    post.images.length > 0 ? `url(${post.images[0].uri})` : "",
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat"
-                }}
+}: IDisplayPostsProps) => {
+  if (errorGlblPosts) {
+    return (
+      <div>Error loading global posts {JSON.stringify(errorGlblPosts)}</div>
+    );
+  }
+  return (
+    <PoseGroup
+      delta={1}
+      preEnterPose="invisible"
+      enterPose="enter"
+      exitPose="exit"
+      animateOnMount={true}
+    >
+      {data && data.getGlobalPosts ? (
+        data.getGlobalPosts.map(post => {
+          let {
+            text,
+            id,
+            title,
+            images,
+            user,
+            comments,
+            currently_liked,
+            comments_count,
+            likes_count,
+            isCtxUserIdAFollowerOfPostUser,
+            __typename
+          } = post;
+
+          if (
+            post &&
+            __typename &&
+            title &&
+            images &&
+            id &&
+            user &&
+            me !== undefined &&
+            me !== null &&
+            isCtxUserIdAFollowerOfPostUser !== undefined &&
+            isCtxUserIdAFollowerOfPostUser !== null &&
+            text !== undefined &&
+            text !== null
+          ) {
+            return (
+              <FeedCard
+                key={id}
+                id={id}
+                images={images}
+                title={title}
+                comments={comments}
+                description={text}
+                currentlyLiked={currently_liked}
+                initialCommentsCount={comments_count}
+                initialLikesCount={likes_count}
+                postUserId={user.id}
+                isCtxUserIdAFollowerOfPostUser={isCtxUserIdAFollowerOfPostUser}
+                followUser={followUser}
+                errorFollowUser={errorFollowUser}
+                loadingFollowUser={loadingFollowUser}
+                me={me}
               />
-              <Box p={[3, 3, 3]} pt={[1, 1, 2]}>
-                <Flex alignItems="center">
-                  <Heading mr="auto">{post.title}</Heading>
-                  <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    flexDirection="column"
-                  >
-                    <FlexUserProfileWrap
-                      maxHeight="40px"
-                      width="40px"
-                      overflow="hidden"
-                      sx={{
-                        borderRadius: "50%"
-                      }}
-                      bg="thread_footer"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="0 2px 16px rgba(0, 0, 0, 0.25)"
-                    >
-                      <Icon size="2em" name="user" fill="white" />
-                    </FlexUserProfileWrap>
-                    <Text color="text">
-                      {post.user.firstName} {post.user.lastName}
-                    </Text>
-                    {post.isCtxUserIdAFollowerOfPostUser === true
-                      ? "UNFOLLOW"
-                      : "FOLLOW"}
-                    <FollowButton
-                      isCtxUserIdAFollower={post.isCtxUserIdAFollower}
-                      me={me}
-                      postUserId={post.user.id}
-                      followUser={followUser}
-                      errorGlblPosts={errorGlblPosts}
-                    >
-                      Follow
-                    </FollowButton>
-                  </Flex>
-                </Flex>
-                <Text alignSelf="end">{post.text}</Text>
-              </Box>
-            </Flex>
-          </PosedCard>
-        );
-      }
-    })}
-  </PoseGroup>
-);
+            );
+          } else {
+            return <div>nothing here</div>;
+          }
+        })
+      ) : (
+        <div>of nothing</div>
+      )}
+    </PoseGroup>
+  );
+};
 
 // interface IDisplayPostsProps {
 //   subscribeGlblPosts: any;
