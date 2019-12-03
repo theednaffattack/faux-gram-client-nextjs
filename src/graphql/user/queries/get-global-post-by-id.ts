@@ -1,8 +1,8 @@
 import { gql } from "apollo-boost";
 
-export const GET_GLOBAL_POSTS = gql`
-  query GetGlobalPosts {
-    getGlobalPosts {
+export const GET_GLOBAL_POST_BY_ID = gql`
+  query GetGlobalPostById($getpostinput: GetGlobalPostByIdInput!) {
+    getGlobalPostById(getpostinput: $getpostinput) {
       id
       title
       text
@@ -22,8 +22,6 @@ export const GET_GLOBAL_POSTS = gql`
       }
       user {
         id
-        firstName
-        lastName
       }
     }
   }

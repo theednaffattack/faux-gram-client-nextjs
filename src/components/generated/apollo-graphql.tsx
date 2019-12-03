@@ -109,6 +109,10 @@ export type GetAllMyMessageThreadsInput = {
   user: Scalars['String'],
 };
 
+export type GetGlobalPostByIdInput = {
+  postId: Scalars['ID'],
+};
+
 export type GetMessagesByThreadIdInput = {
   cursor?: Maybe<Scalars['String']>,
   threadId: Scalars['String'],
@@ -128,6 +132,23 @@ export type GetMessageThreadsFromUserInput = {
 
 export type GetMyFollowingPostByIdInput = {
   postId: Scalars['ID'],
+};
+
+export type GlobalPostReturnType = {
+   __typename?: 'GlobalPostReturnType',
+  id?: Maybe<Scalars['ID']>,
+  title?: Maybe<Scalars['String']>,
+  text?: Maybe<Scalars['String']>,
+  images?: Maybe<Array<Image>>,
+  likes?: Maybe<Array<Like>>,
+  comments?: Maybe<Array<Comment>>,
+  isCtxUserIdAFollowerOfPostUser?: Maybe<Scalars['Boolean']>,
+  user?: Maybe<User>,
+  created_at?: Maybe<Scalars['DateTime']>,
+  updated_at?: Maybe<Scalars['DateTime']>,
+  comments_count: Scalars['Int'],
+  likes_count: Scalars['Int'],
+  currently_liked: Scalars['Boolean'],
 };
 
 export type HandlePostPayload = {
@@ -452,6 +473,7 @@ export type Query = {
   getThoseIFollowAndTheirPostsResolver?: Maybe<User>,
   getMyMessagesFromUser?: Maybe<Array<Message>>,
   getGlobalPosts?: Maybe<Array<FollowingPostReturnType>>,
+  getGlobalPostById?: Maybe<GlobalPostReturnType>,
   meAndAllFollowers?: Maybe<User>,
   myFollowingPosts?: Maybe<Array<FollowingPostReturnType>>,
   getMyFollowingPostById?: Maybe<FollowingPostReturnType>,
@@ -465,6 +487,11 @@ export type Query = {
 
 export type QueryGetMyMessagesFromUserArgs = {
   input: GetMessagesFromUserInput
+};
+
+
+export type QueryGetGlobalPostByIdArgs = {
+  getpostinput: GetGlobalPostByIdInput
 };
 
 
@@ -1050,8 +1077,11 @@ export type GetGlobalPostsQuery = (
   { __typename?: 'Query' }
   & { getGlobalPosts: Maybe<Array<(
     { __typename?: 'FollowingPostReturnType' }
-    & Pick<FollowingPostReturnType, 'id' | 'title' | 'text' | 'created_at' | 'currently_liked' | 'likes_count' | 'comments_count' | 'isCtxUserIdAFollowerOfPostUser'>
-    & { images: Maybe<Array<(
+    & Pick<FollowingPostReturnType, 'id' | 'title' | 'text' | 'created_at' | 'currently_liked' | 'comments_count' | 'likes_count' | 'isCtxUserIdAFollowerOfPostUser'>
+    & { comments: Maybe<Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'id' | 'content' | 'created_at'>
+    )>>, images: Maybe<Array<(
       { __typename?: 'Image' }
       & Pick<Image, 'id' | 'uri'>
     )>>, user: Maybe<(
@@ -1147,6 +1177,29 @@ export type GetAllMyImagesQuery = (
   & { GetAllMyImages: Array<(
     { __typename?: 'Image' }
     & Pick<Image, 'id' | 'uri'>
+  )> }
+);
+
+export type GetGlobalPostByIdQueryVariables = {
+  getpostinput: GetGlobalPostByIdInput
+};
+
+
+export type GetGlobalPostByIdQuery = (
+  { __typename?: 'Query' }
+  & { getGlobalPostById: Maybe<(
+    { __typename?: 'GlobalPostReturnType' }
+    & Pick<GlobalPostReturnType, 'id' | 'title' | 'text' | 'created_at' | 'currently_liked' | 'comments_count' | 'likes_count' | 'isCtxUserIdAFollowerOfPostUser'>
+    & { comments: Maybe<Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'id' | 'content' | 'created_at'>
+    )>>, images: Maybe<Array<(
+      { __typename?: 'Image' }
+      & Pick<Image, 'id' | 'uri'>
+    )>>, user: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )> }
   )> }
 );
 
@@ -2098,9 +2151,14 @@ export const GetGlobalPostsDocument = gql`
     text
     created_at
     currently_liked
-    likes_count
     comments_count
+    likes_count
     isCtxUserIdAFollowerOfPostUser
+    comments {
+      id
+      content
+      created_at
+    }
     images {
       id
       uri
@@ -2318,6 +2376,50 @@ export function withGetAllMyImages<TProps, TChildProps = {}>(operationOptions?: 
     });
 };
 export type GetAllMyImagesQueryResult = ApolloReactCommon.QueryResult<GetAllMyImagesQuery, GetAllMyImagesQueryVariables>;
+export const GetGlobalPostByIdDocument = gql`
+    query GetGlobalPostById($getpostinput: GetGlobalPostByIdInput!) {
+  getGlobalPostById(getpostinput: $getpostinput) {
+    id
+    title
+    text
+    created_at
+    currently_liked
+    comments_count
+    likes_count
+    isCtxUserIdAFollowerOfPostUser
+    comments {
+      id
+      content
+      created_at
+    }
+    images {
+      id
+      uri
+    }
+    user {
+      id
+    }
+  }
+}
+    `;
+export type GetGlobalPostByIdComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetGlobalPostByIdQuery, GetGlobalPostByIdQueryVariables>, 'query'> & ({ variables: GetGlobalPostByIdQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetGlobalPostByIdComponent = (props: GetGlobalPostByIdComponentProps) => (
+      <ApolloReactComponents.Query<GetGlobalPostByIdQuery, GetGlobalPostByIdQueryVariables> query={GetGlobalPostByIdDocument} {...props} />
+    );
+    
+export type GetGlobalPostByIdProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetGlobalPostByIdQuery, GetGlobalPostByIdQueryVariables> & TChildProps;
+export function withGetGlobalPostById<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetGlobalPostByIdQuery,
+  GetGlobalPostByIdQueryVariables,
+  GetGlobalPostByIdProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetGlobalPostByIdQuery, GetGlobalPostByIdQueryVariables, GetGlobalPostByIdProps<TChildProps>>(GetGlobalPostByIdDocument, {
+      alias: 'getGlobalPostById',
+      ...operationOptions
+    });
+};
+export type GetGlobalPostByIdQueryResult = ApolloReactCommon.QueryResult<GetGlobalPostByIdQuery, GetGlobalPostByIdQueryVariables>;
 export const GetOnlyThreadsDocument = gql`
     query GetOnlyThreads($feedinput: FeedInput!) {
   getOnlyThreads(feedinput: $feedinput) {
