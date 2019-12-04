@@ -69,7 +69,8 @@ export const DisplayCards = ({
       animateOnMount={true}
     >
       {data && data.getGlobalPosts ? (
-        data.getGlobalPosts.map(post => {
+        data.getGlobalPosts.edges.map(edge => {
+          let post = edge.node;
           let {
             text,
             id,

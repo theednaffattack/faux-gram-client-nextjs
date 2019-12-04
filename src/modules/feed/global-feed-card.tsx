@@ -306,7 +306,8 @@ export const FeedCard: React.FunctionComponent<GlobalFeedCardProps> = ({
       fromCache.getGlobalPosts
     ) {
       let newCacheData = [
-        ...fromCache.getGlobalPosts.map(post => {
+        ...fromCache.getGlobalPosts.edges.map(node => {
+          let post = node.node;
           if (post.id === id) {
             post.currently_liked = false;
           }
@@ -344,7 +345,8 @@ export const FeedCard: React.FunctionComponent<GlobalFeedCardProps> = ({
       fromCache.getGlobalPosts
     ) {
       let newCacheData = [
-        ...fromCache.getGlobalPosts.map(post => {
+        ...fromCache.getGlobalPosts.edges.map(node => {
+          let post = node.node;
           if (post.id === id) {
             post.currently_liked = true;
           }
