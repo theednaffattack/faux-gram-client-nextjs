@@ -4,17 +4,14 @@ import { MyContext } from "../../../types/types";
 import { MeComponent } from "../../../src/components/generated/apollo-graphql";
 import GlobalFeed from "../../../src/components/global-feed";
 import { getLayout } from "../../../src/modules/site-layout/layout";
-import { ParsedUrlQuery } from "querystring";
 
 interface IFeed {
-  (): JSX.Element;
+  ({ pathname }: MyContext): JSX.Element;
 
   getInitialProps: ({
-    pathname,
-    query
+    pathname
   }: MyContext) => Promise<{
-    pathname: string;
-    query: ParsedUrlQuery;
+    pathname: MyContext["pathname"];
   }>;
 
   getLayout: (page: any) => JSX.Element;
@@ -34,8 +31,8 @@ const Feed: IFeed = () => {
   );
 };
 
-Feed.getInitialProps = async ({ pathname, query }) => {
-  return { pathname, query };
+Feed.getInitialProps = async ({ pathname }) => {
+  return { pathname };
 };
 
 Feed.getLayout = getLayout;
