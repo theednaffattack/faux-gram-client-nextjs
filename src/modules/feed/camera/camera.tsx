@@ -182,7 +182,6 @@ const Camera: React.FunctionComponent<OtherProps> = ({
       alignItems="center"
       // justifyContent="center"
       width={1}
-      border="purp"
       flex="1 1 auto"
       ref={listContainerRef}
       style={{
@@ -209,7 +208,6 @@ const Camera: React.FunctionComponent<OtherProps> = ({
             <Flex
               alignItems="center"
               justifyContent="center"
-              border="lime"
               width={1}
               flexDirection="column"
               px={3}
@@ -228,8 +226,7 @@ const Camera: React.FunctionComponent<OtherProps> = ({
                 width={`${videoWidth}px`}
                 style={{
                   // height: `${container.height}px`
-                  height: `${videoHeight}px`,
-                  border: "2px pink dashed"
+                  height: `${videoHeight}px`
                 }}
               >
                 <Video
@@ -265,7 +262,6 @@ const Camera: React.FunctionComponent<OtherProps> = ({
             <Flex
               alignItems="center"
               width={[1, 1, 1, `${videoWidth}px`]}
-              border="purp"
               flexDirection="column"
               px={3}
               pt={3}

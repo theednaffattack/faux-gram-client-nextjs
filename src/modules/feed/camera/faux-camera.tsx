@@ -181,7 +181,6 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
       alignItems="center"
       // justifyContent="center"
       width={1}
-      border="lime"
       flex="1 1 auto"
       style={{
         height: "100%",
@@ -194,7 +193,6 @@ const FauxCamera: React.FunctionComponent<OtherProps> = ({
         width={1}
         flexDirection="column"
         px={3}
-        border="purp"
         style={{ position: "relative" }}
       >
         <Measure bounds onResize={handleResize}>
