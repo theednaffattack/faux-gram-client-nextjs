@@ -111,11 +111,9 @@ export class DisplayPosts extends React.Component<IDisplayPostsProps, object> {
   }
 
   render() {
-    let clientGlblPosts = this.props;
     return (
       <DisplayCards
         me={this.props.me}
-        clientGlblPosts={clientGlblPosts}
         followUser={this.props.followUser}
         errorGlblPosts={this.props.errorGlblPosts}
         data={this.props.data}
