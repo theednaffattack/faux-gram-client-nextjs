@@ -46,7 +46,6 @@ const Feed: React.FunctionComponent<FeedProps> = ({ me }) => {
   return (
     <GetGlobalPostsComponent variables={{ skip: 0, take: 15 }}>
       {({
-        client: clientGlblPosts,
         data: dataGlblPosts,
         error: errorGlblPosts,
         loading: loadingGlblPosts,
