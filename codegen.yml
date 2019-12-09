@@ -1,6 +1,6 @@
 overwrite: true
+# schema: ./src/graphql/fauxGramGQLSchema.json
 schema: "https://fauxgramapi.eddienaff.dev/graphql"
-# schema: "https://localhost:4000/graphql"
 documents: "./src/graphql/**/*.ts"
 generates:
   ./src/components/generated/fragmentTypes.ts:
@@ -8,7 +8,11 @@ generates:
       - "fragment-matcher"
   ./src/components/generated/apollo-graphql.tsx:
     config:
-      # withMutationFn: true
+      withHooks: true
+      addDocBlocks: true
+      withMutationOptionsType: true
+      withResultType: true
+      withMutationFn: true
       noNamespaces: true
     plugins:
       - "typescript"
