@@ -2,8 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import { Field, Formik } from "formik";
-import { MutationUpdaterFn } from "apollo-boost";
-import Maybe from "graphql/tsutils/Maybe";
 
 import {
   Box,
@@ -24,14 +22,10 @@ import {
   AddCommentToPostComponent,
   GetMyFollowingPostByIdQuery,
   GetMyFollowingPostByIdDocument,
-  LikeReturnType,
-  MyFollowingPostsQuery,
-  MyFollowingPostsDocument,
   FollowUserMutationFn,
   FollowUserMutationResult,
   MeQueryResult,
-  GetGlobalPostsQuery,
-  GetGlobalPostsDocument
+  GetGlobalPostsQueryResult
 } from "../../../src/components/generated/apollo-graphql";
 import { CommentCounter } from "./comments-counter";
 import { LikesCounter } from "./likes-counter";
@@ -55,20 +49,6 @@ let cardWidths = [0.97, 0.95, 0.95, 1 / 2];
 const fakeOnClick = ({ fakeHandlerName }: FakeOnClickProps) => {
   console.log(`${fakeHandlerName} firing!!!🚀`);
 };
-
-type MutationUpdateFunc =
-  | MutationUpdaterFn<
-      {
-        __typename?: "Mutation" | undefined;
-      } & {
-        createOrUpdateLikes: Maybe<
-          {
-            __typename?: "LikeReturnType" | undefined;
-          } & Pick<LikeReturnType, "postId" | "status">
-        >;
-      }
-    >
-  | undefined;
 
 export interface GlobalFeedCardProps extends IPageProps {
   /** Array of Post comments */
@@ -103,6 +83,7 @@ export interface GlobalFeedCardProps extends IPageProps {
   errorFollowUser: FollowUserMutationResult["error"];
   loadingFollowUser?: FollowUserMutationResult["loading"];
   me?: MeQueryResult["data"];
+  refetchGetGlobalPosts: GetGlobalPostsQueryResult["refetch"];
 }
 
 interface CommentFieldProps {
@@ -269,6 +250,7 @@ const RenderCommentList: React.FunctionComponent<CommentListProps> = ({
 };
 
 export const FeedCard: React.FunctionComponent<GlobalFeedCardProps> = ({
+  refetchGetGlobalPosts,
   comments,
   description,
   id,
@@ -284,182 +266,6 @@ export const FeedCard: React.FunctionComponent<GlobalFeedCardProps> = ({
 }) => {
   const isThisADynamicRoute =
     pathname && pathname[pathname.length - 1] === "]" ? true : false;
-
-  const getGlobalPostsUpdateFunction: MutationUpdateFunc = (
-    cache,
-    { data }
-  ) => {
-    let fromCache = cache.readQuery<GetGlobalPostsQuery>({
-      query: GetGlobalPostsDocument,
-      variables: {
-        getpostinput: {
-          postId: id
-        }
-      }
-    });
-
-    if (
-      data &&
-      data.createOrUpdateLikes &&
-      data.createOrUpdateLikes.status === "Deleted" &&
-      fromCache &&
-      fromCache.getGlobalPosts
-    ) {
-      let newCacheData = [
-        ...fromCache.getGlobalPosts.edges.map(node => {
-          let post = node.node;
-          if (post.id === id) {
-            post.currently_liked = false;
-          }
-          return post;
-        })
-      ];
-
-      cache.writeQuery<MyFollowingPostsQuery>({
-        query: MyFollowingPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        },
-        data: { myFollowingPosts: newCacheData }
-      });
-
-      cache.readQuery<MyFollowingPostsQuery>({
-        query: MyFollowingPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        }
-      });
-
-      return fromCache;
-    }
-
-    if (
-      data &&
-      data.createOrUpdateLikes &&
-      data.createOrUpdateLikes.status === "Created" &&
-      fromCache &&
-      fromCache.getGlobalPosts
-    ) {
-      let newCacheData = [
-        ...fromCache.getGlobalPosts.edges.map(node => {
-          let post = node.node;
-          if (post.id === id) {
-            post.currently_liked = true;
-          }
-          return post;
-        })
-      ];
-
-      cache.writeQuery<MyFollowingPostsQuery>({
-        query: MyFollowingPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        },
-        data: { myFollowingPosts: newCacheData }
-      });
-
-      cache.readQuery<MyFollowingPostsQuery>({
-        query: MyFollowingPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        }
-      });
-
-      return fromCache;
-    }
-    return fromCache;
-  };
-
-  const getGlobalPostByIdUpdateFunction: MutationUpdateFunc = (
-    cache,
-    { data }
-  ) => {
-    let fromCache = cache.readQuery<GetGlobalPostsQuery>({
-      query: GetGlobalPostsDocument,
-      variables: {
-        getpostinput: {
-          postId: id
-        }
-      }
-    });
-
-    if (
-      data &&
-      data.createOrUpdateLikes &&
-      data.createOrUpdateLikes.status === "Deleted" &&
-      fromCache &&
-      fromCache.getGlobalPosts
-    ) {
-      let newCacheData = {
-        ...fromCache.getGlobalPosts,
-        currently_liked: false
-      };
-
-      cache.writeQuery<GetGlobalPostsQuery>({
-        query: GetGlobalPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        },
-        data: { getGlobalPosts: newCacheData }
-      });
-
-      cache.readQuery<GetGlobalPostsQuery>({
-        query: GetGlobalPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        }
-      });
-
-      return fromCache;
-    }
-
-    if (
-      data &&
-      data.createOrUpdateLikes &&
-      data.createOrUpdateLikes.status === "Created" &&
-      fromCache &&
-      fromCache.getGlobalPosts
-    ) {
-      let newCacheData = {
-        ...fromCache.getGlobalPosts,
-        currently_liked: true
-      };
-
-      cache.writeQuery<GetGlobalPostsQuery>({
-        query: GetGlobalPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        },
-        data: { getGlobalPosts: newCacheData }
-      });
-
-      cache.readQuery<GetGlobalPostsQuery>({
-        query: GetGlobalPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        }
-      });
-
-      return fromCache;
-    }
-    return fromCache;
-  };
 
   return (
     <Card
@@ -529,12 +335,12 @@ export const FeedCard: React.FunctionComponent<GlobalFeedCardProps> = ({
                   onClick={() => {
                     likesMutation({
                       variables: { input: { postId: id } },
+                      // @ts-ignore
                       update: (cache, { data }) => {
-                        isThisADynamicRoute === true
-                          ? getGlobalPostByIdUpdateFunction(cache, {
-                              data
-                            })
-                          : getGlobalPostsUpdateFunction(cache, { data });
+                        refetchGetGlobalPosts({
+                          skip: 0,
+                          take: 15
+                        });
                       }
                     });
                   }}

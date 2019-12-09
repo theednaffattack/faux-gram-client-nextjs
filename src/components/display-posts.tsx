@@ -1,40 +1,13 @@
 import React from "react";
-import { PoseGroup } from "react-pose";
+import { Fragment } from "react";
 
-// import {
-//   // Box,
-//   Card,
-//   // Flex,
-//   // Heading,
-//   // Icon,
-//   // Text,
-//   // FlexUserProfileWrap
-// } from "./styled-rebass";
-
-// import FollowButton from "./follow-button";
 import FeedCard from "../modules/feed/global-feed-card";
 import {
   GetGlobalPostsQueryResult,
   FollowUserMutationFn,
-  // User,
-  // GlobalPostsSubscription,
-  // GlobalPostsComponentProps,
-  // GetGlobalPostsComponentProps,
   FollowUserMutationResult,
   MeQueryResult
 } from "./generated/apollo-graphql";
-
-// const staggerDuration = 100;
-
-// interface IIndex {
-//   index: number;
-// }
-
-// const PosedCard = posed(Card)({
-//   enter: { opacity: 1, delay: ({ index }: IIndex) => index * staggerDuration },
-//   exit: { opacity: 0, delay: ({ index }: IIndex) => index * staggerDuration },
-//   invisible: { opacity: 0 }
-// });
 
 interface IDisplayPostsProps {
   data: GetGlobalPostsQueryResult["data"];
@@ -45,32 +18,28 @@ interface IDisplayPostsProps {
   subscribeGlblPosts?: any;
   dataFollowUser?: FollowUserMutationResult["data"];
   errorFollowUser?: FollowUserMutationResult["error"];
+  refetchGetGlobalPosts: GetGlobalPostsQueryResult["refetch"];
 }
 
-export const DisplayCards = ({
+export const DisplayCards: React.FunctionComponent<IDisplayPostsProps> = ({
   data,
   followUser,
   errorFollowUser,
   loadingFollowUser,
   me,
-  errorGlblPosts
-}: IDisplayPostsProps) => {
+  errorGlblPosts,
+  refetchGetGlobalPosts
+}) => {
   if (errorGlblPosts) {
     return (
       <div>Error loading global posts {JSON.stringify(errorGlblPosts)}</div>
     );
   }
   return (
-    <PoseGroup
-      delta={1}
-      preEnterPose="invisible"
-      enterPose="enter"
-      exitPose="exit"
-      animateOnMount={true}
-    >
+    <Fragment>
       {data && data.getGlobalPosts ? (
-        data.getGlobalPosts.edges.map(edge => {
-          let post = edge.node;
+        data.getGlobalPosts.map(edge => {
+          let post = edge;
           let {
             text,
             id,
@@ -103,6 +72,7 @@ export const DisplayCards = ({
               <FeedCard
                 key={id}
                 id={id}
+                // cacheManipulation={cacheManipulation}
                 images={images}
                 title={title}
                 comments={comments}
@@ -116,6 +86,7 @@ export const DisplayCards = ({
                 errorFollowUser={errorFollowUser}
                 loadingFollowUser={loadingFollowUser}
                 me={me}
+                refetchGetGlobalPosts={refetchGetGlobalPosts}
               />
             );
           } else {
@@ -125,7 +96,7 @@ export const DisplayCards = ({
       ) : (
         <div>of nothing</div>
       )}
-    </PoseGroup>
+    </Fragment>
   );
 };
 
@@ -138,13 +109,17 @@ export class DisplayPosts extends React.Component<IDisplayPostsProps, object> {
   componentDidMount() {
     this.props.subscribeGlblPosts();
   }
+
   render() {
+    let clientGlblPosts = this.props;
     return (
       <DisplayCards
         me={this.props.me}
+        clientGlblPosts={clientGlblPosts}
         followUser={this.props.followUser}
         errorGlblPosts={this.props.errorGlblPosts}
         data={this.props.data}
+        refetchGetGlobalPosts={this.props.refetchGetGlobalPosts}
       />
     );
   }
