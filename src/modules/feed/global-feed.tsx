@@ -25,7 +25,7 @@ export const subscribeFunction = (subscribeGlobalPosts: any) => {
 };
 
 const Feed = ({ me }: any) => (
-  <GetGlobalPostsComponent>
+  <GetGlobalPostsComponent variables={{ skip: 0, take: 15 }}>
     {({
       data: dataGlobalPosts,
       error: errorGlobalPosts,
