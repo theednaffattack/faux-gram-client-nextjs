@@ -310,7 +310,8 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
       fromCache.getGlobalPosts
     ) {
       let newCacheData = [
-        ...fromCache.getGlobalPosts.map(post => {
+        ...fromCache.getGlobalPosts.map(node => {
+          let post = node;
           if (post.id === id) {
             post.currently_liked = false;
           }
@@ -348,24 +349,51 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
       fromCache.getGlobalPosts
     ) {
       let newCacheData = [
-        ...fromCache.getGlobalPosts.map(post => {
+        ...fromCache.getGlobalPosts.map(node => {
+          let post = node;
           if (post.id === id) {
             post.currently_liked = true;
           }
-          return post;
+          return { node: { node: post } };
         })
       ];
 
-      cache.writeQuery<GetGlobalPostsQuery>({
-        query: MyFollowingPostsDocument,
-        variables: {
-          getpostinput: {
-            postId: id
-          }
-        },
-        data: { getGlobalPosts: newCacheData }
-      });
+      console.log("VIEW THE SHAPE OF NEWCACHE DATA", newCacheData);
 
+      if (
+        data &&
+        data.createOrUpdateLikes &&
+        data.createOrUpdateLikes.status === "Created" &&
+        fromCache &&
+        fromCache.getGlobalPosts
+      ) {
+        // let oldPageInfo = fromCache.getGlobalPosts.pageInfo;
+        // cache.writeQuery<GetGlobalPostsQuery>({
+        //   query: MyFollowingPostsDocument,
+        //   variables: {
+        //     getpostinput: {
+        //       postId: id
+        //     }
+        //   },
+        //   data: {
+        //     getGlobalPosts: {
+        //       edges: [
+        //         ...newCacheData
+        //         // ...fromCache.getGlobalPosts.edges
+        //         // {
+        //         //   node: {
+        //         //     ...newCacheData,
+        //         //     currently_liked: false,
+        //         //     comments_count: 0,
+        //         //     likes_count: 0
+        //         //   }
+        //         // }
+        //       ],
+        //       pageInfo: { oldPageInfo }
+        //     }
+        //   }
+        // });
+      }
       cache.readQuery<GetGlobalPostsQuery>({
         query: GetGlobalPostsDocument,
         variables: {
