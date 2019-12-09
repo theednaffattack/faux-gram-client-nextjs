@@ -8,9 +8,14 @@ export const GLOBAL_POSTS = gql`
       text
       created_at
       currently_liked
-      likes_count
       comments_count
+      likes_count
       isCtxUserIdAFollowerOfPostUser
+      comments {
+        id
+        content
+        created_at
+      }
       images {
         id
         uri
