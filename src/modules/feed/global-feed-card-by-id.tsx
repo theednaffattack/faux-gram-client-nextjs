@@ -542,9 +542,7 @@ export const FeedCard: React.FunctionComponent<ISingleFeedCardProps> = ({
         </Box>
       </Flex>
       <Flex justifyContent="center">
-        {images && images.length > 0 ? (
-          <Image width={["400px", "400px"]} src={images[0].uri} />
-        ) : null}
+        {images && images.length > 0 ? <Image src={images[0].uri} /> : null}
       </Flex>
       <Box py={3} px={2}>
         <Heading as="h3">{title}</Heading>
