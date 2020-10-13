@@ -2,7 +2,7 @@ import {
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject,
-  IntrospectionFragmentMatcher
+  IntrospectionFragmentMatcher,
 } from "apollo-boost";
 import { setContext } from "apollo-link-context";
 import { WebSocketLink } from "apollo-link-ws";
@@ -32,9 +32,9 @@ const prodDomain: string = `fauxgramapi.eddienaff.dev`;
 
 const domain: string = envIsDev ? myLanInfo : prodDomain;
 
-const prefix: string = "https://";
+const prefix: string = envIsDev ? "http://" : "https://";
 
-const wsPrefix: string = "wss://";
+const wsPrefix: string = envIsDev ? "ws://" : "wss://";
 
 const prodGraphqlUrl: string = `${prefix}${domain}/graphql`;
 
@@ -43,7 +43,7 @@ const prodWebsocketsUrl: string = `${wsPrefix}${domain}/subscriptions`;
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData
+  introspectionQueryResultData,
 });
 
 // Polyfill fetch() on the server (used by apollo-client)
@@ -63,7 +63,7 @@ function create(
   const httpLink = new HttpLink({
     uri: prodGraphqlUrl, // Server URL (must be absolute)
     credentials: "include", // Additional fetch() options like `credentials` or `headers`
-    fetch
+    fetch,
   });
 
   // Create a WebSocket link:
@@ -71,11 +71,11 @@ function create(
     ? new WebSocketLink({
         uri: prodWebsocketsUrl,
         options: {
-          reconnect: true
+          reconnect: true,
           // connectionParams: {
           //   authToken: authToken ? `mfg=${authToken}` : ""
           // }
-        }
+        },
       })
     : null;
 
@@ -127,8 +127,8 @@ function create(
     return {
       headers: {
         ...headers,
-        cookie: token ? `mfg=${token}` : ""
-      }
+        cookie: token ? `mfg=${token}` : "",
+      },
     };
   });
 
@@ -139,8 +139,8 @@ function create(
     link: errorLink.concat(authLink.concat(splitLink)),
     cache: new InMemoryCache({
       addTypename: true,
-      fragmentMatcher
-    }).restore(initialState || {})
+      fragmentMatcher,
+    }).restore(initialState || {}),
   });
 }
 
