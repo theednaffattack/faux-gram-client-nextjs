@@ -1,3 +1,4 @@
+import React from "react";
 import Router from "next/router";
 
 import GetMessagesByThreadIdPage from "../../src/components/messages/get-messages-by-thread-id-page";

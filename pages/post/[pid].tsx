@@ -1,3 +1,4 @@
+import React from "react";
 import { ParsedUrlQuery } from "querystring";
 
 import { Header } from "../../src/components/Header";
