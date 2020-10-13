@@ -20,11 +20,6 @@
     "gen:jsonts": "make_types  -i ./src/modules/icon/generated-material-icon-types.ts ./src/modules/icon/material-paths.json MaterialIcons",
     "release": "standard-version"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "dependencies": {
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
